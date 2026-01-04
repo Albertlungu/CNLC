@@ -1,2 +1,22 @@
-flask
-flask-cors
+# Web Framework
+flask==3.0.0
+flask-cors==4.0.0
+
+# Data Validation
+pydantic==2.5.0
+
+# Security & Verification (bot prevention, user auth)
+flask-limiter==3.5.0
+bcrypt==4.1.2
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Utilities
+python-dateutil==2.8.2
+
+# Future: Machine Learning (for recommendation system)
+# scikit-learn==1.3.2
+# pandas==2.1.4
+# numpy==1.26.2
