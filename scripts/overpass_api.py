@@ -34,7 +34,7 @@ def fetch_businesses(
 
     if debug:
         print(f"DEBUG: Status Code: {response.status_code}")
-        print(f"DEBUG: Response Text\n{"="*60}\n: {response.text[:500]}")
+        print(f"DEBUG: Response Text\n{"="*60}\n: {response.text[:5000]}")
         # First 500 chars
 
     return query, response, data
@@ -56,10 +56,57 @@ def compose_json(
 
     businesses = []
 
+    not_local = [
+        # Coffee & Cafes
+        'Bridgehead', 'Second Cup', 'Timothy\'s', 'Starbucks', 'Tim Hortons',
+        'Williams Coffee Pub', 'Van Houtte', 'Country Style',
+
+        # Restaurants & Fast Food
+        'Cora', 'Milestones', 'The Keg', 'Jack Astor\'s', 'Swiss Chalet',
+        'Pizza Hut', 'Osmow\'s', 'Bento Sushi', 'Sunset Grill',
+        'Copper Branch', 'Lone Star', 'The Works', 'Joey',
+        'Browns Socialhouse', 'Denny\'s', 'McDonald\'s', 'Burger King',
+        'Wendy\'s', 'A&W', 'Harvey\'s', 'Subway', 'KFC', 'Taco Bell',
+        'Boston Pizza', 'East Side Mario\'s', 'Montana\'s', 'Kelsey\'s',
+        'Moxie\'s', 'Earls', 'Five Guys', 'Popeyes', 'Dairy Queen',
+
+        # Retail & Department Stores
+        'Dollarama', 'Giant Tiger', 'Winners', 'HomeSense', 'Marshalls',
+        'Joe Fresh', 'Dynamite', 'Garage', 'Smart Set', 'Lululemon',
+        'Nespresso', 'Home Hardware', 'Moores', 'Bulk Barn',
+        'Canadian Tire', 'Staples', 'Walmart', 'Best Buy', 'Costco',
+        'Old Navy', 'Gap', 'H&M', 'Zara', 'Indigo', 'Chapters',
+
+        # Pet Stores
+        'Pet Valu', 'PetSmart',
+
+        # Liquor Stores
+        'LCBO', 'The Beer Store',
+
+        # Grocery & Food
+        'Food Basics', 'M&M Food Market', 'COBS Bread',
+        'Your Independent Grocer', 'Farm Boy', 'Sobeys', 'Metro',
+        'Loblaws', 'No Frills', 'Freshco',
+
+        # Gas Stations & Convenience
+        'Circle K', 'Esso', 'Petro-Canada', 'Shell', '7-Eleven',
+
+        # Other
+        'Sleep Country', 'CAA',
+
+        # Telecom
+        'Bell', 'Rogers', 'Telus', 'Koodo', 'Fido', 'Freedom Mobile',
+        'Chatr', 'Virgin Mobile', 'Public Mobile'
+    ]
+
     for element in data['elements']:
         tags = element.get('tags', {})
 
         if 'name' not in tags:
+            continue
+
+        # Skip chain businesses
+        if tags.get('name') in not_local:
             continue
 
         business = {
