@@ -31,9 +31,9 @@ def get_all_businesses(
     """
     return load_businesses(filepath)
 
-def get_business_by_id(
+def search_by_id(
         business_id:int
-        ) -> dict:
+        ) -> list:
     """
     Fetches a business given its ID and returns it.
 
@@ -44,19 +44,24 @@ def get_business_by_id(
         ModuleNotFoundError: Is raised if the business is not found.
 
     Returns:
-        dict: The entire dict containing business information.
+        list: Contains the dict containing business information (normally only one result).
     """
     businesses = get_all_businesses()
+
+    results = []
     for business in businesses:
         if business.get('id') == business_id:
-            return business
+            results.append(business)
         else:
             continue
 
-    raise ModuleNotFoundError(f"ERROR: Cannot find business id: {business_id}")
+    if results == []:
+        raise ModuleNotFoundError(f"ERROR: Cannot find business id: {business_id}")
     # Will be caught later and displayed in electron
 
-def search_businesses(
+    return results
+
+def search_by_name(
         query:str
         ) -> list[dict]:
     """
