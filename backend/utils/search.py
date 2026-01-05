@@ -61,7 +61,7 @@ def search_by_text(
         else:
             continue
 
-    if results == []:
+    if not results:
         raise ValueError("ERROR: Query did not match any businesses.")
         # Will be caught later and displayed in electron
 
@@ -94,7 +94,7 @@ def filter_by_field(
         else:
             continue
 
-    if results == []:
+    if not results:
         raise ValueError("ERROR: Field and/or value does not exist.")
 
     return results
