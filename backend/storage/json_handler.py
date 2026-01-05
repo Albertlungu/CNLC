@@ -1,19 +1,25 @@
 import json
+import os
 from pathlib import Path
 
 def save_businesses(
         businesses:list[dict],
-        output_filepath:str='../data/businesses.json'
+        output_filepath:str|None=None
         ) -> None:
     """
     Saves businesses taken from OverpassAPI to a JSON file.
 
     Args:
         businesses (list[dict]): List containing businesses info.
-        output_filepath (str, optional): Output filepath. Defaults to '../data/businesses.json'.
+        output_filepath (str, optional): Output filepath. Defaults to 'data/businesses.json'.
     """
+    if output_filepath is None:
+        # Get the project root (2 levels up from this file)
+        project_root = Path(__file__).parent.parent.parent
+        output_filepath = str(project_root / 'data' / 'businesses.json')
+
     with open(output_filepath, 'w') as f:
-        json.dump(businesses, f, indent=2)
+        json.dump(businesses, f, indent=1)
 
 def load_businesses(
         input_filepath:str='../data/businesses.json',

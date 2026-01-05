@@ -1,19 +1,19 @@
 import sys
+import os
 
-sys.path.append('..')
+# Add project root to path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 from scripts.overpass_api import fetch_businesses, compose_json
 from backend.storage.json_handler import save_businesses
 
-cities = ['Ottawa', 'Toronto', 'Montreal', 'Gatineau', 'Vancouver', 'Calgary', 'Edmonton']
 
-all_data = []
-for city in cities:
-    all_data.append(fetch_businesses(city)[2])
-
-businesses = []
-for data in all_data:
-    businesses.extend(compose_json(data))
-
-
+city = 'Ottawa'
+data = fetch_businesses(city)[2]
+businesses = compose_json(data)
 save_businesses(businesses)
+
+print("="*60)
+print(f'{city} businesses successfully saved')
+print("="*60)
