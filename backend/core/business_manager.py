@@ -15,6 +15,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
 from backend.storage.json_handler import load_businesses
+import backend.utils.search as search
 
 def get_all_businesses(
         filepath:str='./data/businesses.json'
@@ -65,66 +66,23 @@ def search_by_name(
         query:str
         ) -> list[dict]:
     """
-    Searches businesses by name using fuzzy matching to account for user typos.
+    Uses text searching function in ./backend/utils/search.py to search by name.
 
     Args:
-        query (str): User query (the name of the business searched for).
-
-    Raises:
-        ValueError: If the business was never found.
+        query (str): What the user is searching for.
 
     Returns:
-        list[dict]: Contains the info for all businesses that were matched to the query.
+        list[dict]: Contains all valid businesses.
     """
-
-    businesses = get_all_businesses() # Fetch all businesses
-
-    valid_businesses = []
-
-    for business in businesses:
-        business_name = business.get('name')
-        if business_name is not None: # Check if None so that .lower() can be used without error
-            partial_ratio = fuzz.partial_ratio(query.lower(), business_name.lower())
-                # Partial ratio: partial matches within string
-            token_set_ratio = fuzz.token_set_ratio(query.lower(), business_name.lower())
-                # Token set ratio: For word order changes
-            if partial_ratio > 85 and token_set_ratio > 85:
-                valid_businesses.append(business)
-        else:
-            continue
-
-    if valid_businesses == []:
-        raise ValueError("ERROR: Query did not match any businesses.")
-        # Will be caught later and displayed in electron
-
-    return valid_businesses
+    return search.search_by_text(query=query)
 
 def filter_by_category(
-        category:str
+        target_category:str
         ) -> list[dict]:
     """
-    Filters through businesses by category.
+    Filters through businesses by category using functions from ./backend/utils/search.py.
 
     Args:
-        category (str): Business category (e.g. restaurant, convenience, bakery)
-
-    Raises:
-        ValueError: If no shops with the given category were found.
-
-    Returns:
-        list[dict]: All businesses that were found within the given category.
+        target_category (str): Category that is being searched for by the user, such as restaurant.
     """
-    businesses = get_all_businesses() # Fetch all businesses
-
-    valid_businesses = []
-
-    for business in businesses:
-        if category == business['category']:
-            valid_businesses.append(business)
-        else:
-            continue
-
-    if valid_businesses == []:
-        raise ValueError("ERROR: Category not found. Please check your input.")
-
-    return valid_businesses
+    return search.filter_by_field('category', target_category)
