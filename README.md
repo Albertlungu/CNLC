@@ -34,6 +34,41 @@ Windows (for Eason):
 		- People who liked X also discovered Y
 	- *Points system* - money -> points -> "ratings" (sort of)
 
+## Project Status
+***DONE***
+- [x] Business JSON population: made the code and put local businesses into a JSON file (~550k lines worth of businesses across 8 cities)
+- [x] Business validation: Making sure all businesses have valid fields and any new ones don't break it (using Pydantic)
+- [x] Business management: Searching by ID, name (using fuzzy matching), and category
+- [x] Flask application: What connects the frontend to the backend through http:// and file:// protocols
+- [x] Business API routes: Translates HTTP requests (things people do on the frontend) to function calls in the business manager module
+- [x] Helper functions (other random stuff)
+- [x] Location based radius filtering: User selects a location and a radius around them, loading only the stores in given area
+Time spent: ~6h focused work
+***TODO***
+- [ ] Stacking multiple filters into server
+- [ ] Reviews
+  - [ ] JSON
+  - [ ] Validation
+  - [ ] Management
+  - [ ] Routing
+- [ ] Bookmarks
+  - [ ] JSON
+  - [ ] Validation
+  - [ ] Management
+  - [ ] Routing
+- [ ] Deals
+  - [ ] JSON
+  - [ ] Validation
+  - [ ] Management
+  - [ ] Routing
+- [ ] Human verification
+  - [ ] Management
+  - [ ] Routing
+- [ ] AI Suggestions
+- [ ] Automatic user geolocation
+- [ ] Frontend
+*Testing all throughout*
+
 ## Project Structure
 
 ```
