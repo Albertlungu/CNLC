@@ -1,0 +1,53 @@
+"filename", "language", "JSON", "Python", "Markdown", "pip requirements", "PowerShell", "Shell Script", "JSON with Comments", "JavaScript", "HTML", "PostCSS", "comment", "blank", "total"
+"/Users/albertlungu/Documents/GitHub/CNLC/README.md", "Markdown", 0, 0, 130, 0, 0, 0, 0, 0, 0, 0, 0, 8, 138
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/api/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/api/server.py", "Python", 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 39, 23, 135
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/bookmark_manager.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/business_manager.py", "Python", 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 58, 17, 118
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/deal_manager.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/review_manager.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/core/verification.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/ml/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/ml/recommender.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/business.py", "Python", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 24, 12, 98
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/category.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/deal.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/review.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/models/user.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/storage/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/storage/data_validator.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/storage/json_handler.py", "Python", 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 23, 5, 45
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/utils/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/utils/geo.py", "Python", 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 30, 13, 91
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/utils/search.py", "Python", 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 43, 15, 100
+"/Users/albertlungu/Documents/GitHub/CNLC/backend/utils/sorting.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/config/config.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/config/settings.json", "JSON with Comments", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/data/bookmarks.json", "JSON", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/data/businesses.json", "JSON", 553340, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 553340
+"/Users/albertlungu/Documents/GitHub/CNLC/data/deals.json", "JSON", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/data/reviews.json", "JSON", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/data/users.json", "JSON", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/main.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/package.json", "JSON", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/preload.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/css/business-card.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/css/components.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/css/styles.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/js/api-client.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/js/app.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/js/utils/constants.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/frontend/src/js/utils/helper.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/requirements.txt", "pip requirements", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 11, 7, 30
+"/Users/albertlungu/Documents/GitHub/CNLC/scripts/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/scripts/overpass_api.py", "Python", 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 115, 5, 143
+"/Users/albertlungu/Documents/GitHub/CNLC/scripts/populate_businesses.py", "Python", 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 9, 7, 29
+"/Users/albertlungu/Documents/GitHub/CNLC/setup.ps1", "PowerShell", 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/albertlungu/Documents/GitHub/CNLC/setup.sh", "Shell Script", 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 3, 15
+"/Users/albertlungu/Documents/GitHub/CNLC/tests/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/albertlungu/Documents/GitHub/CNLC/tests/test_backend/__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"Total", "-", 553340, 321, 130, 12, 3, 12, 0, 0, 0, 0, 352, 154, 554324

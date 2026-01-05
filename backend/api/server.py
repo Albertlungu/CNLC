@@ -3,6 +3,7 @@
 
 Entry point for web API. The main file that ties everything together.
 """
+# TODO: Add the ability to stack multiple filters.
 
 import sys
 import os
@@ -63,21 +64,14 @@ def health_check():
 def get_businesses() -> Response:
     """
     RESTful endpoint: GET /api/businesses
-
-    Query parameters:
-    - search: Search by name (fuzzy matching)
-    - category: Filter by category
-    - (no params): Get all businesses
-
-    Examples:
-    - /api/businesses                     -> Get all
-    - /api/businesses?search=coffee       -> Search by name
-    - /api/businesses?category=restaurant -> Filter by category
     """
     # Extract query parameters
     search_query = request.args.get('search')
     category = request.args.get('category')
     filepath = request.args.get('filepath', 'data/businesses.json')
+    radius = request.args.get('radius', 10, type=int)
+    lat1 = request.args.get('lat1', type=float)
+    lon1 = request.args.get('lon1', type=float)
 
     try:
         # Determine which operation to perform
@@ -85,6 +79,8 @@ def get_businesses() -> Response:
             results = bm.search_by_name(search_query)
         elif category:
             results = bm.filter_by_category(category)
+        elif radius and lat1 is not None and lon1 is not None:
+            results = bm.filter_by_radius(radius, lat1, lon1)
         else:
             results = bm.get_all_businesses(filepath=filepath)
 
