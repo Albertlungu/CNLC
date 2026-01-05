@@ -1,3 +1,9 @@
+"""
+./backend/storage/json_handler.py
+
+Handles saving and loading JSON files from their pipelines.
+"""
+
 import json
 import os
 from pathlib import Path

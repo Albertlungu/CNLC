@@ -1,3 +1,10 @@
+"""
+./scripts/overpass_api.py
+
+Uses OverpassAPI to search for businesses in a specific city, and composes a JSON-formatted list
+with dictionaries to represent information about the business.
+"""
+
 import requests
 from typing import Any
 
