@@ -91,6 +91,12 @@ CNLC/
 │   ├── deals.json                    # Active deals and coupons
 │   └── categories.json               # Business category definitions
 │
+├── scripts/                          # Data population and maintenance scripts
+│   ├── populate_businesses.py        # Main script to fetch and populate business data
+│   ├── osm_overpass_api.py           # OpenStreetMap Overpass API client and methods
+│   ├── yelp_api.py                   # Yelp Fusion API client (optional, future)
+│   └── google_places_api.py          # Google Places API client (optional, future)
+│
 ├── tests/                            # Automated tests
 │   ├── test_backend/                 # Backend unit and integration tests
 │   │   ├── test_business_manager.py  # Test business logic
