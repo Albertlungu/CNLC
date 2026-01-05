@@ -18,10 +18,10 @@ from scripts.overpass_api import fetch_businesses, compose_json
 from backend.storage.json_handler import save_businesses
 
 
-city = 'Ottawa'
+city = 'Winnipeg'
 data = fetch_businesses(city)[2]
-businesses = compose_json(data)
-save_businesses(businesses)
+businesses = compose_json(data, city=city)
+save_businesses(businesses, io_type='a')
 
 print("="*60)
 print(f'{city} businesses successfully saved')

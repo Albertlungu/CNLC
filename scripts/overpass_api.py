@@ -11,7 +11,7 @@ from typing import Any
 def fetch_businesses(
         city:str,
         debug=False
-        ) -> tuple[str, requests.Response, dict]:
+        ) -> tuple[str, requests.Response, dict, str]:
     """
     Gets businesses using requests library and OverpassAPI.
 
@@ -44,10 +44,11 @@ def fetch_businesses(
         print(f"DEBUG: Response Text\n{"="*60}\n: {response.text[:5000]}")
         # First 500 chars
 
-    return query, response, data
+    return query, response, data, city
 
 def compose_json(
-        data:dict
+        data:dict,
+        city:str
         ) -> list[dict]:
     """
     Uses the data from the fetch_businesses() function to display relevant information about the
@@ -55,6 +56,7 @@ def compose_json(
 
     Args:
         data (dict): Data from fetch_businesses function.
+        city (str): City name.
 
     Returns:
         list[dict]: All business information as a list of dictionaries. To be compounded into a json
@@ -124,8 +126,8 @@ def compose_json(
             'address': {
                 'street': tags.get('addr:street'),
                 'housenumber': tags.get('addr:housenumber'),
-                'city': tags.get('addr:city'),
-                'country': tags.get('addr:country'),
+                'city': tags.get('addr:city') or city,
+                'country': tags.get('addr:country') or 'Canada',
                 'postcode': tags.get('addr:postcode')
             },
             'phone': tags.get('phone') or tags.get('contact:phone'),

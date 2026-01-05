@@ -10,7 +10,8 @@ from pathlib import Path
 
 def save_businesses(
         businesses:list[dict],
-        output_filepath:str|None=None
+        output_filepath:str|None=None,
+        io_type:str='a'
         ) -> None:
     """
     Saves businesses taken from OverpassAPI to a JSON file.
@@ -18,13 +19,14 @@ def save_businesses(
     Args:
         businesses (list[dict]): List containing businesses info.
         output_filepath (str, optional): Output filepath. Defaults to 'data/businesses.json'.
+        io_type (str, optional): Whether to rewrite, delete, or append to file.
     """
     if output_filepath is None:
         # Get the project root (2 levels up from this file)
         project_root = Path(__file__).parent.parent.parent
         output_filepath = str(project_root / 'data' / 'businesses.json')
 
-    with open(output_filepath, 'w') as f:
+    with open(output_filepath, io_type) as f:
         json.dump(businesses, f, indent=1)
 
 def load_businesses(

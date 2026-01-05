@@ -1,5 +1,18 @@
 # CNLC
 
+## Installing Dependencies
+To install the dependencies needed for this program, copy paste the following commands into your computer's terminal:
+
+MacOS:
+```bash
+./setup.sh
+```
+
+Windows (for Eason):
+```bash
+.\setup.ps1
+```
+
 ## Overview and project plan (my notes from Jan 4 call):
 **Prompt**: A byte-sized business boost
 - Use programming skills to support small local businesses in their community
@@ -89,13 +102,10 @@ CNLC/
 │   ├── users.json                    # User accounts and authentication data
 │   ├── bookmarks.json                # User-saved favorite businesses
 │   ├── deals.json                    # Active deals and coupons
-│   └── categories.json               # Business category definitions
 │
 ├── scripts/                          # Data population and maintenance scripts
 │   ├── populate_businesses.py        # Main script to fetch and populate business data
 │   ├── osm_overpass_api.py           # OpenStreetMap Overpass API client and methods
-│   ├── yelp_api.py                   # Yelp Fusion API client (optional, future)
-│   └── google_places_api.py          # Google Places API client (optional, future)
 │
 ├── tests/                            # Automated tests
 │   ├── test_backend/                 # Backend unit and integration tests
@@ -125,16 +135,3 @@ CNLC/
 - **Frontend (Electron)**: Desktop GUI that communicates with the backend via HTTP requests
 - **Data Layer (JSON)**: Persistent storage using JSON files for simplicity and portability
 - **Communication**: Frontend sends HTTP requests to `http://localhost:5000` where Flask serves the API
-
-## Installing Dependencies
-To install the dependencies needed for this program, copy paste the following commands into your computer's terminal:
-
-MacOS:
-```bash
-./setup.sh
-```
-
-Windows (for Eason):
-```bash
-.\setup.ps1
-```
