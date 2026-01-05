@@ -41,7 +41,7 @@ def search_by_id(
         business_id (int): Numerical identification of business.
 
     Raises:
-        ModuleNotFoundError: Is raised if the business is not found.
+        ValueError: Is raised if the business is not found.
 
     Returns:
         list: Contains the dict containing business information (normally only one result).
@@ -56,7 +56,7 @@ def search_by_id(
             continue
 
     if results == []:
-        raise ModuleNotFoundError(f"ERROR: Cannot find business id: {business_id}")
+        raise ValueError(f"ERROR: Cannot find business id: {business_id}")
     # Will be caught later and displayed in electron
 
     return results
@@ -71,7 +71,7 @@ def search_by_name(
         query (str): User query (the name of the business searched for).
 
     Raises:
-        ModuleNotFoundError: If the business was never found.
+        ValueError: If the business was never found.
 
     Returns:
         list[dict]: Contains the info for all businesses that were matched to the query.
@@ -94,7 +94,7 @@ def search_by_name(
             continue
 
     if valid_businesses == []:
-        raise ModuleNotFoundError("ERROR: Query did not match any businesses.")
+        raise ValueError("ERROR: Query did not match any businesses.")
         # Will be caught later and displayed in electron
 
     return valid_businesses
@@ -109,7 +109,7 @@ def filter_by_category(
         category (str): Business category (e.g. restaurant, convenience, bakery)
 
     Raises:
-        ModuleNotFoundError: If no shops with the given category were found.
+        ValueError: If no shops with the given category were found.
 
     Returns:
         list[dict]: All businesses that were found within the given category.
@@ -125,6 +125,6 @@ def filter_by_category(
             continue
 
     if valid_businesses == []:
-        raise ModuleNotFoundError("ERROR: Category not found. Please check your input.")
+        raise ValueError("ERROR: Category not found. Please check your input.")
 
     return valid_businesses

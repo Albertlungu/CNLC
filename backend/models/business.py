@@ -32,6 +32,9 @@ class Business(BaseModel):
     opening_hours: Optional[str] = None
     category: str
     cuisine: Optional[str] = None
+    phone: Optional[str] = None
+    website: Optional[str] = None
+    address: Optional[str] = None
 
     tlds = [
         '.ca',
@@ -89,7 +92,7 @@ class Business(BaseModel):
         if link is None:
             return link
 
-        if not link.startswith('http://') or link.startswith('https://'):
+        if not link.startswith('http://') and link.startswith('https://'):
             return 'http://' + link
 
         return link

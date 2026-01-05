@@ -57,71 +57,83 @@ def health_check():
     """
     return jsonify({"status": "healthy"}), 200
 
-# ======================= Routing blueprints ====================
+# ======================= RESTful API Routes ====================
 
-@app.route('/api/businesses/get_businesses', methods=['GET'])
+@app.route('/api/businesses', methods=['GET'])
 def get_businesses() -> Response:
     """
-    Getting all businesses from JSON file.
+    RESTful endpoint: GET /api/businesses
+
+    Query parameters:
+    - search: Search by name (fuzzy matching)
+    - category: Filter by category
+    - (no params): Get all businesses
+
+    Examples:
+    - /api/businesses                     -> Get all
+    - /api/businesses?search=coffee       -> Search by name
+    - /api/businesses?category=restaurant -> Filter by category
     """
+    # Extract query parameters
+    search_query = request.args.get('search')
+    category = request.args.get('category')
     filepath = request.args.get('filepath', 'data/businesses.json')
-    results = bm.get_all_businesses(filepath=filepath)
-    resp = jsonify({
-        "results": results,
-        "count": len(results)
+
+    try:
+        # Determine which operation to perform
+        if search_query:
+            results = bm.search_by_name(search_query)
+        elif category:
+            results = bm.filter_by_category(category)
+        else:
+            results = bm.get_all_businesses(filepath=filepath)
+
+        resp = jsonify({
+            "businesses": results,
+            "count": len(results)
         })
-    return make_response(resp, 200)
+        return make_response(resp, 200)
 
-@app.route('/api/businesses/id_search', methods=['GET'])
-def id_search() -> Response:
+    except ValueError as e:
+        # Handle not found errors from business_manager
+        resp = jsonify({"error": str(e)})
+        return make_response(resp, 404)
+    except Exception as e:
+        # Handle unexpected errors
+        resp = jsonify({"error": "Internal server error"})
+        return make_response(resp, 500)
+
+@app.route('/api/businesses/<int:business_id>', methods=['GET'])
+def get_business_by_id(business_id: int) -> Response:
     """
-    Returns the business matching the ID.
+    RESTful endpoint: GET /api/businesses/<id>
+
+    Returns a single business by its ID.
+
+    Example:
+    - /api/businesses/123456
     """
-    business_id = request.args.get('business_id', type=int)
+    try:
+        results = bm.search_by_id(business_id=business_id)
 
-    if business_id is None:
-        resp = jsonify({"error": "Business ID is required and must be an integer"})
-        return make_response(resp, 400)
-
-    results = bm.search_by_id(business_id=business_id)
-    resp = jsonify({
-        "results": results,
-        "count": len(results)
+        # Return the first (and should be only) result
+        resp = jsonify({
+            "business": results[0] if results else None,
         })
-    return make_response(resp, 200)
+        return make_response(resp, 200)
 
-@app.route('/api/businesses/name_search', methods=['GET'])
-def name_search() -> Response:
-    """
-    Searches businesses by name using fuzzy matching to account for user typos.
-    """
-    name = request.args.get('name', type=str)
+    except ValueError as e:
+        # Business not found
+        resp = jsonify({"error": str(e)})
+        return make_response(resp, 404)
+    except Exception as e:
+        # Unexpected error
+        resp = jsonify({"error": "Internal server error"})
+        return make_response(resp, 500)
 
-    if name is None:
-        resp = jsonify({"error": "Name is required and must be a string"})
-        return make_response(resp, 400)
-
-    results = bm.search_by_name(name)
-    resp = jsonify({
-        "results": results,
-        "count": len(results)
-        })
-    return make_response(resp, 200)
-
-@app.route('/api/businesses/category_filter', methods=['GET'])
-def category_filter() -> Response:
-    """
-    Filters through businesses by category.
-    """
-    category = request.args.get('category', type=str)
-
-    if category is None:
-        resp = jsonify({"error": "Category is required and must be a string"})
-        return make_response(resp, 400)
-
-    results = bm.filter_by_category(category=category)
-    resp = jsonify({
-        "results": results,
-        "count": len(results)
-        })
-    return make_response(resp, 200)
+if __name__ == '__main__':
+    app.run(
+        host='127.0.0.1',
+        port=5000,
+        debug=True
+    )
