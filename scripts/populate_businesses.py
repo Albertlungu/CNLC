@@ -1,3 +1,12 @@
+"""
+./scripts/populate_businesses.py
+
+Pulls together entire business population pipeline.
+
+IDEA: Use geolocation to find user's latitude and longitude, they can select a radius in which
+businesses are shown. The radius (in km) is translated to deg, and we estimate that way.
+"""
+
 import sys
 import os
 
