@@ -25,3 +25,6 @@ requests==2.31.0
 # Fuzzy matching
 fuzzywuzzy
 python-Levenshtein
+
+# Math
+numpy
