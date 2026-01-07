@@ -77,32 +77,20 @@ def get_businesses() -> Response:
         results = bm.get_all_businesses(filepath=filepath)
 
         # Apply radius filter first if provided
-        if radius and lat1 is not None and lon1 is not None:
-            from backend.utils.geo import Haversine
-            filtered_results = []
-            for business in results:
-                lat2 = business['latitude']
-                lon2 = business['longitude']
-                if Haversine(lat1, lon1, lat2, lon2).final_distance() < radius:
-                    filtered_results.append(business)
-            results = filtered_results
+        if lat1 and lon1:
+            if radius != 0:
+                results = bm.filter_by_radius(results, radius, lat1, lon1)
+            else:
+                resp = jsonify({"error": "Radius must be nonzero"})
+                return make_response(resp, 500)
 
         # Apply category filter if provided
         if category:
-            results = [b for b in results if b.get('category') == category]
+            results = bm.filter_by_category(results, category)
 
         # Apply search filter if provided (fuzzy matching)
         if search_query:
-            from fuzzywuzzy import fuzz
-            filtered_results = []
-            for business in results:
-                business_name = business.get('name')
-                if business_name is not None:
-                    partial_ratio = fuzz.partial_ratio(search_query.lower(), business_name.lower())
-                    token_set_ratio = fuzz.token_set_ratio(search_query.lower(), business_name.lower())
-                    if partial_ratio > 85 and token_set_ratio > 85:
-                        filtered_results.append(business)
-            results = filtered_results
+            results = bm.search_by_name(results, search_query)
 
         resp = jsonify({
             "businesses": results,
@@ -129,8 +117,9 @@ def get_business_by_id(business_id: int) -> Response:
     Example:
     - /api/businesses/123456
     """
+    results = bm.get_all_businesses()
     try:
-        results = bm.search_by_id(business_id=business_id)
+        results = bm.search_by_id(results, business_id=business_id)
 
         # Return the first (and should be only) result
         resp = jsonify({

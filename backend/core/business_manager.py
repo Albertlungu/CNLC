@@ -31,11 +31,15 @@ def get_all_businesses(filepath:str='./data/businesses.json') -> list[dict]:
     """
     return load_businesses(filepath)
 
-def search_by_id(business_id:int) -> list:
+def search_by_id(
+        businesses:list[dict],
+        business_id:int
+        ) -> list:
     """
     Fetches a business given its ID and returns it.
 
     Args:
+        businesses (list[dict]): Businesses being searched through.
         business_id (int): Numerical identification of business.
 
     Raises:
@@ -44,8 +48,6 @@ def search_by_id(business_id:int) -> list:
     Returns:
         list: Contains the dict containing business information (normally only one result).
     """
-    businesses = get_all_businesses()
-
     results = []
     for business in businesses:
         if business.get('id') == business_id:
@@ -59,28 +61,37 @@ def search_by_id(business_id:int) -> list:
 
     return results
 
-def search_by_name(query:str) -> list[dict]:
+def search_by_name(
+        businesses:list[dict],
+        query:str
+        ) -> list[dict]:
     """
     Uses text searching function in ./backend/utils/search.py to search by name.
 
     Args:
+        businesses (dict): Businesses being searched through.
         query (str): What the user is searching for.
 
     Returns:
         list[dict]: Contains all valid businesses.
     """
-    return search.search_by_text(query=query)
+    return search.search_by_text(businesses, query=query)
 
-def filter_by_category(target_category:str) -> list[dict]:
+def filter_by_category(
+        businesses:list[dict],
+        target_category:str
+        ) -> list[dict]:
     """
     Filters through businesses by category using functions from ./backend/utils/search.py.
 
     Args:
+        businesses (dict): Businesses being searched through.
         target_category (str): Category that is being searched for by the user, such as restaurant.
     """
-    return search.filter_by_field('category', target_category)
+    return search.filter_by_field(businesses, 'category', target_category)
 
 def filter_by_radius(
+        businesses:list[dict],
         radius:int,
         lat1:float,
         lon1:float
@@ -89,6 +100,7 @@ def filter_by_radius(
     Filters by location through shops with a custom radius, given the user's location.
 
     Args:
+        businesses (list[dict]): Businesses being searched through.
         radius (int): Radius within which the user is searching.
         lat1 (float): User's latitude.
         lon1 (float): User's longitude.
@@ -99,8 +111,6 @@ def filter_by_radius(
     Returns:
         list[dict]: Contains all businesses found in the given radius.
     """
-
-    businesses = get_all_businesses()
     results = []
 
     for business in businesses:

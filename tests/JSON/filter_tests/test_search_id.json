@@ -1,0 +1,20 @@
+{
+  "business": {
+    "address": {
+      "city": "Gatineau",
+      "country": "Canada",
+      "housenumber": "20",
+      "postcode": "J9A 3G1",
+      "street": "Boulevard du Plateau"
+    },
+    "category": "restaurant",
+    "cuisine": "pizza;shawarma",
+    "id": 2706036649,
+    "latitude": 45.4369349,
+    "longitude": -75.768297,
+    "name": "Pizza Plateau",
+    "opening_hours": "Su - Th 11:00-23:00; Fr-Sa 11:00- 23:59",
+    "phone": null,
+    "website": null
+  }
+}

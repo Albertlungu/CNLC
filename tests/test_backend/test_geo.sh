@@ -14,6 +14,7 @@ if grep -q '"status": "healthy"' ./tests/JSON/health.json; then
 else
     echo "Unhealthy"
 fi
+
 sleep 3 && curl -s "http://127.0.0.1:5000/api/businesses?lat1=$LAT1&lon1=$LON1&radius=$RADIUS" > ./tests/JSON/geolocation.json
 if grep -q '"count":' ./tests/JSON/geolocation.json; then
     echo "Geolocation API working"

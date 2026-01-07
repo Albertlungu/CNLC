@@ -1,0 +1,203 @@
+{
+  "businesses": [
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "349",
+        "postcode": "J8P 1L3",
+        "street": "Rue Notre-Dame"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 3690658041,
+      "latitude": 45.481584,
+      "longitude": -75.642235,
+      "name": "Depanneur 7 Jours",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "55",
+        "postcode": "J8X 1Z3",
+        "street": "Rue Frontenac"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 3690765587,
+      "latitude": 45.4291341,
+      "longitude": -75.718283,
+      "name": "D\u00e9panneur",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "4",
+        "postcode": null,
+        "street": "Rue Georges-Bilodeau"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 3690782879,
+      "latitude": 45.4624017,
+      "longitude": -75.7480991,
+      "name": "Depanneur",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "72",
+        "postcode": "J9H 3E2",
+        "street": "Rue du Couvent"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 3690844190,
+      "latitude": 45.3970692,
+      "longitude": -75.8455648,
+      "name": "Depanneur Palmyra",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": null,
+        "postcode": null,
+        "street": null
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 4359225689,
+      "latitude": 45.3865838,
+      "longitude": -75.8047416,
+      "name": "Depanneur Deschenes",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "390",
+        "postcode": null,
+        "street": "Boulevard Alexandre-Tach\u00e9"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 6463073844,
+      "latitude": 45.4219802,
+      "longitude": -75.7459293,
+      "name": "Depanneur Tache",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "411",
+        "postcode": null,
+        "street": "Boulevard Saint-Ren\u00e9 Est"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 6680785257,
+      "latitude": 45.4933938,
+      "longitude": -75.6407753,
+      "name": "Depanneur Proprio",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": null,
+        "postcode": null,
+        "street": null
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 6762916759,
+      "latitude": 45.4472804,
+      "longitude": -75.7397317,
+      "name": "Depanneur du Casino",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": "35",
+        "postcode": null,
+        "street": "All\u00e9e de Hambourg"
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 9634708667,
+      "latitude": 45.433753,
+      "longitude": -75.79888,
+      "name": "Depanneur Agora",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Gatineau",
+        "country": "Canada",
+        "housenumber": null,
+        "postcode": null,
+        "street": null
+      },
+      "category": "convenience",
+      "cuisine": null,
+      "id": 11638192167,
+      "latitude": 45.4717186,
+      "longitude": -75.7517587,
+      "name": "Depanneur du D\u00f4me",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    },
+    {
+      "address": {
+        "city": "Ottawa",
+        "country": "Canada",
+        "housenumber": "139",
+        "postcode": null,
+        "street": "Preston Street"
+      },
+      "category": "alcohol",
+      "cuisine": null,
+      "id": 5835524138,
+      "latitude": 45.4075478,
+      "longitude": -75.7134967,
+      "name": "Ward 14 Depanneur",
+      "opening_hours": null,
+      "phone": null,
+      "website": null
+    }
+  ],
+  "count": 11
+}
