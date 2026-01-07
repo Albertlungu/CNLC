@@ -30,12 +30,14 @@ def get_all_businesses(
     return load_businesses(filepath)
 
 def search_by_text(
+        businesses:list[dict],
         query:str
         ) -> list[dict]:
     """
     Searches businesses by name using fuzzy matching to account for user typos.
 
     Args:
+        businesses (dict): Dictionary containing businesses searched through.
         query (str): User query (the name of the business searched for).
 
     Raises:
@@ -44,9 +46,6 @@ def search_by_text(
     Returns:
         list[dict]: Contains the info for all businesses that were matched to the query.
     """
-
-    businesses = get_all_businesses() # Fetch all businesses
-
     results = []
 
     for business in businesses:
@@ -68,6 +67,7 @@ def search_by_text(
     return results
 
 def filter_by_field(
+        businesses:list[dict],
         field:str,
         value:str
         ) -> list[dict]:
@@ -75,6 +75,7 @@ def filter_by_field(
     Generic filtering by field for more reusability in other code.
 
     Args:
+        businesses (dict): Dictionary containing businesses searched through.
         field (str): Field searched for, such as category, or cuisine
         value (str): Value matched to field, for example, the category could be restaurant
 
@@ -84,8 +85,6 @@ def filter_by_field(
     Returns:
         list[dict]: Contains all valid businesses in field f with value v.
     """
-
-    businesses = get_all_businesses()
     results = []
 
     for business in businesses:
