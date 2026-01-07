@@ -3,7 +3,6 @@
 
 Entry point for web API. The main file that ties everything together.
 """
-# TODO: Add the ability to stack multiple filters.
 
 import sys
 import os
@@ -74,15 +73,36 @@ def get_businesses() -> Response:
     lon1 = request.args.get('lon1', type=float)
 
     try:
-        # Determine which operation to perform
+        # Start with all businesses
+        results = bm.get_all_businesses(filepath=filepath)
+
+        # Apply radius filter first if provided
+        if radius and lat1 is not None and lon1 is not None:
+            from backend.utils.geo import Haversine
+            filtered_results = []
+            for business in results:
+                lat2 = business['latitude']
+                lon2 = business['longitude']
+                if Haversine(lat1, lon1, lat2, lon2).final_distance() < radius:
+                    filtered_results.append(business)
+            results = filtered_results
+
+        # Apply category filter if provided
+        if category:
+            results = [b for b in results if b.get('category') == category]
+
+        # Apply search filter if provided (fuzzy matching)
         if search_query:
-            results = bm.search_by_name(search_query)
-        elif category:
-            results = bm.filter_by_category(category)
-        elif radius and lat1 is not None and lon1 is not None:
-            results = bm.filter_by_radius(radius, lat1, lon1)
-        else:
-            results = bm.get_all_businesses(filepath=filepath)
+            from fuzzywuzzy import fuzz
+            filtered_results = []
+            for business in results:
+                business_name = business.get('name')
+                if business_name is not None:
+                    partial_ratio = fuzz.partial_ratio(search_query.lower(), business_name.lower())
+                    token_set_ratio = fuzz.token_set_ratio(search_query.lower(), business_name.lower())
+                    if partial_ratio > 85 and token_set_ratio > 85:
+                        filtered_results.append(business)
+            results = filtered_results
 
         resp = jsonify({
             "businesses": results,
