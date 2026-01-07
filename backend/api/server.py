@@ -12,7 +12,7 @@ from typing import Union, Tuple, Any, Literal
 from flask import Flask, Response, jsonify, request, make_response
 from flask_cors import CORS
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
 
 import backend.core.business_manager as bm
