@@ -92,7 +92,7 @@ class Business(BaseModel):
         if link is None:
             return link
 
-        if not link.startswith('http://') and link.startswith('https://'):
-            return 'http://' + link
+        if not link.startswith('http://') and not link.startswith('https://'):
+                return 'http://' + link
 
         return link
