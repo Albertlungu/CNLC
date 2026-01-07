@@ -65,9 +65,9 @@ def get_businesses() -> Response:
     RESTful endpoint: GET /api/businesses
     """
     # Extract query parameters
-    search_query = request.args.get('search')
-    category = request.args.get('category')
-    filepath = request.args.get('filepath', 'data/businesses.json')
+    search_query = request.args.get('search', type=str)
+    category = request.args.get('category', type=str)
+    filepath = request.args.get('filepath', 'data/businesses.json', type=str)
     radius = request.args.get('radius', 10, type=int)
     lat1 = request.args.get('lat1', type=float)
     lon1 = request.args.get('lon1', type=float)
