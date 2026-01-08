@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1000,
+        "username": "albertlungu",
+        "email": "alung2@ocdsb.ca",
+        "phone": "+1-111-111-1111",
+        "isActive": true,
+        "roles": ["admin"],
+        "bookmarks": [
+        ],
+        "profile": {
+            "firstName": "Albert",
+            "lastName": "Lungu"
+        },
+        "location": {
+            "country": "Canada",
+            "city": "Ottawa"
+        }
+    },
+    {
+        "id": 1001,
+        "username": "easonyang",
+        "email": "eyang11@ocdsb.ca",
+        "phone": "+1-111-111-1111",
+        "isActive": true,
+        "roles": ["admin"],
+        "bookmarks": [
+        ],
+        "profile": {
+            "firstName": "Eason",
+            "lastName": "Yang"
+        },
+        "location": {
+            "country": "Canada",
+            "city": "Ottawa"
+        }
+    },
+    {
+        "id": 1002,
+        "username": "vivianwang",
+        "email": "vwang1@ocdsb.ca",
+        "phone": "+1-111-111-1111",
+        "isActive": true,
+        "roles": ["admin"],
+        "bookmarks": [
+        ],
+        "profile": {
+            "firstName": "Vivian",
+            "lastName": "Wang"
+        },
+        "location": {
+            "country": "Canada",
+            "city": "Ottawa"
+        }
+    }
+]
