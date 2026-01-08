@@ -15,6 +15,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.insert(0, project_root)
 
 import backend.core.business_manager as bm
+import backend.storage.json_handler as jh
 
 app = Flask(__name__) # Creating the flask application
 
@@ -74,7 +75,7 @@ def get_businesses() -> Response:
 
     try:
         # Start with all businesses
-        results = bm.get_all_businesses(filepath=filepath)
+        results = jh.load_businesses(input_filepath=filepath)
 
         # Apply radius filter first if provided
         if lat1 and lon1:
@@ -117,7 +118,7 @@ def get_business_by_id(business_id: int) -> Response:
     Example:
     - /api/businesses/123456
     """
-    results = bm.get_all_businesses()
+    results = jh.load_businesses()
     try:
         results = bm.search_by_id(results, business_id=business_id)
 

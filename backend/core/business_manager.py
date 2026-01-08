@@ -18,19 +18,6 @@ from backend.storage.json_handler import load_businesses
 import backend.utils.search as search
 from backend.utils.geo import Haversine
 
-def get_all_businesses(filepath:str='./data/businesses.json') -> list[dict]:
-    """
-    Gets all businesses without any other processing.
-
-    Args:
-        filepath (str, optional): Filepath to businesses JSON file.
-                                  Defaults to './data/businesses.json'.
-
-    Returns:
-        list[dict]: Information about the business.
-    """
-    return load_businesses(filepath)
-
 def search_by_id(
         businesses:list[dict],
         business_id:int
