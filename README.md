@@ -13,6 +13,11 @@ Windows (for Eason):
 .\setup.ps1
 ```
 
+## Team Structure
+**Backend:** Albert
+
+**Frontend:** Vivian & Eason
+
 ## Overview and project plan (my notes from Jan 4 call):
 **Prompt**: A byte-sized business boost
 - Use programming skills to support small local businesses in their community
