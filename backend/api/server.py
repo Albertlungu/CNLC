@@ -7,9 +7,13 @@ Entry point for web API. The main file that ties everything together.
 import sys
 import os
 from typing import Union, Tuple, Any, Literal
+from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify, request, make_response
 from flask_cors import CORS
+
+# Load environment variables from .env file
+load_dotenv()
 
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
@@ -150,7 +154,7 @@ def submit_form() -> Response:
 
     success, message = verify_recaptcha(
         response_token=token,
-        secret_key='6Lfcb0QsAAAAAEat4XTxdznugxO8Wcs90hyMZNM1', # Secret key
+        secret_key=os.environ.get('RECAPTCHA_SECRET_KEY'),
         user_ip=user_ip
     )
 
