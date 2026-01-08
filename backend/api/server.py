@@ -16,6 +16,7 @@ sys.path.insert(0, project_root)
 
 import backend.core.business_manager as bm
 import backend.storage.json_handler as jh
+from backend.core.verification import verify_recaptcha
 
 app = Flask(__name__) # Creating the flask application
 
@@ -58,7 +59,10 @@ def health_check():
     """
     return jsonify({"status": "healthy"}), 200
 
-# ======================= RESTful API Routes ====================
+# ======================= API Routes ====================
+
+
+# --- Businesses ---
 
 @app.route('/api/businesses', methods=['GET'])
 def get_businesses() -> Response:
@@ -135,6 +139,26 @@ def get_business_by_id(business_id: int) -> Response:
     except Exception as e:
         # Unexpected error
         resp = jsonify({"error": "Internal server error"})
+        return make_response(resp, 500)
+
+# --- Verification ---
+@app.route('/api/submit-form', methods=['POST'])
+def submit_form() -> Response:
+    # Get token from form
+    token = request.form.get('g-recaptcha-response')
+    user_ip = request.remote_addr
+
+    success, message = verify_recaptcha(
+        response_token=token,
+        secret_key='6Lfcb0QsAAAAAEat4XTxdznugxO8Wcs90hyMZNM1', # Secret key
+        user_ip=user_ip
+    )
+
+    if success:
+        resp = jsonify({"status": "success"})
+        return make_response(resp, 200)
+    else:
+        resp = jsonify({"status": "error", "message": message})
         return make_response(resp, 500)
 
 if __name__ == '__main__':
