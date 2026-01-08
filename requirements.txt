@@ -4,6 +4,7 @@ flask-cors==4.0.0
 
 # Data Validation
 pydantic==2.5.0
+pydantic-extra-types
 
 # Security & Verification (bot prevention, user auth)
 flask-limiter==3.5.0
