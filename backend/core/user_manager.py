@@ -44,7 +44,8 @@ def create_user(
         country (str, optional): User's country of residence. Defaults to "Canada".
 
     Raises:
-        NameError: If the username already exists.
+        ValueError: If the username already exists.
+        ValidationError: If the user info is invalid (Pydantic validation).
 
     Returns:
         Union[str, None]: Basically always returns str, unless an error is present.
@@ -52,7 +53,7 @@ def create_user(
 
     for user in users:
         if user['username'] == username:
-            raise  NameError("ERROR: Username is not available.")
+            raise  ValueError("ERROR: Username is not available.")
 
     try:
         validated_user = User(
@@ -82,12 +83,21 @@ def remove_user(username:str, users:list[dict]=jh.load_users()):
     Args:
         username (str): Unique username.
         users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+
+    Raises:
+        ValueError: When the user does not exist.
     """
+
+    user_exists = False
     for idx, user in enumerate(users):
         if user['username'] == username:
+            user_exists = True
             del users[idx]
-
-    jh.save_users(users=users, io_type='w')
+        break
+    if user_exists:
+        jh.save_users(users=users, io_type='w')
+    else:
+        raise ValueError("ERROR: User does not exist.")
 
 def edit_user(
         username:str,
@@ -103,9 +113,14 @@ def edit_user(
         field (str): Field to be modified
         new_value (Any): Value to replace the old one.
         users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+
+    Raises:
+        ValueError: When user does not exist.
     """
+    user_exists = False
     for user in users:
         if user['username'] == username:
+            user_exists = True
             if field == "firstName" or field == "lastName": # If in profile sub-dict
                 user['profile'][field] = new_value
             elif field == "country" or field == "city": # If in location sub-dict
@@ -114,8 +129,12 @@ def edit_user(
                 user['password_hash'] = pw.hash_password(new_value)
             else:
                 user[field] = new_value
+            break
 
-    jh.save_users(users, io_type='w')
+    if user_exists:
+        jh.save_users(users, io_type='w')
+    else:
+        raise ValueError("ERROR: User does not exist.")
 
 def get_user_by_username(
         username:str,
@@ -129,7 +148,7 @@ def get_user_by_username(
         users (list[dict], optional): Contains all users. Defaults to jh.load_users().
 
     Raises:
-        NameError: If the username does not exist.
+        ValueError: If the username does not exist.
 
     Returns:
         dict: User that was found.
@@ -137,8 +156,9 @@ def get_user_by_username(
     for user in users:
         if user['username'] == username:
             return user
+        break
 
-    raise NameError("ERROR: Username not found.")
+    raise ValueError("ERROR: Username not found.")
 
 def authenticate_user(
         username:str,

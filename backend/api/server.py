@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, request, make_response
 from flask_cors import CORS
 
+from pydantic import ValidationError
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -55,6 +57,13 @@ def server_error(error):
     """
     return jsonify({"error": "Internal server error."}), 500
 
+@app.errorhandler(403)
+def forbidden(error):
+    """
+    Handle 403 errors with JSON response (access forbidden)
+    """
+    return jsonify({"error": "Forbidden"}), 403
+
 
 # ======================= Health check ======================
 
@@ -93,7 +102,7 @@ def get_businesses() -> Response:
                 results = buis.filter_by_radius(results, radius, lat1, lon1)
             else:
                 resp = jsonify({"error": "Radius must be nonzero"})
-                return make_response(resp, 500)
+                return make_response(resp, 400)
 
         # Apply category filter if provided
         if category:
@@ -104,6 +113,7 @@ def get_businesses() -> Response:
             results = buis.search_by_name(results, search_query)
 
         resp = jsonify({
+            "status": "success",
             "businesses": results,
             "count": len(results)
         })
@@ -190,7 +200,13 @@ def create_user() -> Response:
             return make_response(resp, 200)
         else:
             resp = jsonify({"status": "error", "message": "One or more fields missing."})
-            return make_response(resp, 404)
+            return make_response(resp, 400)
+    except ValidationError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 400)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 400)
     except Exception as e:
         resp = jsonify({"status": "error", "message": str(e)})
         return make_response(resp, 500)
@@ -204,13 +220,75 @@ def remove_user() -> Response:
         Response: Status, being error or success, giving a message upon error.
     """
     username = request.args.get('username', type=str)
-    if username:
-        um.remove_user(username)
-        resp = jsonify({"status": "success"})
-        return make_response(resp, 200)
+    try:
+        if username:
+            um.remove_user(username)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 404) # User not found
 
     resp = jsonify({"status": "error", "message": "No username given."})
-    return make_response(resp, 404)
+    return make_response(resp, 400) # Bad request
+
+@app.route('/api/user/edit', methods=['POST'])
+def edit_user() -> Response:
+    username = request.args.get('username', type=str)
+    field = request.args.get('field', type=str)
+    new_value = request.args.get('new-value', type=str)
+
+    if username and field and new_value:
+        try:
+            um.edit_user(username, field, new_value)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+        except ValueError as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 404)
+        except Exception as e:
+            # Unexpected error
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 500)
+    else:
+        resp = jsonify({"status": "error", "message":"Username/field/value were not provided."})
+        return make_response(resp, 400) # Bad request
+
+@app.route('/api/user/get-by-username', methods=['GET'])
+def get_by_username() -> Response:
+    username = request.args.get('username', type=str)
+
+    try:
+        if username:
+            user = um.get_user_by_username(username)
+            resp = jsonify({"status": "success", "user": user})
+            return make_response(resp, 200)
+        else:
+            resp = jsonify({"status": "error", "message": "Username was not given."})
+            return make_response(resp, 400) # Bad request
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 404)
+    except Exception as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 500)
+
+@app.route('/api/user/auth', methods=['GET'])
+def authenticate_user() -> Response:
+    username = request.args.get('username', type=str)
+    password = request.args.get('password', type=str)
+
+    try:
+        if username and password:
+            um.authenticate_user(username, password)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+        else:
+            resp = jsonify({"status": "error", "message": "Username and password not given."})
+            return make_response(resp, 400)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 404)
 
 
 # ========= Verification ===========
@@ -231,7 +309,7 @@ def submit_form() -> Response:
         return make_response(resp, 200)
     else:
         resp = jsonify({"status": "error", "message": message})
-        return make_response(resp, 500)
+        return make_response(resp, 403)
 
 if __name__ == '__main__':
     app.run(
