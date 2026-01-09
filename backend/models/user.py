@@ -24,6 +24,8 @@ class User(BaseModel):
     isActive: bool
     roles: list[str] = Field(..., description="User Roles")
     bookmarks: list[int] = Field(..., description="Containing Bookmarked Business IDs")
+    profile: UserProfile
+    location: UserLocation
 
     @field_validator('id')
     @classmethod
@@ -43,9 +45,9 @@ class User(BaseModel):
         Returns:
             int: The ID otherwise
         """
-        if len(str(id_num)) == 4:
+        if len(str(id_num)) == 8:
             return id_num
-        raise ValueError("ERROR: ID must be exactly 4 digits long")
+        raise ValueError("ERROR: ID must be exactly 8 digits long")
 
     @field_validator('username')
     @classmethod
