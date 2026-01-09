@@ -4,6 +4,7 @@
         "username": "albertlungu",
         "email": "alung2@ocdsb.ca",
         "phone": "+1-111-111-1111",
+        "password_hash": "$2b$12$W.vkyEu5XWW4i7B0BRyKrON6Xg4QFDuT8tgnrfvwB/ALpzEV02XJG",
         "isActive": true,
         "roles": ["admin"],
         "bookmarks": [
@@ -22,6 +23,7 @@
         "username": "easonyang",
         "email": "eyang11@ocdsb.ca",
         "phone": "+1-111-111-1111",
+        "password_hash": "hashed_password_here",
         "isActive": true,
         "roles": ["admin"],
         "bookmarks": [
@@ -40,6 +42,7 @@
         "username": "vivianwang",
         "email": "vwang1@ocdsb.ca",
         "phone": "+1-111-111-1111",
+        "password_hash": "hashed_password_here",
         "isActive": true,
         "roles": ["admin"],
         "bookmarks": [
