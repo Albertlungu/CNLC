@@ -16,12 +16,14 @@ sys.path.insert(0, project_root)
 
 import backend.storage.json_handler as jh
 from backend.models.user import User, UserProfile, UserLocation
+import backend.utils.password as pw
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 def create_user(
         username:str,
         email:str,
         phone:str,
+        password:str,
         first_name:str,
         last_name:str,
         city:str,
@@ -58,7 +60,7 @@ def create_user(
             username=username,
             email=email,
             phone=PhoneNumber(phone),
-            password_hash="0",
+            password_hash=pw.hash_password(password),
             isActive=True,
             roles=["user"],
             bookmarks=[],
@@ -108,6 +110,8 @@ def edit_user(
                 user['profile'][field] = new_value
             elif field == "country" or field == "city": # If in location sub-dict
                 user['location'][field] = new_value
+            elif field == "password_hash": # If modifying password, must encrypt first
+                user['password_hash'] = pw.hash_password(new_value)
             else:
                 user[field] = new_value
 
@@ -135,3 +139,29 @@ def get_user_by_username(
             return user
 
     raise NameError("ERROR: Username not found.")
+
+def authenticate_user(
+        username:str,
+        password:str,
+        users:list[dict]=jh.load_users()
+        ) -> bool:
+    """
+    Verifies if password matches hashed value (for logging back in).
+
+    Args:
+        username (str): Unique username.
+        password (str): Password in words.
+        users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+
+    Raises:
+        ValueError: If user does not exist.
+
+    Returns:
+        bool: If passwords match or not.
+    """
+    for user in users:
+        if user['username'] == username:
+            return pw.verify_password(password, user['password_hash'])
+
+    raise ValueError("ERROR: Could not find user.")
+
