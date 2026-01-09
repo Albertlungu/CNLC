@@ -164,4 +164,3 @@ def authenticate_user(
             return pw.verify_password(password, user['password_hash'])
 
     raise ValueError("ERROR: Could not find user.")
-
