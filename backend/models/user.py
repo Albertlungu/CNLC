@@ -21,6 +21,7 @@ class User(BaseModel):
     username: str = Field(..., description="Unique Username")
     email: EmailStr
     phone: PhoneNumber
+    password_hash: str
     isActive: bool
     roles: list[str] = Field(..., description="User Roles")
     bookmarks: list[int] = Field(..., description="Containing Bookmarked Business IDs")

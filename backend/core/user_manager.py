@@ -58,6 +58,7 @@ def create_user(
             username=username,
             email=email,
             phone=PhoneNumber(phone),
+            password_hash="0",
             isActive=True,
             roles=["user"],
             bookmarks=[],
