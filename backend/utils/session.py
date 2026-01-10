@@ -89,29 +89,27 @@ class SessionManager:
 
     def destroy_session(self) -> None:
         """
-        Deactivates a session and marks it as expired immediately.
+        Deactivates all active sessions for this user.
 
         Raises:
-            ValueError: If the session is not found for this user.
+            ValueError: If no active sessions are found for this user.
         """
         sessions = jh.load_sessions()
 
-        target_index = None
-        session_id = None
-        for i, session in enumerate(sessions):
-            if session.get("username") == self.username:
-                target_index = i
-                session_id = session.get("session_id")
-                break
+        found_any = False
+        for session in sessions:
+            if session.get("username") == self.username and session.get("is_active"):
+                session["is_active"] = False
+                session["expiration"] = datetime.datetime.now().isoformat()
+                found_any = True
 
-        if target_index is None or session_id is None:
-            raise ValueError("ERROR: Session not found.")
+        if not found_any:
+            raise ValueError("ERROR: No active sessions found.")
 
-        sessions[target_index]["is_active"] = False
-        sessions[target_index]["expiration"] = datetime.datetime.now().isoformat()
-
-        jh.delete_session(session_id)
-        jh.save_session(sessions[target_index], io_type="a")
+        project_root = jh.Path(__file__).parent.parent.parent
+        filepath = str(project_root / "data" / "sessions.json")
+        with open(filepath, "w") as f:
+            jh.json.dump(sessions, f, indent=1)
 
     @staticmethod
     def cleanup_expired_sessions(days_to_keep: int = 5) -> int:
