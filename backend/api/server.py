@@ -11,7 +11,7 @@ from typing import Any, Literal, Tuple, Union
 
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, make_response, request
-from flask.sessions import session_json_serializer
+from flask.sessions import SessionInterface, session_json_serializer
 from flask_cors import CORS
 from pydantic import ValidationError
 from pydantic.json_schema import JsonSchemaWarningKind
@@ -136,7 +136,7 @@ def get_businesses() -> Response:
         return make_response(resp, 404)
     except Exception as e:
         # Handle unexpected errors
-        resp = jsonify({"error": "Internal server error"})
+        resp = jsonify({"error": str(e)})
         return make_response(resp, 500)
 
 
@@ -172,7 +172,7 @@ def get_business_by_id(business_id: int) -> Response:
         return make_response(resp, 500)
 
 
-@app.route("/api/users/create", methods=["POST"])
+@app.route("/api/user/create", methods=["POST"])
 def create_user() -> Response:
     """
     RESTful API endpoint for creating a user.
@@ -180,14 +180,14 @@ def create_user() -> Response:
     Returns:
         Response: Status.
     """
-    username = request.args.get("username", type=str)
-    email = request.args.get("email", type=str)
-    phone = request.args.get("phone", type=str)
-    password = request.args.get("password", type=str)
-    first_name = request.args.get("first-name", type=str)
-    last_name = request.args.get("last-name", type=str)
-    city = request.args.get("city", type=str)
-    country = request.args.get("country", "Canada", type=str)
+    username = request.json.get("username", type=str)
+    email = request.json.get("email", type=str)
+    phone = request.json.get("phone", type=str)
+    password = request.json.get("password", type=str)
+    first_name = request.json.get("first-name", type=str)
+    last_name = request.json.get("last-name", type=str)
+    city = request.json.get("city", type=str)
+    country = request.json.get("country", "Canada", type=str)
     users = jh.load_users()
 
     try:
@@ -211,7 +211,7 @@ def create_user() -> Response:
                 country,
                 users,
             )
-            resp = jsonify({"status": "success"})
+            resp = jsonify({"status": "success", "user": user})
             return make_response(resp, 200)
         else:
             resp = jsonify(
@@ -229,93 +229,6 @@ def create_user() -> Response:
         return make_response(resp, 500)
 
 
-@app.route("/api/user/remove", methods=["POST"])
-def remove_user() -> Response:
-    """
-    RESTful API endpoint to remove user.
-
-    Returns:
-        Response: Status, being error or success, giving a message upon error.
-    """
-    username = request.args.get("username", type=str)
-    try:
-        if username:
-            um.remove_user(username)
-            resp = jsonify({"status": "success"})
-            return make_response(resp, 200)
-    except ValueError as e:
-        resp = jsonify({"status": "error", "message": str(e)})
-        return make_response(resp, 404)  # User not found
-
-    resp = jsonify({"status": "error", "message": "No username given."})
-    return make_response(resp, 400)  # Bad request
-
-
-@app.route("/api/user/edit", methods=["POST"])
-def edit_user() -> Response:
-    username = request.args.get("username", type=str)
-    field = request.args.get("field", type=str)
-    new_value = request.args.get("new-value", type=str)
-
-    if username and field and new_value:
-        try:
-            um.edit_user(username, field, new_value)
-            resp = jsonify({"status": "success"})
-            return make_response(resp, 200)
-        except ValueError as e:
-            resp = jsonify({"status": "error", "message": str(e)})
-            return make_response(resp, 404)
-        except Exception as e:
-            # Unexpected error
-            resp = jsonify({"status": "error", "message": str(e)})
-            return make_response(resp, 500)
-    else:
-        resp = jsonify(
-            {"status": "error", "message": "Username/field/value were not provided."}
-        )
-        return make_response(resp, 400)  # Bad request
-
-
-@app.route("/api/user/get-by-username", methods=["GET"])
-def get_by_username() -> Response:
-    username = request.args.get("username", type=str)
-
-    try:
-        if username:
-            user = um.get_user_by_username(username)
-            resp = jsonify({"status": "success", "user": user})
-            return make_response(resp, 200)
-        else:
-            resp = jsonify({"status": "error", "message": "Username was not given."})
-            return make_response(resp, 400)  # Bad request
-    except ValueError as e:
-        resp = jsonify({"status": "error", "message": str(e)})
-        return make_response(resp, 404)
-    except Exception as e:
-        resp = jsonify({"status": "error", "message": str(e)})
-        return make_response(resp, 500)
-
-
-@app.route("/api/user/auth", methods=["GET"])
-def authenticate_user() -> Response:
-    username = request.args.get("username", type=str)
-    password = request.args.get("password", type=str)
-
-    try:
-        if username and password:
-            um.authenticate_user(username, password)
-            resp = jsonify({"status": "success"})
-            return make_response(resp, 200)
-        else:
-            resp = jsonify(
-                {"status": "error", "message": "Username and password not given."}
-            )
-            return make_response(resp, 400)
-    except ValueError as e:
-        resp = jsonify({"status": "error", "message": str(e)})
-        return make_response(resp, 404)
-
-
 # ========= Bookmarks ===========
 @app.route("/api/bookmarks/add", methods=["POST"])
 def add_bookmarks() -> Response:
@@ -325,8 +238,8 @@ def add_bookmarks() -> Response:
     Returns:
         Response: Status, being error or success, giving a message upon error.
     """
-    username = request.args.get("username", type=str)
-    bookmarks = request.args.get("bookmarks", type=str)
+    username = request.json.get("username", type=str)
+    bookmarks = request.json.get("bookmarks", type=str)
 
     try:
         if username and bookmarks:
@@ -356,8 +269,8 @@ def remove_bookmarks_route() -> Response:
     Returns:
         Response: Status, being error or success, giving a message upon error.
     """
-    username = request.args.get("username", type=str)
-    bookmarks = request.args.get("bookmarks", type=str)
+    username = request.json.get("username", type=str)
+    bookmarks = request.json.get("bookmarks", type=str)
 
     try:
         if username and bookmarks:
@@ -439,16 +352,16 @@ def get_bookmarked_businesses() -> Response:
 
 # ========= Session Management ===========
 @app.route("/api/session/create", methods=["POST"])
-def create_session() -> Union[tuple[Response, dict], Response]:
-    username = request.args.get("username", type=str)
+def create_session() -> Response:
+    username = request.json.get("username", type=str)
 
     if username:
         try:
-            session_manager = SessionManager(username)
-            session_info = session_manager.create_session()
+            sm = SessionManager(username)
+            session_info = sm.create_session()
             jh.save_session(session_info)
-            resp = jsonify({"status": "success"})
-            return make_response(resp, 200), session_info
+            resp = jsonify({"status": "success", "session_info": session_info})
+            return make_response(resp, 200)
         except ValueError as e:
             resp = jsonify({"status": "error", "message": str(e)})
             return make_response(resp, 400)
@@ -460,14 +373,102 @@ def create_session() -> Union[tuple[Response, dict], Response]:
         return make_response(resp, 400)
 
 
-@app.route("/api/session/destroy", methods=["POST"])
-def destroy_session() -> Response:
-    username = request.args.get("username", type=str)
+# ========= Auth ==========
+@app.route("/api/auth/register", methods=["POST"])
+def register() -> Response:
+    """
+    RESTful API endpoint for registering a user and creating a session.
+    """
+    if not request.json:
+        resp = jsonify({"status": "error", "message": "No data provided."})
+        return make_response(resp, 400)
+
+    username = request.json.get("username")
+    email = request.json.get("email")
+    phone = request.json.get("phone")
+    password = request.json.get("password")
+    first_name = request.json.get("first-name")
+    last_name = request.json.get("last-name")
+    city = request.json.get("city")
+    country = request.json.get("country", "Canada")
+
+    try:
+        if not all([username, email, phone, password, first_name, last_name, city]):
+            resp = jsonify(
+                {"status": "error", "message": "One or more fields missing."}
+            )
+            return make_response(resp, 400)
+
+        users = jh.load_users()
+        user = um.create_user(
+            username,
+            email,
+            phone,
+            password,
+            first_name,
+            last_name,
+            city,
+            country,
+            users,
+        )
+
+        # Create session immediately after registration
+        session_manager = SessionManager(username)
+        session_info = session_manager.create_session()
+        jh.save_session(session_info)
+
+        resp = jsonify(
+            {"status": "success", "user": user, "session_info": session_info}
+        )
+        return make_response(resp, 201)
+    except ValidationError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 400)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 400)
+    except Exception as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 500)
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def login() -> Response:
+    username = request.json.get("username") if request.json else None
+    password = request.json.get("password") if request.json else None
+
+    try:
+        if username and password:
+            um.authenticate_user(username, password)
+
+            # Create session on successful login
+            session_manager = SessionManager(username)
+            session_info = session_manager.create_session()
+            jh.save_session(session_info)
+
+            resp = jsonify({"status": "success", "session_info": session_info})
+            return make_response(resp, 200)
+        else:
+            resp = jsonify(
+                {"status": "error", "message": "Username and password not given."}
+            )
+            return make_response(resp, 400)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 401)
+    except Exception as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 500)
+
+
+@app.route("/api/auth/logout", methods=["POST"])
+def logout() -> Response:
+    username = request.json.get("username", type=str)
 
     if username:
         try:
-            session_manager = SessionManager(username)
-            session_manager.destroy_session()
+            sm = SessionManager(username)
+            sm.destroy_session()
             resp = jsonify({"status": "success"})
             return make_response(resp, 200)
         except ValueError as e:
@@ -479,6 +480,73 @@ def destroy_session() -> Response:
     else:
         resp = jsonify({"status": "error", "message": "Username not given."})
         return make_response(resp, 400)
+
+
+@app.route("/api/auth/profile", methods=["GET"])
+def get_profile() -> Response:
+    username = request.args.get("username", type=str)
+
+    try:
+        if username:
+            user = um.get_user_by_username(username)
+            resp = jsonify({"status": "success", "user": user})
+            return make_response(resp, 200)
+        else:
+            resp = jsonify({"status": "error", "message": "Username was not given."})
+            return make_response(resp, 400)  # Bad request
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 404)
+    except Exception as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 500)
+
+
+@app.route("/api/auth/profile", methods=["POST"])
+def update_profile() -> Response:
+    username = request.json.get("username", type=str)
+    field = request.json.get("field", type=str)
+    new_value = request.json.get("new-value", type=str)
+
+    if username and field and new_value:
+        try:
+            um.edit_user(username, field, new_value)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+        except ValueError as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 404)
+        except Exception as e:
+            # Unexpected error
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 500)
+    else:
+        resp = jsonify(
+            {"status": "error", "message": "Username/field/value were not provided."}
+        )
+        return make_response(resp, 400)  # Bad request
+
+
+@app.route("/api/auth/delete", methods=["POST"])
+def delete_profile() -> Response:
+    """
+    RESTful API endpoint to remove user.
+
+    Returns:
+        Response: Status, being error or success, giving a message upon error.
+    """
+    username = request.json.get("username", type=str)
+    try:
+        if username:
+            um.remove_user(username)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+    except ValueError as e:
+        resp = jsonify({"status": "error", "message": str(e)})
+        return make_response(resp, 404)  # User not found
+
+    resp = jsonify({"status": "error", "message": "No username given."})
+    return make_response(resp, 400)  # Bad request
 
 
 # ========= Verification ===========
