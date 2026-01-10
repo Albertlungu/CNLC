@@ -31,7 +31,7 @@ class SessionManager:
     def create_session(self) -> dict:
         session_id = secrets.token_urlsafe(32)
         created_at = datetime.datetime.now()
-        expiration = datetime.datetime.now() + datetime.timedelta(hours=2)
+        expiration = datetime.datetime.now() + datetime.timedelta(days=7)
         is_active = True
 
         session_info = {
