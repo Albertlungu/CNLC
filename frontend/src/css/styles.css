@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Fredoka One', cursive;
+}
+
+/* Button */
+.btn, .top-button {
+  font-family: 'Fredoka One', cursive;
+}
+
+.homepage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* needed for top-right button */
+}
+
+/* Top half – Image */
+.top-half {
+  height: 100vh;
+  width: 100%;
+  background-image: url("start-page.png"); /* from Canva */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #ccc; /* fallback color */
+}
+
+/* Bottom half – Content */
+.bottom-half {
+  height: 50vh;
+  width: 100%;
+  background-color: rgb(255, 218, 197);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.bottom-half h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.bottom-half p {
+  max-width: 600px;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+/* Button */
+.btn {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background-color: #111;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #333;
+}
+
+/* Top-right small button */
+.top-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.top-button:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
