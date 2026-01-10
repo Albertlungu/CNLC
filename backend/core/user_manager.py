@@ -4,32 +4,34 @@
 Functions to manipulate the users on the platform.
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
-from typing import Union, Any
+from typing import Any, Union
 
 from pydantic import ValidationError
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-import backend.storage.json_handler as jh
-from backend.models.user import User, UserProfile, UserLocation
-import backend.utils.password as pw
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
+import backend.storage.json_handler as jh
+import backend.utils.password as pw
+from backend.models.user import User, UserLocation, UserProfile
+
+
 def create_user(
-        username:str,
-        email:str,
-        phone:str,
-        password:str,
-        first_name:str,
-        last_name:str,
-        city:str,
-        country:str="Canada",
-        users:list[dict]=jh.load_users()
-        ) -> Union[str, None]:
+    username: str,
+    email: str,
+    phone: str,
+    password: str,
+    first_name: str,
+    last_name: str,
+    city: str,
+    country: str = "Canada",
+    users: list[dict] = jh.load_users(),
+) -> Union[str, dict]:
     """
     Creates a user validated by model.
 
@@ -48,12 +50,12 @@ def create_user(
         ValidationError: If the user info is invalid (Pydantic validation).
 
     Returns:
-        Union[str, None]: Basically always returns str, unless an error is present.
+        Union[str, dict]: Returns the new user as a dictionary. If an error is present, returns an error message.
     """
 
     for user in users:
-        if user['username'] == username:
-            raise  ValueError("ERROR: Username is not available.")
+        if user["username"] == username:
+            raise ValueError("ERROR: Username is not available.")
 
     try:
         validated_user = User(
@@ -66,17 +68,20 @@ def create_user(
             roles=["user"],
             bookmarks=[],
             profile=UserProfile(firstName=first_name, lastName=last_name),
-            location=UserLocation(country=country, city=city)
+            location=UserLocation(country=country, city=city),
         )
 
         new_user = [validated_user.model_dump()]
 
         jh.save_users(new_user)
 
+        return new_user[0]
+
     except ValidationError as e:
         return f"ERROR: User information invalid. {str(e)}"
 
-def remove_user(username:str, users:list[dict]=jh.load_users()):
+
+def remove_user(username: str, users: list[dict] = jh.load_users()):
     """
     Removes a user by username.
 
@@ -90,21 +95,19 @@ def remove_user(username:str, users:list[dict]=jh.load_users()):
 
     user_exists = False
     for idx, user in enumerate(users):
-        if user['username'] == username:
+        if user["username"] == username:
             user_exists = True
             del users[idx]
-        break
+            break
     if user_exists:
-        jh.save_users(users=users, io_type='w')
+        jh.save_users(users=users, io_type="w")
     else:
         raise ValueError("ERROR: User does not exist.")
 
+
 def edit_user(
-        username:str,
-        field:str,
-        new_value:Any,
-        users:list[dict]=jh.load_users()
-        ):
+    username: str, field: str, new_value: Any, users: list[dict] = jh.load_users()
+):
     """
     Edits a specific user.
 
@@ -119,27 +122,25 @@ def edit_user(
     """
     user_exists = False
     for user in users:
-        if user['username'] == username:
+        if user["username"] == username:
             user_exists = True
-            if field == "firstName" or field == "lastName": # If in profile sub-dict
-                user['profile'][field] = new_value
-            elif field == "country" or field == "city": # If in location sub-dict
-                user['location'][field] = new_value
-            elif field == "password_hash": # If modifying password, must encrypt first
-                user['password_hash'] = pw.hash_password(new_value)
+            if field == "firstName" or field == "lastName":  # If in profile sub-dict
+                user["profile"][field] = new_value
+            elif field == "country" or field == "city":  # If in location sub-dict
+                user["location"][field] = new_value
+            elif field == "password_hash":  # If modifying password, must encrypt first
+                user["password_hash"] = pw.hash_password(new_value)
             else:
                 user[field] = new_value
             break
 
     if user_exists:
-        jh.save_users(users, io_type='w')
+        jh.save_users(users, io_type="w")
     else:
         raise ValueError("ERROR: User does not exist.")
 
-def get_user_by_username(
-        username:str,
-        users:list[dict]=jh.load_users()
-        ) -> dict:
+
+def get_user_by_username(username: str, users: list[dict] = jh.load_users()) -> dict:
     """
     Iterates through a list of dicts to get a user given their username.
 
@@ -154,17 +155,15 @@ def get_user_by_username(
         dict: User that was found.
     """
     for user in users:
-        if user['username'] == username:
+        if user["username"] == username:
             return user
-        break
 
     raise ValueError("ERROR: Username not found.")
 
+
 def authenticate_user(
-        username:str,
-        password:str,
-        users:list[dict]=jh.load_users()
-        ) -> bool:
+    username: str, password: str, users: list[dict] = jh.load_users()
+) -> bool:
     """
     Verifies if password matches hashed value (for logging back in).
 
@@ -180,7 +179,7 @@ def authenticate_user(
         bool: If passwords match or not.
     """
     for user in users:
-        if user['username'] == username:
-            return pw.verify_password(password, user['password_hash'])
+        if user["username"] == username:
+            return pw.verify_password(password, user["password_hash"])
 
     raise ValueError("ERROR: Could not find user.")
