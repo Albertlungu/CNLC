@@ -29,9 +29,9 @@ def create_bookmarks(
         bookmarks (list): The bookmarks they want to add.
         output_filepath (str, optional): _description_. Defaults to "../data/users.json".
     """
-    if output_filepath != "":
+    if output_filepath == "../data/users.json":
         project_root = Path(__file__).parent.parent.parent
-        output_filepath = str(project_root / "data" / "businesses.json")
+        output_filepath = str(project_root / "data" / "users.json")
 
     if isinstance(bookmarks, int):
         bookmarks = [bookmarks]
@@ -40,14 +40,12 @@ def create_bookmarks(
     loaded_user = None
     for user in users:
         if user["username"] == username:
-            loaded_user = user
+            user["bookmarks"].extend(bookmarks)
             break
-
-    if loaded_user is None:
+    else:
         raise ValueError("ERROR: Username does not exist.")
 
-    del users  # Deleting everything but keeping the selected user
-    loaded_user["bookmarks"].extend(bookmarks)
+    jh.save_users(users, output_filepath, io_type="w")
 
 
 def remove_bookmarks(
@@ -63,29 +61,28 @@ def remove_bookmarks(
         bookmarks (list): The bookmarks they want to add.
         output_filepath (str, optional): _description_. Defaults to "../data/users.json".
     """
-    if output_filepath != "":
+    if output_filepath == "../data/users.json":
         project_root = Path(__file__).parent.parent.parent
-        output_filepath = str(project_root / "data" / "businesses.json")
+        output_filepath = str(project_root / "data" / "users.json")
 
     if isinstance(bookmarks, int):
         bookmarks = [bookmarks]
 
     users = jh.load_users()  # Loading all users in memory
-    loaded_user = None
+    user_found = False
     for user in users:
         if user["username"] == username:
-            loaded_user = user
+            user_found = True
+            for bookmark in bookmarks:
+                if bookmark not in user["bookmarks"]:
+                    raise ValueError(f"ERROR: Bookmark {bookmark} does not exist.")
+                user["bookmarks"].remove(bookmark)
             break
 
-    if loaded_user is None:
+    if not user_found:
         raise ValueError("ERROR: Username does not exist.")
 
-    del users  # Deleting everything but keeping the selected user
-
-    for bookmark in bookmarks:
-        if bookmark not in loaded_user["bookmarks"]:
-            raise ValueError(f"ERROR: Bookmark {bookmark} does not exist.")
-        loaded_user["bookmarks"].remove(bookmark)
+    jh.save_users(users, output_filepath, io_type="w")
 
 
 def get_user_bookmarks(username: str, users: list[dict] = jh.load_users()) -> list:

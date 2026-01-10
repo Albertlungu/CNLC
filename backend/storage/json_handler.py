@@ -72,9 +72,9 @@ def save_users(
         output_filepath (str, optional): Filepath to output JSON file. Defaults to "../data/users.json".
         io_type (str, optional): Whether to rewrite, delete, or append to file. Defaults to "a".
     """
-    if output_filepath != "":
+    if output_filepath == "../data/users.json":
         project_root = Path(__file__).parent.parent.parent
-        output_filepath = str(project_root / "data" / "businesses.json")
+        output_filepath = str(project_root / "data" / "users.json")
 
     with open(output_filepath, io_type) as f:
         json.dump(users, f, indent=1)
