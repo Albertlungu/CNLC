@@ -21,6 +21,10 @@ def load_businesses(
     Returns:
         list[dict]: Information about the business.
     """
+    if input_filepath in ("../data/businesses.json", "data/businesses.json"):
+        project_root = Path(__file__).parent.parent.parent
+        input_filepath = str(project_root / "data" / "businesses.json")
+
     with open(input_filepath, "r") as f:
         return json.load(f)
 
@@ -57,6 +61,10 @@ def load_users(input_filepath: str = "../data/users.json") -> list[dict]:
     Returns:
         list[dict]: List containing the dictionaries with all users and their data.
     """
+    if input_filepath == "../data/users.json":
+        project_root = Path(__file__).parent.parent.parent
+        input_filepath = str(project_root / "data" / "users.json")
+
     with open(input_filepath, "r") as f:
         return json.load(f)
 

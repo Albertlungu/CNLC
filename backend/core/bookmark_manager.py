@@ -37,7 +37,6 @@ def create_bookmarks(
         bookmarks = [bookmarks]
 
     users = jh.load_users()  # Loading all users in memory
-    loaded_user = None
     for user in users:
         if user["username"] == username:
             user["bookmarks"].extend(bookmarks)
