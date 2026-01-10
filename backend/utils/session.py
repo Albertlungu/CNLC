@@ -75,3 +75,37 @@ class SessionManager:
 
         jh.delete_session(session_id)
         jh.save_session(sessions[target_index], io_type="a")
+
+    @staticmethod
+    def cleanup_expired_sessions(days_to_keep: int = 5) -> int:
+        """
+        Removes inactive sessions older than the specified number of days.
+
+        Args:
+            days_to_keep (int): Number of days to keep inactive sessions. Defaults to 30.
+
+        Returns:
+            int: Number of sessions cleaned up.
+        """
+        sessions = jh.load_sessions()
+        cutoff_date = datetime.datetime.now() - datetime.timedelta(days=days_to_keep)
+
+        sessions_to_keep = []
+        cleanup_count = 0
+
+        for session in sessions:
+            created_at = datetime.datetime.fromisoformat(session["created_at"])
+            is_active = session.get("is_active", True)
+
+            if is_active or created_at >= cutoff_date:
+                sessions_to_keep.append(session)
+            else:
+                cleanup_count += 1
+
+        if cleanup_count > 0:
+            with open(
+                jh.Path(__file__).parent.parent.parent / "data" / "sessions.json", "w"
+            ) as f:
+                jh.json.dump(sessions_to_keep, f, indent=1)
+
+        return cleanup_count
