@@ -6,12 +6,16 @@ Entry point for web API. The main file that ties everything together.
 
 import os
 import sys
+from optparse import make_option
 from typing import Any, Literal, Tuple, Union
 
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, make_response, request
+from flask.sessions import session_json_serializer
 from flask_cors import CORS
 from pydantic import ValidationError
+from pydantic.json_schema import JsonSchemaWarningKind
+from pydantic.type_adapter import TypeAdapterT
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,6 +30,7 @@ import backend.core.business_manager as buis
 import backend.core.user_manager as um
 import backend.storage.json_handler as jh
 from backend.core.verification import verify_recaptcha
+from backend.utils.session import SessionManager
 
 app = Flask(__name__)  # Creating the flask application
 
@@ -433,6 +438,47 @@ def get_bookmarked_businesses() -> Response:
 
 
 # ========= Session Management ===========
+@app.route("/api/session/create", methods=["POST"])
+def create_session() -> Union[tuple[Response, dict], Response]:
+    username = request.args.get("username", type=str)
+
+    if username:
+        try:
+            session_manager = SessionManager(username)
+            session_info = session_manager.create_session()
+            jh.save_session(session_info)
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200), session_info
+        except ValueError as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 400)
+        except Exception as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 500)
+    else:
+        resp = jsonify({"status": "error", "message": "Username not given."})
+        return make_response(resp, 400)
+
+
+@app.route("/api/session/destroy", methods=["POST"])
+def destroy_session() -> Response:
+    username = request.args.get("username", type=str)
+
+    if username:
+        try:
+            session_manager = SessionManager(username)
+            session_manager.destroy_session()
+            resp = jsonify({"status": "success"})
+            return make_response(resp, 200)
+        except ValueError as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 400)
+        except Exception as e:
+            resp = jsonify({"status": "error", "message": str(e)})
+            return make_response(resp, 500)
+    else:
+        resp = jsonify({"status": "error", "message": "Username not given."})
+        return make_response(resp, 400)
 
 
 # ========= Verification ===========
