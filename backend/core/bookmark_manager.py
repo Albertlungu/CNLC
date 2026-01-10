@@ -76,7 +76,7 @@ def remove_bookmarks(
             break
 
     if loaded_user is None:
-        raise ValueError(f"ERROR: Username does not exist.")
+        raise ValueError("ERROR: Username does not exist.")
 
     del users # Deleting everything but keeping the selected user
 
