@@ -22,6 +22,11 @@ CNLC (Canadian Non-chain Local Catalog) is a desktop application for discovering
 - ✅ Filter stacking (combine multiple filters)
 - ✅ RESTful API with CORS enabled
 - ✅ Error handling and validation
+- ✅ All user-related shenanigans
+- ✅ User authentication and authorization
+- ✅ User profile management
+- ✅ Bookmark management
+- ✅ Session handling
 
 ### Files Implemented
 - `backend/models/business.py` - Pydantic models
@@ -33,92 +38,6 @@ CNLC (Canadian Non-chain Local Catalog) is a desktop application for discovering
 - `data/businesses.json` - Business data
 - `scripts/overpass_api.py` - Data fetching
 - `scripts/populate_businesses.py` - Data pipeline
-
----
-
-## Phase 2: User Features 🔄 IN PROGRESS
-
-### Objective
-Add user accounts, authentication, and bookmarking functionality to personalize the experience.
-
-### Components
-
-#### 2.1 User Model & Validation
-- **File**: `backend/models/user.py`
-- **Purpose**: Define user data structure with validation
-- **Features**:
-  - User ID (UUID)
-  - Username (unique, 3-30 characters)
-  - Email (unique, validated format)
-  - Password hash (bcrypt)
-  - Created timestamp
-  - Last login timestamp
-  - Account status (active/inactive)
-
-#### 2.2 User Manager
-- **File**: `backend/core/user_manager.py`
-- **Purpose**: Handle user CRUD operations and authentication
-- **Features**:
-  - Create user (registration)
-  - Authenticate user (login)
-  - Update user profile
-  - Change password
-  - Delete user account
-  - Get user by ID/username/email
-
-#### 2.3 Bookmark System
-- **File**: `backend/core/bookmark_manager.py`
-- **Purpose**: Manage user bookmarks/favorites
-- **Features**:
-  - Add bookmark
-  - Remove bookmark
-  - Get all bookmarks for user
-  - Check if business is bookmarked
-  - Bookmark counts per business
-
-#### 2.4 Human Verification
-- **File**: `backend/core/verification.py`
-- **Purpose**: Bot prevention for registration/login
-- **Features**:
-  - Simple math CAPTCHA
-  - Session-based challenge storage
-  - Rate limiting integration
-  - Challenge generation and validation
-
-#### 2.5 User API Routes
-- **File**: `backend/api/routes/users.py` (new)
-- **Endpoints**:
-  - `POST /api/users/register` - Create account
-  - `POST /api/users/login` - Authenticate
-  - `POST /api/users/logout` - End session
-  - `GET /api/users/profile` - Get user info
-  - `PUT /api/users/profile` - Update profile
-  - `PUT /api/users/password` - Change password
-  - `DELETE /api/users/account` - Delete account
-
-#### 2.6 Bookmark API Routes
-- **File**: `backend/api/routes/bookmarks.py` (new)
-- **Endpoints**:
-  - `POST /api/bookmarks` - Add bookmark
-  - `DELETE /api/bookmarks/<business_id>` - Remove bookmark
-  - `GET /api/bookmarks` - Get user's bookmarks
-  - `GET /api/bookmarks/check/<business_id>` - Check if bookmarked
-
-#### 2.7 Data Storage
-- **Files**:
-  - `data/users.json` - User accounts
-  - `data/bookmarks.json` - User bookmarks
-- **Structure**: JSON arrays with appropriate schemas
-
-### Dependencies Already Available
-- `bcrypt==4.1.2` - Password hashing
-- `flask-limiter==3.5.0` - Rate limiting
-- `python-dateutil==2.8.2` - Timestamp handling
-
-### Documentation
-- **Guide**: `private/phase2_user_features.md` (to be created)
-- **Style**: Matches `private/flask_api.md` format
-- **Content**: In-depth explanations + code hints
 
 ---
 
