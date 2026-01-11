@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auth Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div class="container">
+  <div class="form-container">
+
+    <form id="loginForm" class="form active">
+      <h2>Login</h2>
+      <div class="input-icon">
+        <span class="icon">👤</span>
+        <input type="text" placeholder="Email or Username" required>
+      </div>
+      <div class="input-icon">
+        <span class="icon">🔒</span>
+        <input type="password" placeholder="Password" required>
+      </div>
+      <p class="forgot" onclick="showForgot()">Forgot password?</p>
+      <button type="submit">Login</button>
+      <p>Don’t have an account? <span onclick="showSignup()">Sign up</span></p>
+    </form>
+
+    <form id="signupForm" class="form">
+      <h2>Sign Up</h2>
+      <div class="input-icon">
+        <span class="icon">📧</span>
+        <input type="email" placeholder="Email" required>
+      </div>
+      <div class="input-icon">
+        <span class="icon">👤</span>
+        <input type="text" placeholder="Username" required>
+      </div>
+      <div class="input-icon">
+        <span class="icon">🔒</span>
+        <input type="password" id="signupPassword" placeholder="Password" required oninput="checkPasswordStrength()">
+      </div>
+      <div class="strength-meter">
+        <div id="strength-bar"></div>
+      </div>
+      <p id="strength-text"></p>
+      <button type="submit">Create Account</button>
+      <p>Already have an account? <span onclick="showLogin()">Login</span></p>
+    </form>
+
+    <form id="forgotForm" class="form">
+      <h2>Reset Password</h2>
+      <p class="info-text">Enter your email and we’ll send you a reset link.</p>
+      <div class="input-icon">
+        <span class="icon">📧</span>
+        <input type="email" placeholder="Email address" required>
+      </div>
+      <button type="submit">Send Reset Link</button>
+      <p><span onclick="showLogin()">Back to Login</span></p>
+    </form>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
