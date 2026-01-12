@@ -4,11 +4,10 @@
         "username": "albertlungu",
         "email": "alung2@ocdsb.ca",
         "phone": "+1-111-111-1111",
-        "password_hash": "$2b$12$W.vkyEu5XWW4i7B0BRyKrON6Xg4QFDuT8tgnrfvwB/ALpzEV02XJG",
+        "password_hash": "$2b$12$eYc6pBD2INALvAO7bw17LOXbWSbo84smGZ7tYNy.I0xExreXjbNle",
         "isActive": true,
         "roles": ["admin"],
-        "bookmarks": [
-        ],
+        "bookmarks": [],
         "profile": {
             "firstName": "Albert",
             "lastName": "Lungu"
@@ -26,8 +25,7 @@
         "password_hash": "hashed_password_here",
         "isActive": true,
         "roles": ["admin"],
-        "bookmarks": [
-        ],
+        "bookmarks": [],
         "profile": {
             "firstName": "Eason",
             "lastName": "Yang"
@@ -45,8 +43,7 @@
         "password_hash": "hashed_password_here",
         "isActive": true,
         "roles": ["admin"],
-        "bookmarks": [
-        ],
+        "bookmarks": [],
         "profile": {
             "firstName": "Vivian",
             "lastName": "Wang"
