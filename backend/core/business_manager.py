@@ -5,23 +5,14 @@ Brain of business logic, including fetching businesses from JSON file, searching
 matching, and geolocation.
 """
 
-import sys
-import os
+from fuzzywuzzy import fuzz, process
 
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
-from backend.storage.json_handler import load_businesses
 import backend.utils.search as search
+from backend.storage.json_handler import load_businesses
 from backend.utils.geo import Haversine
 
-def search_by_id(
-        businesses:list[dict],
-        business_id:int
-        ) -> list:
+
+def search_by_id(businesses: list[dict], business_id: int) -> list:
     """
     Fetches a business given its ID and returns it.
 
@@ -37,7 +28,7 @@ def search_by_id(
     """
     results = []
     for business in businesses:
-        if business.get('id') == business_id:
+        if business.get("id") == business_id:
             results.append(business)
         else:
             continue
@@ -48,10 +39,8 @@ def search_by_id(
 
     return results
 
-def search_by_name(
-        businesses:list[dict],
-        query:str
-        ) -> list[dict]:
+
+def search_by_name(businesses: list[dict], query: str) -> list[dict]:
     """
     Uses text searching function in ./backend/utils/search.py to search by name.
 
@@ -64,10 +53,8 @@ def search_by_name(
     """
     return search.search_by_text(businesses, query=query)
 
-def filter_by_category(
-        businesses:list[dict],
-        target_category:str
-        ) -> list[dict]:
+
+def filter_by_category(businesses: list[dict], target_category: str) -> list[dict]:
     """
     Filters through businesses by category using functions from ./backend/utils/search.py.
 
@@ -75,14 +62,12 @@ def filter_by_category(
         businesses (dict): Businesses being searched through.
         target_category (str): Category that is being searched for by the user, such as restaurant.
     """
-    return search.filter_by_field(businesses, 'category', target_category)
+    return search.filter_by_field(businesses, "category", target_category)
+
 
 def filter_by_radius(
-        businesses:list[dict],
-        radius:int,
-        lat1:float,
-        lon1:float
-        ) -> list[dict]:
+    businesses: list[dict], radius: int, lat1: float, lon1: float
+) -> list[dict]:
     """
     Filters by location through shops with a custom radius, given the user's location.
 
@@ -101,9 +86,9 @@ def filter_by_radius(
     results = []
 
     for business in businesses:
-        lat2 = business['latitude']
-        lon2 = business['longitude']
-        if Haversine(lat1,lon1,lat2,lon2).final_distance() < radius:
+        lat2 = business["latitude"]
+        lon2 = business["longitude"]
+        if Haversine(lat1, lon1, lat2, lon2).final_distance() < radius:
             results.append(business)
         else:
             continue

@@ -4,19 +4,11 @@
 Entry point for web API. The main file that ties everything together.
 """
 
-import os
-import sys
-
 from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_cors import CORS
 
 load_dotenv()
-
-project_root = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
-sys.path.insert(0, project_root)
 
 from backend.api.routes import (
     auth_bp,

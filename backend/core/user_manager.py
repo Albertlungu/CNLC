@@ -4,15 +4,9 @@
 Functions to manipulate the users on the platform.
 """
 
-import os
-import sys
 from typing import Any, Optional, Union
 
 from pydantic import ValidationError
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 import backend.storage.json_handler as jh

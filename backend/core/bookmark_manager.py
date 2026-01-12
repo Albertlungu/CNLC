@@ -4,23 +4,18 @@
 Functions to manipulate the bookmarks for the users.
 """
 
-import os
-import sys
-from pathlib import Path
 from typing import Optional
 
 from typing_extensions import Any
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
 import backend.storage.json_handler as jh
+from config.config import USERS_JSON
 
 
 def create_bookmarks(
     username: str,
     bookmarks: Any,
-    output_filepath: str = "../data/users.json",
+    output_filepath: Optional[str] = None,
 ) -> None:
     """
     Adds bookmarks to a user's data.
@@ -28,11 +23,10 @@ def create_bookmarks(
     Args:
         username (str): The user's unique username.
         bookmarks (list): The bookmarks they want to add.
-        output_filepath (str, optional): _description_. Defaults to "../data/users.json".
+        output_filepath (str, optional): Output filepath. Defaults to config USERS_JSON.
     """
-    if output_filepath == "../data/users.json":
-        project_root = Path(__file__).parent.parent.parent
-        output_filepath = str(project_root / "data" / "users.json")
+    if output_filepath is None:
+        output_filepath = str(USERS_JSON)
 
     if isinstance(bookmarks, int):
         bookmarks = [bookmarks]
@@ -51,19 +45,18 @@ def create_bookmarks(
 def remove_bookmarks(
     username: str,
     bookmarks: Any,
-    output_filepath: str = "../data/users.json",
+    output_filepath: Optional[str] = None,
 ) -> None:
     """
     Removes bookmarks from a user's data.
 
     Args:
         username (str): The user's unique username.
-        bookmarks (list): The bookmarks they want to add.
-        output_filepath (str, optional): _description_. Defaults to "../data/users.json".
+        bookmarks (list): The bookmarks they want to remove.
+        output_filepath (str, optional): Output filepath. Defaults to config USERS_JSON.
     """
-    if output_filepath == "../data/users.json":
-        project_root = Path(__file__).parent.parent.parent
-        output_filepath = str(project_root / "data" / "users.json")
+    if output_filepath is None:
+        output_filepath = str(USERS_JSON)
 
     if isinstance(bookmarks, int):
         bookmarks = [bookmarks]
