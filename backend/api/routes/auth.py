@@ -148,7 +148,7 @@ def get_profile() -> Response:
 def update_profile() -> Response:
     username = request.args.get("username", type=str)
     field = request.args.get("field", type=str)
-    new_value = request.args.get("new-value", type=str)
+    new_value = request.args.get("newValue", type=str)
 
     if username and field and new_value:
         try:

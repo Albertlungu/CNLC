@@ -171,3 +171,40 @@ def delete_session(
 
     with open(output_filepath, "w") as f:
         json.dump(sessions, f, indent=4)
+
+
+def load_reviews(input_filepath: str = "../data/reviews.json") -> list[dict]:
+    if input_filepath == "../data/reviews.json":
+        project_root = Path(__file__).parent.parent.parent
+        input_filepath = str(project_root / "data" / "reviews.json")
+
+    with open(input_filepath, "r") as f:
+        return json.load(f)
+
+
+def save_reviews(
+    new_reviews: list[dict],
+    output_filepath: str = "../data/reviews.json",
+    io_type: str = "a",
+) -> None:
+    """
+    Function to save new reviews to JSON file
+    """
+    project_root = Path(__file__).parent.parent.parent
+    output_filepath = str(project_root / "data" / "reviews.json")
+
+    if io_type == "a":
+        existing_reviews = load_reviews(output_filepath)
+        existing_reviews.extend(new_reviews)
+        all_reviews = existing_reviews
+    else:
+        all_reviews = new_reviews
+
+    with open(output_filepath, io_type) as f:
+        json.dump(all_reviews, f, indent=4)
+
+def remove_review(
+    reviews: list[dict],
+    username: str,
+    review_id: int
+):

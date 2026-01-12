@@ -4,17 +4,21 @@
 Pydantic user model. Email validation, password strength requirements, etc.
 """
 
-from pydantic import BaseModel, Field, field_validator, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic_extra_types.phone_numbers import PhoneNumber
+
 
 class UserProfile(BaseModel):
     firstName: str = Field(..., description="User's First Name")
     lastName: str = Field(..., description="User's Last Name")
 
+
 class UserLocation(BaseModel):
     country: str = "Canada"
     city: str = Field(..., description="User City")
+
 
 class User(BaseModel):
     id: int = Field(..., description="Unique User ID")
@@ -28,12 +32,9 @@ class User(BaseModel):
     profile: UserProfile
     location: UserLocation
 
-    @field_validator('id')
+    @field_validator("id")
     @classmethod
-    def validate_id(
-        cls,
-        id_num:int
-    ) -> int:
+    def validate_id(cls, id_num: int) -> int:
         """
         Validates the user ID to be exactly 4 digits.
 
@@ -50,12 +51,9 @@ class User(BaseModel):
             return id_num
         raise ValueError("ERROR: ID must be exactly 8 digits long")
 
-    @field_validator('username')
+    @field_validator("username")
     @classmethod
-    def validate_username(
-        cls,
-        username:str
-    ) -> str:
+    def validate_username(cls, username: str) -> str:
         """
         Ensuring that the username does not have any disallowed characters.
 
@@ -69,12 +67,39 @@ class User(BaseModel):
             str: The user's unique username.
         """
         disallowed_chars = [
-        " ", "\t", "\n", "\r",
-        "/", "\\", "?", "#", "%", "&", "=", "+", ":", ";", ",",
-        "'", '"', "`",
-        "(", ")", "{", "}", "[", "]", "<", ">",
-        "*", "^", "|", "~", "!",
-        ".", "@"
+            " ",
+            "\t",
+            "\n",
+            "\r",
+            "/",
+            "\\",
+            "?",
+            "#",
+            "%",
+            "&",
+            "=",
+            "+",
+            ":",
+            ";",
+            ",",
+            "'",
+            '"',
+            "`",
+            "(",
+            ")",
+            "{",
+            "}",
+            "[",
+            "]",
+            "<",
+            ">",
+            "*",
+            "^",
+            "|",
+            "~",
+            "!",
+            ".",
+            "@",
         ]
 
         if any(disallowed_chars) in list(username):
