@@ -48,7 +48,7 @@ def save_businesses(
         output_filepath = str(project_root / "data" / "businesses.json")
 
     with open(output_filepath, io_type) as f:
-        json.dump(businesses, f, indent=1)
+        json.dump(businesses, f, indent=4)
 
 
 def load_users(input_filepath: str = "../data/users.json") -> list[dict]:
@@ -84,8 +84,15 @@ def save_users(
         project_root = Path(__file__).parent.parent.parent
         output_filepath = str(project_root / "data" / "users.json")
 
-    with open(output_filepath, io_type) as f:
-        json.dump(users, f, indent=1)
+    if io_type == "a":
+        existing_users = load_users(output_filepath)
+        existing_users.extend(users)
+        all_users = existing_users
+    else:
+        all_users = users
+
+    with open(output_filepath, "w") as f:
+        json.dump(all_users, f, indent=4)
 
 
 def load_sessions(input_filepath: str = "../data/sessions.json") -> list[dict]:
@@ -134,7 +141,7 @@ def save_session(
         sessions = [session_info]
 
     with open(output_filepath, "w") as f:
-        json.dump(sessions, f, indent=1)
+        json.dump(sessions, f, indent=4)
 
 
 def delete_session(
@@ -163,4 +170,4 @@ def delete_session(
         raise ValueError(f"ERROR: Session {session_id} does not exist.")
 
     with open(output_filepath, "w") as f:
-        json.dump(sessions, f, indent=1)
+        json.dump(sessions, f, indent=4)
