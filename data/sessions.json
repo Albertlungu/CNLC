@@ -1,0 +1,30 @@
+[
+    {
+        "username": "albertlungu",
+        "session_id": "2Dxdbch5kvSe67v3W2lKACtBXlCYvI7YAmeMrRmY0U0",
+        "created_at": "2026-01-12T14:09:19.229271",
+        "expiration": "2026-01-19T14:09:19.229276",
+        "is_active": true
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "Jr-PYn-bMhqKIt5K4lf6dOz3Nzc7RCWBSXo0O8AV_dk",
+        "created_at": "2026-01-12T14:17:24.323524",
+        "expiration": "2026-01-19T14:17:24.323534",
+        "is_active": true
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "hBI4iRz9H_Xs3FePP2eDCoT2APN7VFXoJuCwQ3i_GB0",
+        "created_at": "2026-01-12T15:31:31.051473",
+        "expiration": "2026-01-19T15:31:31.051479",
+        "is_active": true
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "8JXAcEW0aDEhJAAup4OaA5oq_z3qOd7Hx79IZoDJkNA",
+        "created_at": "2026-01-12T15:31:32.116947",
+        "expiration": "2026-01-19T15:31:32.116952",
+        "is_active": true
+    }
+]
