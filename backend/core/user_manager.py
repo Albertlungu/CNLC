@@ -173,13 +173,16 @@ def authenticate_user(
         users (list[dict], optional): Contains all users. Defaults to jh.load_users().
 
     Raises:
-        ValueError: If user does not exist.
+        ValueError: If user does not exist or password is incorrect.
 
     Returns:
         bool: If passwords match or not.
     """
     for user in users:
         if user["username"] == username:
-            return pw.verify_password(password, user["password_hash"])
+            if pw.verify_password(password, user["password_hash"]):
+                return True
+            else:
+                raise ValueError("ERROR: Incorrect password.")
 
     raise ValueError("ERROR: Could not find user.")
