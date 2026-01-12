@@ -7,6 +7,7 @@ Functions to manipulate the bookmarks for the users.
 import os
 import sys
 from pathlib import Path
+from typing import Optional
 
 from typing_extensions import Any
 
@@ -84,7 +85,7 @@ def remove_bookmarks(
     jh.save_users(users, output_filepath, io_type="w")
 
 
-def get_user_bookmarks(username: str, users: list[dict] = jh.load_users()) -> list:
+def get_user_bookmarks(username: str, users: Optional[list[dict]] = None) -> list:
     """
     Returns a list of bookmarks for a given user.
 
@@ -95,6 +96,9 @@ def get_user_bookmarks(username: str, users: list[dict] = jh.load_users()) -> li
     Returns:
         list: A list of bookmarks for the user.
     """
+    if not users:
+        users = jh.load_users()
+
     loaded_user = None
     for user in users:
         if user["username"] == username:
@@ -110,8 +114,8 @@ def get_user_bookmarks(username: str, users: list[dict] = jh.load_users()) -> li
 
 def get_bookmarked_businesses(
     username: str,
-    users: list[dict] = jh.load_users(),
-    businesses: list[dict] = jh.load_businesses(),
+    users: Optional[list[dict]] = None,
+    businesses: Optional[list[dict]] = None,
 ) -> list:
     """
     Returns a list of businesses that have been bookmarked by a user.
@@ -124,6 +128,11 @@ def get_bookmarked_businesses(
     Returns:
             list: A list of businesses that have been bookmarked by the user.
     """
+    if not users:
+        users = jh.load_users()
+    if not businesses:
+        businesses = jh.load_businesses()
+
     loaded_user = None
     for user in users:
         if user["username"] == username:
