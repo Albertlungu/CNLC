@@ -6,8 +6,7 @@ Functions to manipulate the users on the platform.
 
 import os
 import sys
-from pathlib import Path
-from typing import Any, Union
+from typing import Any, Optional, Union
 
 from pydantic import ValidationError
 
@@ -30,7 +29,7 @@ def create_user(
     last_name: str,
     city: str,
     country: str = "Canada",
-    users: list[dict] = jh.load_users(),
+    users: Optional[list[dict]] = None,
 ) -> Union[str, dict]:
     """
     Creates a user validated by model.
@@ -52,6 +51,8 @@ def create_user(
     Returns:
         Union[str, dict]: Returns the new user as a dictionary. If an error is present, returns an error message.
     """
+    if not users:
+        users = jh.load_users()
 
     for user in users:
         if user["username"] == username:
@@ -81,7 +82,7 @@ def create_user(
         return f"ERROR: User information invalid. {str(e)}"
 
 
-def remove_user(username: str, users: list[dict] = jh.load_users()):
+def remove_user(username: str, users: Optional[list[dict]] = None):
     """
     Removes a user by username.
 
@@ -92,6 +93,8 @@ def remove_user(username: str, users: list[dict] = jh.load_users()):
     Raises:
         ValueError: When the user does not exist.
     """
+    if not users:
+        users = jh.load_users()
 
     user_exists = False
     for idx, user in enumerate(users):
@@ -106,7 +109,7 @@ def remove_user(username: str, users: list[dict] = jh.load_users()):
 
 
 def edit_user(
-    username: str, field: str, new_value: Any, users: list[dict] = jh.load_users()
+    username: str, field: str, new_value: Any, users: Optional[list[dict]] = None
 ):
     """
     Edits a specific user.
@@ -120,6 +123,9 @@ def edit_user(
     Raises:
         ValueError: When user does not exist.
     """
+    if not users:
+        users = jh.load_users()
+
     user_exists = False
     for user in users:
         if user["username"] == username:
@@ -140,7 +146,7 @@ def edit_user(
         raise ValueError("ERROR: User does not exist.")
 
 
-def get_user_by_username(username: str, users: list[dict] = jh.load_users()) -> dict:
+def get_user_by_username(username: str, users: Optional[list[dict]] = None) -> dict:
     """
     Iterates through a list of dicts to get a user given their username.
 
@@ -154,6 +160,9 @@ def get_user_by_username(username: str, users: list[dict] = jh.load_users()) -> 
     Returns:
         dict: User that was found.
     """
+    if not users:
+        users = jh.load_users()
+
     for user in users:
         if user["username"] == username:
             return user
@@ -162,7 +171,7 @@ def get_user_by_username(username: str, users: list[dict] = jh.load_users()) -> 
 
 
 def authenticate_user(
-    username: str, password: str, users: list[dict] = jh.load_users()
+    username: str, password: str, users: Optional[list[dict]] = None
 ) -> bool:
     """
     Verifies if password matches hashed value (for logging back in).
@@ -178,6 +187,9 @@ def authenticate_user(
     Returns:
         bool: If passwords match or not.
     """
+    if not users:
+        users = jh.load_users()
+
     for user in users:
         if user["username"] == username:
             if pw.verify_password(password, user["password_hash"]):
@@ -186,3 +198,6 @@ def authenticate_user(
                 raise ValueError("ERROR: Incorrect password.")
 
     raise ValueError("ERROR: Could not find user.")
+
+
+# TODO: (Maybe: Implement a "Forgot Password" feature)
