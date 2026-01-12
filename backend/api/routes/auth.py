@@ -4,6 +4,8 @@
 Authentication-related API endpoints.
 """
 
+import time
+
 from flask import Blueprint, Response, jsonify, make_response, request
 from pydantic import ValidationError
 
@@ -27,8 +29,8 @@ def register() -> Response:
     email = request.json.get("email")
     phone = request.json.get("phone")
     password = request.json.get("password")
-    first_name = request.json.get("first-name")
-    last_name = request.json.get("last-name")
+    first_name = request.json.get("firstName")
+    last_name = request.json.get("lastName")
     city = request.json.get("city")
     country = request.json.get("country", "Canada")
 
@@ -51,6 +53,8 @@ def register() -> Response:
             country,
             users,
         )
+
+        time.sleep(0.5)
 
         session_manager = SessionManager(username)
         session_info = session_manager.create_session()
