@@ -44,7 +44,7 @@ def register() -> Response:
             username,
             email,
             phone,
-            password,
+            password,  # Already hashed, look at user_manager.py
             first_name,
             last_name,
             city,
