@@ -9,6 +9,7 @@ import os
 import secrets
 import sys
 from multiprocessing import Value
+from typing import Optional
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
@@ -17,18 +18,21 @@ import backend.storage.json_handler as jh
 
 
 class SessionManager:
-    def __init__(self, username: str, users: list[dict] = jh.load_users()) -> None:
+    def __init__(self, username: str, users: Optional[list[dict]] = None) -> None:
         """
         Initializes a session manager for a specific user.
 
         Args:
             username (str): Unique username.
-            users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+            users (list[dict], optional): Contains all users. Defaults to None (loads fresh).
 
         Raises:
             ValueError: If the username does not exist.
         """
         self.username = username
+
+        if users is None:
+            users = jh.load_users()
 
         self.loaded_user = None
         for user in users:
@@ -109,7 +113,7 @@ class SessionManager:
         project_root = jh.Path(__file__).parent.parent.parent
         filepath = str(project_root / "data" / "sessions.json")
         with open(filepath, "w") as f:
-            jh.json.dump(sessions, f, indent=1)
+            jh.json.dump(sessions, f, indent=4)
 
     @staticmethod
     def cleanup_expired_sessions(days_to_keep: int = 5) -> int:
@@ -141,6 +145,6 @@ class SessionManager:
             with open(
                 jh.Path(__file__).parent.parent.parent / "data" / "sessions.json", "w"
             ) as f:
-                jh.json.dump(sessions_to_keep, f, indent=1)
+                jh.json.dump(sessions_to_keep, f, indent=4)
 
         return cleanup_count
