@@ -22,7 +22,7 @@ body {
   top: 0;
   left: 0;
   z-index: 0;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .bubbles span {
@@ -46,20 +46,20 @@ body {
 .bubbles span:nth-child(10){ width: 40px; height: 40px; left: 77%; animation-duration: 19s; animation-delay: 2s; }
 
 @keyframes riseAndPulse {
-  0% { 
-    transform: translateY(0) scale(1); 
-    opacity: 0; 
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
   }
   10% {
     opacity: 0.7;
   }
-  50% { 
-    transform: translateY(-60vh) scale(1.3); 
-    opacity: 1; 
+  50% {
+    transform: translateY(-60vh) scale(1.3);
+    opacity: 1;
   }
-  100% { 
-    transform: translateY(-120vh) scale(1); 
-    opacity: 0; 
+  100% {
+    transform: translateY(-120vh) scale(1);
+    opacity: 0;
   }
 }
 
@@ -91,7 +91,10 @@ body {
 
 .form.active { display: flex; }
 
-h2 { text-align: center; margin-bottom: 20px; color: #333; }
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; }
 
 .input-icon { position: relative; margin-bottom: 15px; }
 .input-icon .icon {
@@ -127,18 +130,48 @@ button {
 }
 button:hover { background: #ff4b4b; }
 
-p { text-align: center; font-size: 14px; margin-top: 15px; color: #555; }
-span { color: #ff6b6b; font-weight: bold; cursor: pointer; }
-.forgot { text-align: right; font-size: 13px; color: #ff6b6b; cursor: pointer; margin-bottom: 15px; margin-top: -5px; }
-.info-text { font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.4; }
-
-.strength-meter { 
-  height: 6px; 
-  width: 100%; 
-  background: #eee; 
-  border-radius: 3px; 
-  overflow: hidden; 
-  margin-bottom: 5px; 
+p {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    color: #555;
 }
-#strength-bar { height: 100%; width: 0%; transition: width 0.4s ease, background 0.4s; }
-#strength-text { font-size: 12px; margin-top: 0; margin-bottom: 15px; text-align: left; }
+span {
+    color: #ff6b6b;
+    font-weight: bold;
+    cursor: pointer;
+}
+.forgot {
+    text-align: right;
+    font-size: 13px;
+    color: #ff6b6b;
+    cursor: pointer;
+    margin-bottom: 15px;
+    margin-top: -5px;
+}
+.info-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.strength-meter {
+  height: 6px;
+  width: 100%;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+#strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease, background 0.4s;
+}
+#strength-text {
+    font-size: 12px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: left;
+}
