@@ -3,21 +3,13 @@
 
 Helper functions for backend; DRY principle and modularity.
 """
-import sys
-import os
 
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
+from fuzzywuzzy import fuzz, process
 
 from backend.storage.json_handler import load_businesses
 
-def search_by_text(
-        businesses:list[dict],
-        query:str
-        ) -> list[dict]:
+
+def search_by_text(businesses: list[dict], query: str) -> list[dict]:
     """
     Searches businesses by name using fuzzy matching to account for user typos.
 
@@ -34,12 +26,14 @@ def search_by_text(
     results = []
 
     for business in businesses:
-        business_name = business.get('name')
-        if business_name is not None: # Check if None so that .lower() can be used without error
+        business_name = business.get("name")
+        if (
+            business_name is not None
+        ):  # Check if None so that .lower() can be used without error
             partial_ratio = fuzz.partial_ratio(query.lower(), business_name.lower())
-                # Partial ratio: partial matches within string
+            # Partial ratio: partial matches within string
             token_set_ratio = fuzz.token_set_ratio(query.lower(), business_name.lower())
-                # Token set ratio: For word order changes
+            # Token set ratio: For word order changes
             if partial_ratio > 85 and token_set_ratio > 85:
                 results.append(business)
         else:
@@ -51,11 +45,8 @@ def search_by_text(
 
     return results
 
-def filter_by_field(
-        businesses:list[dict],
-        field:str,
-        value:str
-        ) -> list[dict]:
+
+def filter_by_field(businesses: list[dict], field: str, value: str) -> list[dict]:
     """
     Generic filtering by field for more reusability in other code.
 
