@@ -6,6 +6,7 @@ Handles saving and loading JSON files from their pipelines.
 
 import json
 from pathlib import Path
+from tarfile import TarError
 from typing import Optional, Union
 
 from config.config import BUSINESSES_JSON, REVIEWS_JSON, SESSIONS_JSON, USERS_JSON
