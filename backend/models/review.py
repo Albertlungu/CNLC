@@ -10,10 +10,18 @@ from pydantic import BaseModel, Field, field_validator
 class Review(BaseModel):
     """
     Main review validation model.
+
+    - businessID
+    - user_id
+    - username
+    - rating
+    - review
+    - helpful
+    - review_id
     """
 
-    businessID: int = Field(..., description="Unique business ID")
-    userID: int = Field(..., description="Unique user ID")
+    business_id: int = Field(..., description="Unique business ID")
+    user_id: int = Field(..., description="Unique user ID")
     username: str = Field(..., description="Unique username")
     rating: int = Field(..., description="User's rating (1-5 stars)")
     review: str = Field(..., description="User's review/comment on this business")
