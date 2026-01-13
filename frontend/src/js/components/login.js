@@ -91,3 +91,16 @@ forgotForm.addEventListener("submit", e => {
   alert("If the email exists, a reset link has been sent.");
   showLogin();
 });
+
+// Check URL hash on page load to show the correct form
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash;
+  if (hash === '#signup') {
+    showSignup();
+  } else if (hash === '#login') {
+    showLogin();
+  } else if (hash === '#forgot') {
+    showForgot();
+  }
+  // If no hash or unrecognized hash, default to login (already active by default)
+});
