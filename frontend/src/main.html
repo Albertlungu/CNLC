@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Directory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Map</a></li>
+            <li><a href="#">📌</a></li>
+            <li><a href="#">❤️</a></li>
+            <li><a href="#">🔥</a></li>
+            <li><a href="#">👤</a></li>
+        </ul>
+    </nav>
+    
+    <div class="main-content">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Hours</h3>
+                    <span class="filter-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-options">
+                        <div class="hours-slider">
+                            <div class="slider-container">
+                                <label for="hour-start">Start Hour:</label>
+                                <input type="range" id="hour-start" min="0" max="24" value="0">
+                            </div>
+                            <div class="slider-container">
+                                <label for="hour-end">End Hour:</label>
+                                <input type="range" id="hour-end" min="0" max="24" value="24">
+                            </div>
+                            <span id="hour-range-text">0:00 - 24:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Category</h3>
+                    <span class="filter-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-options">
+                        <label><input type="checkbox" class="category" value="restaurant"> Restaurant</label>
+                        <label><input type="checkbox" class="category" value="grocery"> Grocery</label>
+                        <label><input type="checkbox" class="category" value="recreation"> Recreation</label>
+                        <label><input type="checkbox" class="category" value="entertainment"> Entertainment</label>
+                        <label><input type="checkbox" class="category" value="retail"> Retail</label>
+                        <label><input type="checkbox" class="category" value="health_beauty"> Health & Beauty</label>
+                        <label><input type="checkbox" class="category" value="pet"> Pet</label>
+                        <label><input type="checkbox" class="category" value="other"> Other</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Rating</h3>
+                    <span class="filter-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-options">
+                        <label><input type="checkbox" class="rating" value="1"> ⭐️</label>
+                        <label><input type="checkbox" class="rating" value="2"> ⭐️⭐️</label>
+                        <label><input type="checkbox" class="rating" value="3"> ⭐️⭐️⭐️</label>
+                        <label><input type="checkbox" class="rating" value="4"> ⭐️⭐️⭐️⭐️</label>
+                        <label><input type="checkbox" class="rating" value="5"> ⭐️⭐️⭐️⭐️⭐️</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Radius</h3>
+                    <span class="filter-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-options">
+                        <label><input type="radio" name="radius" value="less_than_5km"> &lt; 5 km</label>
+                        <label><input type="radio" name="radius" value="less_than_10km"> &lt; 10 km</label>
+                        <label><input type="radio" name="radius" value="less_than_15km"> &lt; 15 km</label>
+                        <label><input type="radio" name="radius" value="greater_than_15km"> &gt; 20 km</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div id="business-grid" class="grid-container"></div>
+
+            <div id="pagination">
+                <button id="prev-page">Previous Page</button>
+                <button id="next-page">Next Page</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
