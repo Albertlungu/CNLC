@@ -54,17 +54,26 @@ window.checkPasswordStrength = function() {
   }
 }
 
-loginForm.addEventListener("submit", e => {
+loginForm.addEventListener("submit", async e => {
     e.preventDefault();
-    alert("Login submitted");
     const loginUsername = document.getElementById("username").value;
     const loginPassword = document.getElementById("password").value;
-    login(loginUsername, loginPassword);
+
+    try {
+        const result = await login(loginUsername, loginPassword);
+        if (result.status === "success") {
+            // Redirect to businesses page on successful login
+            window.location.href = "businesses.html";
+        } else {
+            alert("Login failed: " + (result.message || "Unknown error"));
+        }
+    } catch (error) {
+        alert("Login error: " + error.message);
+    }
 });
 
-signupForm.addEventListener("submit", e => {
+signupForm.addEventListener("submit", async e => {
     e.preventDefault();
-    alert("Account created");
     const signupUsername = document.getElementById("signupUsername").value;
     const signupEmail = document.getElementById("signupEmail").value;
     const signupPhonenumber = document.getElementById("signupPhonenumber").value;
@@ -73,17 +82,27 @@ signupForm.addEventListener("submit", e => {
     const signupLastName = document.getElementById("signupLastName").value;
     const signupCity = document.getElementById("signupCity").value;
     const signupCountry = document.getElementById("signupCountry").value;
-    console.log('Signup values saved.')
-    register(
-        signupUsername,
-        signupEmail,
-        signupPhonenumber,
-        signupPassword,
-        signupFirstName,
-        signupLastName,
-        signupCity,
-        signupCountry
-    );
+
+    try {
+        const result = await register(
+            signupUsername,
+            signupEmail,
+            signupPhonenumber,
+            signupPassword,
+            signupFirstName,
+            signupLastName,
+            signupCity,
+            signupCountry
+        );
+        if (result.status === "success") {
+            // Redirect to businesses page on successful registration
+            window.location.href = "businesses.html";
+        } else {
+            alert("Registration failed: " + (result.message || "Unknown error"));
+        }
+    } catch (error) {
+        alert("Registration error: " + error.message);
+    }
 });
 
 forgotForm.addEventListener("submit", e => {
