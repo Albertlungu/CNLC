@@ -1,14 +1,14 @@
 // Login
 export async function login(username, password) {
-    const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
-        method: 'POST',
+    const response = await fetch("http://127.0.0.1:5000/api/auth/login", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             username: username,
-            password: password
-        })
+            password: password,
+        }),
     });
     const result = await response.json();
     console.log("Login function has been run.");
@@ -17,11 +17,20 @@ export async function login(username, password) {
 }
 
 // Register
-export async function register(username, email, phone, password, firstName, lastName, city, country) {
-    const response = await fetch('http://127.0.0.1:5000/api/auth/register', {
-        method: 'POST',
+export async function register(
+    username,
+    email,
+    phone,
+    password,
+    firstName,
+    lastName,
+    city,
+    country,
+) {
+    const response = await fetch("http://127.0.0.1:5000/api/auth/register", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             username: username,
@@ -31,8 +40,8 @@ export async function register(username, email, phone, password, firstName, last
             firstName: firstName,
             lastName: lastName,
             city: city,
-            country: country
-        })
+            country: country,
+        }),
     });
     const result = await response.json();
     console.log("RESULT: ", result);
