@@ -5,13 +5,14 @@ Uses OverpassAPI to search for businesses in a specific city, and composes a JSO
 with dictionaries to represent information about the business.
 """
 
-import requests
 from typing import Any
 
+import requests
+
+
 def fetch_businesses(
-        city:str,
-        debug=False
-        ) -> tuple[str, requests.Response, dict, str]:
+    city: str, debug=False
+) -> tuple[str, requests.Response, dict, str]:
     """
     Gets businesses using requests library and OverpassAPI.
 
@@ -41,15 +42,13 @@ def fetch_businesses(
 
     if debug:
         print(f"DEBUG: Status Code: {response.status_code}")
-        print(f"DEBUG: Response Text\n{"="*60}\n: {response.text[:5000]}")
+        print(f"DEBUG: Response Text\n{'=' * 60}\n: {response.text[:5000]}")
         # First 500 chars
 
     return query, response, data, city
 
-def compose_json(
-        data:dict,
-        city:str
-        ) -> list[dict]:
+
+def compose_json(data: dict, city: str) -> list[dict]:
     """
     Uses the data from the fetch_businesses() function to display relevant information about the
     business.
@@ -67,74 +66,139 @@ def compose_json(
 
     not_local = [
         # Coffee & Cafes
-        'Bridgehead', 'Second Cup', 'Timothy\'s', 'Starbucks', 'Tim Hortons',
-        'Williams Coffee Pub', 'Van Houtte', 'Country Style',
-
+        "Bridgehead",
+        "Second Cup",
+        "Timothy's",
+        "Starbucks",
+        "Tim Hortons",
+        "Williams Coffee Pub",
+        "Van Houtte",
+        "Country Style",
         # Restaurants & Fast Food
-        'Cora', 'Milestones', 'The Keg', 'Jack Astor\'s', 'Swiss Chalet',
-        'Pizza Hut', 'Osmow\'s', 'Bento Sushi', 'Sunset Grill',
-        'Copper Branch', 'Lone Star', 'The Works', 'Joey',
-        'Browns Socialhouse', 'Denny\'s', 'McDonald\'s', 'Burger King',
-        'Wendy\'s', 'A&W', 'Harvey\'s', 'Subway', 'KFC', 'Taco Bell',
-        'Boston Pizza', 'East Side Mario\'s', 'Montana\'s', 'Kelsey\'s',
-        'Moxie\'s', 'Earls', 'Five Guys', 'Popeyes', 'Dairy Queen',
-
+        "Cora",
+        "Milestones",
+        "The Keg",
+        "Jack Astor's",
+        "Swiss Chalet",
+        "Pizza Hut",
+        "Osmow's",
+        "Bento Sushi",
+        "Sunset Grill",
+        "Copper Branch",
+        "Lone Star",
+        "The Works",
+        "Joey",
+        "Browns Socialhouse",
+        "Denny's",
+        "McDonald's",
+        "Burger King",
+        "Wendy's",
+        "A&W",
+        "Harvey's",
+        "Subway",
+        "KFC",
+        "Taco Bell",
+        "Boston Pizza",
+        "East Side Mario's",
+        "Montana's",
+        "Kelsey's",
+        "Moxie's",
+        "Earls",
+        "Five Guys",
+        "Popeyes",
+        "Dairy Queen",
         # Retail & Department Stores
-        'Dollarama', 'Giant Tiger', 'Winners', 'HomeSense', 'Marshalls',
-        'Joe Fresh', 'Dynamite', 'Garage', 'Smart Set', 'Lululemon',
-        'Nespresso', 'Home Hardware', 'Moores', 'Bulk Barn',
-        'Canadian Tire', 'Staples', 'Walmart', 'Best Buy', 'Costco',
-        'Old Navy', 'Gap', 'H&M', 'Zara', 'Indigo', 'Chapters',
-
+        "Dollarama",
+        "Giant Tiger",
+        "Winners",
+        "HomeSense",
+        "Marshalls",
+        "Joe Fresh",
+        "Dynamite",
+        "Garage",
+        "Smart Set",
+        "Lululemon",
+        "Nespresso",
+        "Home Hardware",
+        "Moores",
+        "Bulk Barn",
+        "Canadian Tire",
+        "Staples",
+        "Walmart",
+        "Best Buy",
+        "Costco",
+        "Old Navy",
+        "Gap",
+        "H&M",
+        "Zara",
+        "Indigo",
+        "Chapters",
         # Pet Stores
-        'Pet Valu', 'PetSmart',
-
+        "Pet Valu",
+        "PetSmart",
         # Liquor Stores
-        'LCBO', 'The Beer Store',
-
+        "LCBO",
+        "The Beer Store",
         # Grocery & Food
-        'Food Basics', 'M&M Food Market', 'COBS Bread',
-        'Your Independent Grocer', 'Farm Boy', 'Sobeys', 'Metro',
-        'Loblaws', 'No Frills', 'Freshco',
-
+        "Food Basics",
+        "M&M Food Market",
+        "COBS Bread",
+        "Your Independent Grocer",
+        "Farm Boy",
+        "Sobeys",
+        "Metro",
+        "Loblaws",
+        "No Frills",
+        "Freshco",
         # Gas Stations & Convenience
-        'Circle K', 'Esso', 'Petro-Canada', 'Shell', '7-Eleven',
-
+        "Circle K",
+        "Esso",
+        "Petro-Canada",
+        "Shell",
+        "7-Eleven",
+        "Quickie"
         # Other
-        'Sleep Country', 'CAA',
-
+        "Sleep Country",
+        "CAA",
         # Telecom
-        'Bell', 'Rogers', 'Telus', 'Koodo', 'Fido', 'Freedom Mobile',
-        'Chatr', 'Virgin Mobile', 'Public Mobile'
+        "Bell",
+        "Rogers",
+        "Telus",
+        "Koodo",
+        "Fido",
+        "Freedom Mobile",
+        "Chatr",
+        "Virgin Mobile",
+        "Public Mobile",
     ]
 
-    for element in data['elements']:
-        tags = element.get('tags', {})
+    for element in data["elements"]:
+        tags = element.get("tags", {})
 
-        if 'name' not in tags:
+        if "name" not in tags:
             continue
 
         # Skip chain businesses
-        if tags.get('name') in not_local:
+        if tags.get("name") in not_local:
             continue
 
         business = {
-            'id': element.get('id'),
-            'name': tags.get('name'),
-            'latitude': element.get('lat'),
-            'longitude': element.get('lon'),
-            'address': {
-                'street': tags.get('addr:street'),
-                'housenumber': tags.get('addr:housenumber'),
-                'city': tags.get('addr:city') or city,
-                'country': tags.get('addr:country') or 'Canada',
-                'postcode': tags.get('addr:postcode')
+            "id": element.get("id"),
+            "name": tags.get("name"),
+            "latitude": element.get("lat"),
+            "longitude": element.get("lon"),
+            "address": {
+                "street": tags.get("addr:street"),
+                "housenumber": tags.get("addr:housenumber"),
+                "city": tags.get("addr:city") or city,
+                "country": tags.get("addr:country") or "Canada",
+                "postcode": tags.get("addr:postcode"),
             },
-            'phone': tags.get('phone') or tags.get('contact:phone'),
-            'website': tags.get('website') or tags.get('contact:website'),
-            'opening_hours': tags.get('opening_hours'),
-            'category': tags.get('shop') or tags.get('amenity') or tags.get('craft'),
-            'cuisine': tags.get('cuisine')
+            "phone": tags.get("phone") or tags.get("contact:phone"),
+            "website": tags.get("website") or tags.get("contact:website"),
+            "opening_hours": tags.get("opening_hours"),
+            "category": tags.get("shop") or tags.get("amenity") or tags.get("craft"),
+            "cuisine": tags.get("cuisine"),
         }
 
         businesses.append(business)
