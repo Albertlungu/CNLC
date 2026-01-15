@@ -1,3 +1,4 @@
+
 # This document is to explain how the API and the server works to join Python backend and JS frontend
 **DEADLINE: FEB 1, 2026**
 

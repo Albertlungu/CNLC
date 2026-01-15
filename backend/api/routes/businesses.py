@@ -23,6 +23,8 @@ def get_businesses() -> Response:
     radius = request.args.get("radius", 10, type=int)
     lat1 = request.args.get("lat1", type=float)
     lon1 = request.args.get("lon1", type=float)
+    offset = request.args.get("offset", 0, type=int)
+    limit = request.args.get("limit", 30, type=int)
 
     try:
         results = jh.load_businesses(input_filepath=filepath)
@@ -40,8 +42,16 @@ def get_businesses() -> Response:
         if search_query:
             results = buis.search_by_name(results, search_query)
 
+        total_count = len(results)
+        results = results[offset : offset + limit]
+
         resp = jsonify(
-            {"status": "success", "businesses": results, "count": len(results)}
+            {
+                "status": "success",
+                "businesses": results,
+                "count": len(results),
+                "total": total_count,
+            }
         )
         return make_response(resp, 200)
 
