@@ -1,3 +1,6 @@
+import { filterBusinesses } from "./api-client.js";
+import { getUserLocation } from "./utils/helper.js";
+
 const filterState = {
     hours: {
         rangeStart: 0,
@@ -14,38 +17,23 @@ const nextPageBtn = document.getElementById("next-page");
 
 let currentPage = 1;
 const businessesPerPage = 30;
-const totalBusinesses = 1000;
+// const totalBusinesses = 1000;
 
-function createBusinessCard(index) {
+
+
+function createBusinessCard(business) {
     const box = document.createElement("div");
     box.className = "business-box";
 
     box.innerHTML = `
-    <div class="image-container">
-      <img src="https://picsum.photos/300/150?random=${index}" alt="Business Image" class="business-image">
-      <span class="heart">&#9825;</span>
-    </div>
     <div class="dropdown-bar">
-      Business ${index}
+      ${business.name}
       <span class="arrow">&#9662;</span>
     </div>
     <div class="description">
-      This is a detailed description of Business ${index}. You can include services, features, or a tagline here.
+        ${business.address}, ${business.city}
     </div>
   `;
-
-    const heart = box.querySelector(".heart");
-
-    heart.addEventListener("click", () => {
-        if (heart.classList.contains("liked")) {
-            heart.classList.remove("liked");
-            heart.innerHTML = "&#9825;";
-        } else {
-            heart.classList.add("liked");
-            heart.innerHTML = "&#10084;";
-            createHeartParticles(heart);
-        }
-    });
 
     const bar = box.querySelector(".dropdown-bar");
     const arrow = bar.querySelector(".arrow");
@@ -56,6 +44,60 @@ function createBusinessCard(index) {
     });
 
     return box;
+}
+
+async function renderPage(page) {
+    console.log("renderPage called with page:", page);
+    grid.style.opacity = 0;
+
+    let lat = null;
+    let lon = null;
+
+    if (filterState.radius) {
+        console.log("Radius filter active, attempting to get location...");
+        try {
+            const location = await getUserLocation();
+            lat = location.lat;
+            lon = location.lon;
+            console.log("Got location:", lat, lon);
+        } catch (error) {
+            console.error("Could not fetch location:", error);
+            console.log("Continuing without location");
+        }
+    }
+
+    console.log("Calling API with:", { category: filterState.categories[0], lat, lon, radius: filterState.radius, page });
+
+    try {
+        const offset = (page - 1) * businessesPerPage;
+        const result = await filterBusinesses(
+            filterState.categories[0],
+            lat,
+            lon,
+            filterState.radius,
+            offset,
+            businessesPerPage
+        );
+        console.log("API Response:", result);
+        console.log("Number of businesses:", result.businesses?.length);
+
+        if (result.status === 'success') {
+            grid.innerHTML = "";
+
+            result.businesses.forEach(business => {
+                const card = createBusinessCard(business);
+                console.log("Created card for:", business.name);
+                grid.appendChild(card);
+            });
+
+            console.log("Grid children count:", grid.children.length);
+            grid.style.opacity = 1;
+        } else {
+            console.error("API did not return success status");
+        }
+    } catch (e) {
+        console.error("Error rendering businesses: ", e);
+    }
 }
 
 function createHeartParticles(heart) {
@@ -75,20 +117,6 @@ function createHeartParticles(heart) {
         heart.appendChild(particle);
         particle.addEventListener("animationend", () => particle.remove());
     }
-}
-
-function renderPage(page) {
-    grid.style.opacity = 0;
-    setTimeout(() => {
-        grid.innerHTML = "";
-        const start = (page - 1) * businessesPerPage + 1;
-        const end = start + businessesPerPage - 1;
-        for (let i = start; i <= end; i++) {
-            grid.appendChild(createBusinessCard(i));
-        }
-        grid.style.opacity = 1;
-        updateButtons();
-    }, 250);
 }
 
 function updateButtons() {
@@ -138,6 +166,13 @@ function initializeFilters() {
 }
 
 function setupEventListeners() {
+    const filterHeaders = document.querySelectorAll(".filter-header");
+    filterHeaders.forEach((header) => {
+        header.addEventListener("click", function () {
+            toggleFilter(this);
+        });
+    });
+
     const hourSliders = document.querySelectorAll(
         '.hours-slider input[type="range"]',
     );
@@ -165,6 +200,7 @@ function setupEventListeners() {
             }
             console.log("Categories updated:", filterState.categories);
             logFilterState();
+            renderPage(currentPage);
         });
     });
 
@@ -181,6 +217,7 @@ function setupEventListeners() {
             filterState.ratings.sort((a, b) => a - b);
             console.log("Ratings updated:", filterState.ratings);
             logFilterState();
+            renderPage(currentPage);
         });
     });
 
@@ -191,6 +228,7 @@ function setupEventListeners() {
                 filterState.radius = e.target.value;
                 console.log("Radius changed:", filterState.radius);
                 logFilterState();
+                renderPage(currentPage);
             }
         });
     });

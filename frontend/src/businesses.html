@@ -22,7 +22,7 @@
     <div class="main-content">
         <div class="filter-bar">
             <div class="filter-group">
-                <div class="filter-header" onclick="toggleFilter(this)">
+                <div class="filter-header">
                     <h3>Hours</h3>
                     <span class="filter-arrow">▼</span>
                 </div>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="filter-group">
-                <div class="filter-header" onclick="toggleFilter(this)">
+                <div class="filter-header">
                     <h3>Category</h3>
                     <span class="filter-arrow">▼</span>
                 </div>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="filter-group">
-                <div class="filter-header" onclick="toggleFilter(this)">
+                <div class="filter-header">
                     <h3>Rating</h3>
                     <span class="filter-arrow">▼</span>
                 </div>
@@ -79,16 +79,16 @@
             </div>
 
             <div class="filter-group">
-                <div class="filter-header" onclick="toggleFilter(this)">
+                <div class="filter-header">
                     <h3>Radius</h3>
                     <span class="filter-arrow">▼</span>
                 </div>
                 <div class="filter-content">
                     <div class="filter-options">
-                        <label><input type="radio" name="radius" value="less_than_5km"> &lt; 5 km</label>
-                        <label><input type="radio" name="radius" value="less_than_10km"> &lt; 10 km</label>
-                        <label><input type="radio" name="radius" value="less_than_15km"> &lt; 15 km</label>
-                        <label><input type="radio" name="radius" value="greater_than_15km"> &gt; 20 km</label>
+                        <label><input type="radio" name="radius" value="5"> &lt; 5 km</label>
+                        <label><input type="radio" name="radius" value="10"> &lt; 10 km</label>
+                        <label><input type="radio" name="radius" value="15"> &lt; 15 km</label>
+                        <label><input type="radio" name="radius" value="300"> &gt; 20 km</label>
                     </div>
                 </div>
             </div>
@@ -104,6 +104,6 @@
         </div>
     </div>
 
-    <script src="js/businesses.js"></script>
+    <script type="module"src="js/businesses.js"></script>
 </body>
 </html>
