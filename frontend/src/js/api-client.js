@@ -47,3 +47,36 @@ export async function register(
     console.log("RESULT: ", result);
     return result;
 }
+
+
+export async function filterBusinesses(category, lat1, lon1, radius, offset = 0, limit = 30) {
+
+    const params = new URLSearchParams();
+    if (category) {
+        params.append('category', category);
+    }
+    if (lat1 && lon1 && radius) {
+        params.append('lat1', lat1);
+        params.append('lon1', lon1);
+        params.append('radius', radius);
+    }
+    params.append('offset', offset);
+    params.append('limit', limit);
+
+    const url = `http://127.0.0.1:5000/api/businesses?${params.toString()}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        const result = await response.json();
+        console.log("RESULT: ", result);
+        return result;
+    } catch (error) {
+        console.error("Error fetching businesses:", error);
+        throw error;
+    }
+}
