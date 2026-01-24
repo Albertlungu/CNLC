@@ -1,4 +1,9 @@
-import { login, register } from "../api-client.js";
+import { login, register, isLoggedIn } from "../api-client.js";
+
+// Redirect to businesses page if already logged in
+if (isLoggedIn()) {
+    window.location.href = "businesses.html";
+}
 
 console.log("app.js loaded successfully!");
 
@@ -62,6 +67,12 @@ loginForm.addEventListener("submit", async (e) => {
     try {
         const result = await login(loginUsername, loginPassword);
         if (result.status === "success") {
+            // Store session info in localStorage
+            localStorage.setItem("session", JSON.stringify({
+                username: loginUsername,
+                sessionInfo: result.session_info,
+                loggedInAt: new Date().toISOString()
+            }));
             // Redirect to businesses page on successful login
             window.location.href = "businesses.html";
         } else {
@@ -96,6 +107,12 @@ signupForm.addEventListener("submit", async (e) => {
             signupCountry,
         );
         if (result.status === "success") {
+            // Store session info in localStorage
+            localStorage.setItem("session", JSON.stringify({
+                username: signupUsername,
+                sessionInfo: result.session_info,
+                loggedInAt: new Date().toISOString()
+            }));
             // Redirect to businesses page on successful registration
             window.location.href = "businesses.html";
         } else {

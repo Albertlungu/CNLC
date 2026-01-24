@@ -65,6 +65,20 @@ def filter_by_category(businesses: list[dict], target_category: str) -> list[dic
     return search.filter_by_field(businesses, "category", target_category)
 
 
+def filter_by_min_rating(businesses: list[dict], min_rating: int) -> list[dict]:
+    """
+    Filters businesses to only include those with a rating >= min_rating.
+
+    Args:
+        businesses (list[dict]): Businesses being filtered.
+        min_rating (int): Minimum rating threshold (1-5).
+
+    Returns:
+        list[dict]: Businesses with rating >= min_rating.
+    """
+    return [b for b in businesses if b.get("rating") and b.get("rating") >= min_rating]
+
+
 def filter_by_radius(
     businesses: list[dict], radius: int, lat1: float, lon1: float
 ) -> list[dict]:
