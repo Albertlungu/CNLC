@@ -6,7 +6,7 @@ Business-related API endpoints.
 
 from flask import Blueprint, Response, jsonify, make_response, request
 
-import backend.core.business_manager as buis
+import backend.core.business_manager as bm
 import backend.storage.json_handler as jh
 
 businesses_bp = Blueprint("businesses", __name__, url_prefix="/api/businesses")
@@ -23,6 +23,7 @@ def get_businesses() -> Response:
     radius = request.args.get("radius", 10, type=int)
     lat1 = request.args.get("lat1", type=float)
     lon1 = request.args.get("lon1", type=float)
+    min_rating = request.args.get("min_rating", type=int)
     offset = request.args.get("offset", 0, type=int)
     limit = request.args.get("limit", 30, type=int)
 
@@ -31,16 +32,19 @@ def get_businesses() -> Response:
 
         if lat1 and lon1:
             if radius != 0:
-                results = buis.filter_by_radius(results, radius, lat1, lon1)
+                results = bm.filter_by_radius(results, radius, lat1, lon1)
             else:
                 resp = jsonify({"error": "Radius must be nonzero"})
                 return make_response(resp, 400)
 
         if category:
-            results = buis.filter_by_category(results, category)
+            results = bm.filter_by_category(results, category)
+
+        if min_rating:
+            results = bm.filter_by_min_rating(results, min_rating)
 
         if search_query:
-            results = buis.search_by_name(results, search_query)
+            results = bm.search_by_name(results, search_query)
 
         total_count = len(results)
         results = results[offset : offset + limit]
@@ -72,7 +76,7 @@ def get_business_by_id(business_id: int) -> Response:
     """
     results = jh.load_businesses()
     try:
-        results = buis.search_by_id(results, business_id=business_id)
+        results = bm.search_by_id(results, business_id=business_id)
 
         resp = jsonify(
             {

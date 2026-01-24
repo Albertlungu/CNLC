@@ -12,52 +12,35 @@
         <ul class="menu-links">
             <li><a href="#">Home</a></li>
             <li><a href="#">Map</a></li>
-            <li><a href="#">📌</a></li>
-            <li><a href="#">❤️</a></li>
-            <li><a href="#">🔥</a></li>
-            <li><a href="#">👤</a></li>
+            <li><a href="#">Saved</a></li>
+            <li><a href="#">Favorites</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
         </ul>
     </nav>
 
     <div class="main-content">
         <div class="filter-bar">
-            <div class="filter-group">
-                <div class="filter-header">
-                    <h3>Hours</h3>
-                    <span class="filter-arrow">▼</span>
-                </div>
-                <div class="filter-content">
-                    <div class="filter-options">
-                        <div class="hours-slider">
-                            <div class="slider-container">
-                                <label for="hour-start">Start Hour:</label>
-                                <input type="range" id="hour-start" min="0" max="24" value="0">
-                            </div>
-                            <div class="slider-container">
-                                <label for="hour-end">End Hour:</label>
-                                <input type="range" id="hour-end" min="0" max="24" value="24">
-                            </div>
-                            <span id="hour-range-text">0:00 - 24:00</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="search-group">
+                <input type="text" id="search-input" placeholder="Search businesses...">
+                <button id="search-btn">Search</button>
             </div>
 
             <div class="filter-group">
                 <div class="filter-header">
                     <h3>Category</h3>
-                    <span class="filter-arrow">▼</span>
+                    <span class="filter-arrow">&#9660;</span>
                 </div>
                 <div class="filter-content">
                     <div class="filter-options">
                         <label><input type="checkbox" class="category" value="restaurant"> Restaurant</label>
-                        <label><input type="checkbox" class="category" value="grocery"> Grocery</label>
-                        <label><input type="checkbox" class="category" value="recreation"> Recreation</label>
-                        <label><input type="checkbox" class="category" value="entertainment"> Entertainment</label>
-                        <label><input type="checkbox" class="category" value="retail"> Retail</label>
-                        <label><input type="checkbox" class="category" value="health_beauty"> Health & Beauty</label>
-                        <label><input type="checkbox" class="category" value="pet"> Pet</label>
-                        <label><input type="checkbox" class="category" value="other"> Other</label>
+                        <label><input type="checkbox" class="category" value="cafe"> Cafe</label>
+                        <label><input type="checkbox" class="category" value="clothes"> Clothes</label>
+                        <label><input type="checkbox" class="category" value="hairdresser"> Hairdresser</label>
+                        <label><input type="checkbox" class="category" value="beauty"> Beauty</label>
+                        <label><input type="checkbox" class="category" value="convenience"> Convenience</label>
+                        <label><input type="checkbox" class="category" value="supermarket"> Supermarket</label>
+                        <label><input type="checkbox" class="category" value="bakery"> Bakery</label>
                     </div>
                 </div>
             </div>
@@ -65,15 +48,15 @@
             <div class="filter-group">
                 <div class="filter-header">
                     <h3>Rating</h3>
-                    <span class="filter-arrow">▼</span>
+                    <span class="filter-arrow">&#9660;</span>
                 </div>
                 <div class="filter-content">
                     <div class="filter-options">
-                        <label><input type="checkbox" class="rating" value="1"> ⭐️</label>
-                        <label><input type="checkbox" class="rating" value="2"> ⭐️⭐️</label>
-                        <label><input type="checkbox" class="rating" value="3"> ⭐️⭐️⭐️</label>
-                        <label><input type="checkbox" class="rating" value="4"> ⭐️⭐️⭐️⭐️</label>
-                        <label><input type="checkbox" class="rating" value="5"> ⭐️⭐️⭐️⭐️⭐️</label>
+                        <label><input type="checkbox" class="rating" value="1"> 1 Star</label>
+                        <label><input type="checkbox" class="rating" value="2"> 2 Stars</label>
+                        <label><input type="checkbox" class="rating" value="3"> 3 Stars</label>
+                        <label><input type="checkbox" class="rating" value="4"> 4 Stars</label>
+                        <label><input type="checkbox" class="rating" value="5"> 5 Stars</label>
                     </div>
                 </div>
             </div>
@@ -81,7 +64,7 @@
             <div class="filter-group">
                 <div class="filter-header">
                     <h3>Radius</h3>
-                    <span class="filter-arrow">▼</span>
+                    <span class="filter-arrow">&#9660;</span>
                 </div>
                 <div class="filter-content">
                     <div class="filter-options">

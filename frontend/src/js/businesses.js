@@ -1,11 +1,13 @@
-import { filterBusinesses } from "./api-client.js";
+import { filterBusinesses, requireAuth, logout, getSession } from "./api-client.js";
 import { getUserLocation } from "./utils/helper.js";
 
+// Check authentication before loading page
+if (!requireAuth()) {
+    throw new Error("Authentication required");
+}
+
 const filterState = {
-    hours: {
-        rangeStart: 0,
-        rangeEnd: 24,
-    },
+    searchQuery: "",
     categories: [],
     ratings: [],
     radius: null,
@@ -14,16 +16,35 @@ const filterState = {
 const grid = document.getElementById("business-grid");
 const prevPageBtn = document.getElementById("prev-page");
 const nextPageBtn = document.getElementById("next-page");
+const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+const logoutBtn = document.getElementById("logout-btn");
 
 let currentPage = 1;
+let totalResults = 0;
 const businessesPerPage = 30;
-// const totalBusinesses = 1000;
 
 
+
+function formatAddress(address) {
+    if (!address) return "Address not available";
+    const parts = [];
+    if (address.housenumber) parts.push(address.housenumber);
+    if (address.street) parts.push(address.street);
+    const streetLine = parts.join(" ");
+    if (streetLine && address.city) {
+        return `${streetLine}, ${address.city}`;
+    }
+    if (address.city) return address.city;
+    return streetLine || "Address not available";
+}
 
 function createBusinessCard(business) {
     const box = document.createElement("div");
     box.className = "business-box";
+
+    const addressText = formatAddress(business.address);
+    const categoryText = business.category ? `Category: ${business.category}` : "";
 
     box.innerHTML = `
     <div class="dropdown-bar">
@@ -31,7 +52,8 @@ function createBusinessCard(business) {
       <span class="arrow">&#9662;</span>
     </div>
     <div class="description">
-        ${business.address}, ${business.city}
+        ${addressText}
+        ${categoryText ? `<br><span class="category-tag">${categoryText}</span>` : ""}
     </div>
   `;
 
@@ -66,15 +88,28 @@ async function renderPage(page) {
         }
     }
 
-    console.log("Calling API with:", { category: filterState.categories[0], lat, lon, radius: filterState.radius, page });
+    const radiusInt = filterState.radius ? parseInt(filterState.radius, 10) : null;
+    const minRating = filterState.ratings.length > 0 ? Math.min(...filterState.ratings) : null;
+
+    console.log("Calling API with:", {
+        search: filterState.searchQuery,
+        category: filterState.categories[0],
+        lat,
+        lon,
+        radius: radiusInt,
+        minRating,
+        page
+    });
 
     try {
         const offset = (page - 1) * businessesPerPage;
         const result = await filterBusinesses(
+            filterState.searchQuery,
             filterState.categories[0],
             lat,
             lon,
-            filterState.radius,
+            radiusInt,
+            minRating,
             offset,
             businessesPerPage
         );
@@ -83,21 +118,38 @@ async function renderPage(page) {
 
         if (result.status === 'success') {
             grid.innerHTML = "";
+            totalResults = result.total || 0;
 
-            result.businesses.forEach(business => {
-                const card = createBusinessCard(business);
-                console.log("Created card for:", business.name);
-                grid.appendChild(card);
-            });
+            if (result.businesses.length === 0) {
+                grid.innerHTML = '<div class="no-results">No businesses found matching your criteria.</div>';
+            } else {
+                result.businesses.forEach(business => {
+                    const card = createBusinessCard(business);
+                    grid.appendChild(card);
+                });
+            }
 
-            console.log("Grid children count:", grid.children.length);
+            updatePaginationButtons();
             grid.style.opacity = 1;
         } else {
             console.error("API did not return success status");
+            showError("Failed to load businesses. Please try again.");
         }
     } catch (e) {
         console.error("Error rendering businesses: ", e);
+        showError("An error occurred while loading businesses.");
     }
+}
+
+function showError(message) {
+    grid.innerHTML = `<div class="error-message">${message}</div>`;
+    grid.style.opacity = 1;
+}
+
+function updatePaginationButtons() {
+    const totalPages = Math.ceil(totalResults / businessesPerPage);
+    prevPageBtn.disabled = currentPage <= 1;
+    nextPageBtn.disabled = currentPage >= totalPages || totalResults === 0;
 }
 
 function createHeartParticles(heart) {
@@ -119,9 +171,6 @@ function createHeartParticles(heart) {
     }
 }
 
-function updateButtons() {
-    prevPageBtn.disabled = currentPage === 1;
-}
 
 function toggleFilter(headerElement) {
     const filterGroup = headerElement.parentElement;
@@ -144,6 +193,7 @@ function toggleFilter(headerElement) {
 document.addEventListener("DOMContentLoaded", function () {
     initializeFilters();
     setupEventListeners();
+    setupSearchListeners();
     logFilterState();
 
     renderPage(currentPage);
@@ -156,13 +206,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     nextPageBtn.addEventListener("click", () => {
-        currentPage++;
-        renderPage(currentPage);
+        const totalPages = Math.ceil(totalResults / businessesPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderPage(currentPage);
+        }
     });
+
+    // Logout button handler
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+        });
+    }
 });
 
+function setupSearchListeners() {
+    searchBtn.addEventListener("click", () => {
+        filterState.searchQuery = searchInput.value.trim();
+        currentPage = 1;
+        renderPage(currentPage);
+    });
+
+    searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            filterState.searchQuery = searchInput.value.trim();
+            currentPage = 1;
+            renderPage(currentPage);
+        }
+    });
+}
+
 function initializeFilters() {
-    updateHourRangeText();
+    // Filters initialized via HTML defaults
 }
 
 function setupEventListeners() {
@@ -170,21 +247,6 @@ function setupEventListeners() {
     filterHeaders.forEach((header) => {
         header.addEventListener("click", function () {
             toggleFilter(this);
-        });
-    });
-
-    const hourSliders = document.querySelectorAll(
-        '.hours-slider input[type="range"]',
-    );
-    hourSliders.forEach((slider, index) => {
-        slider.addEventListener("input", function (e) {
-            if (index === 0) {
-                filterState.hours.rangeStart = parseInt(e.target.value);
-            } else {
-                filterState.hours.rangeEnd = parseInt(e.target.value);
-            }
-            updateHourRangeText();
-            logFilterState();
         });
     });
 
@@ -199,6 +261,7 @@ function setupEventListeners() {
                 );
             }
             console.log("Categories updated:", filterState.categories);
+            currentPage = 1;
             logFilterState();
             renderPage(currentPage);
         });
@@ -216,6 +279,7 @@ function setupEventListeners() {
             }
             filterState.ratings.sort((a, b) => a - b);
             console.log("Ratings updated:", filterState.ratings);
+            currentPage = 1;
             logFilterState();
             renderPage(currentPage);
         });
@@ -225,8 +289,9 @@ function setupEventListeners() {
     radiusRadios.forEach((radio) => {
         radio.addEventListener("change", function (e) {
             if (e.target.checked) {
-                filterState.radius = e.target.value;
+                filterState.radius = parseInt(e.target.value, 10);
                 console.log("Radius changed:", filterState.radius);
+                currentPage = 1;
                 logFilterState();
                 renderPage(currentPage);
             }
@@ -234,22 +299,9 @@ function setupEventListeners() {
     });
 }
 
-function updateHourRangeText() {
-    const hourRangeText = document.getElementById("hour-range-text");
-    if (hourRangeText) {
-        const startHour = filterState.hours.rangeStart;
-        const endHour = filterState.hours.rangeEnd;
-        hourRangeText.textContent = `${formatHour(startHour)} - ${formatHour(endHour)}`;
-    }
-}
-
-function formatHour(hour) {
-    return `${hour.toString().padStart(2, "0")}:00`;
-}
-
 function logFilterState() {
     console.log("=== Current Filter State ===");
-    console.log("Hours:", filterState.hours);
+    console.log("Search:", filterState.searchQuery);
     console.log("Categories:", filterState.categories);
     console.log("Ratings:", filterState.ratings);
     console.log("Radius:", filterState.radius);
@@ -261,30 +313,19 @@ function getFilterState() {
 }
 
 function resetFilters() {
-    filterState.hours = {
-        rangeStart: 0,
-        rangeEnd: 24,
-    };
-    const hourSliders = document.querySelectorAll(
-        '.hours-slider input[type="range"]',
-    );
-    hourSliders[0].value = 0;
-    hourSliders[1].value = 24;
-    updateHourRangeText();
+    filterState.searchQuery = "";
+    if (searchInput) searchInput.value = "";
 
     filterState.categories = [];
-    document
-        .querySelectorAll(".category")
-        .forEach((cb) => (cb.checked = false));
+    document.querySelectorAll(".category").forEach((cb) => (cb.checked = false));
 
     filterState.ratings = [];
     document.querySelectorAll(".rating").forEach((cb) => (cb.checked = false));
 
     filterState.radius = null;
-    document
-        .querySelectorAll('input[name="radius"]')
-        .forEach((radio) => (radio.checked = false));
+    document.querySelectorAll('input[name="radius"]').forEach((radio) => (radio.checked = false));
 
+    currentPage = 1;
     console.log("Filters reset to default state");
     logFilterState();
 }

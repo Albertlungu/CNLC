@@ -75,5 +75,12 @@
         "created_at": "2026-01-15T12:15:31.225982",
         "expiration": "2026-01-22T12:15:31.225985",
         "is_active": true
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "QEhSSPIsC9BWGE58y4w6EX2SOHeQVIllBZ7hB5clBEk",
+        "created_at": "2026-01-23T20:08:39.404663",
+        "expiration": "2026-01-30T20:08:39.404666",
+        "is_active": true
     }
 ]
