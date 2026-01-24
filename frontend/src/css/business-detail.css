@@ -47,8 +47,9 @@ body {
     transition: all 0.3s ease;
 }
 
-.menu-links li a:hover {
-    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
+.menu-links li a:hover,
+.menu-links li a.active {
+    background: #ff6600;
     color: white;
 }
 
@@ -57,7 +58,7 @@ body {
 }
 
 .menu-links li a.logout-link:hover {
-    background: linear-gradient(135deg, #d32f2f 0%, #ef5350 100%);
+    background: #d32f2f;
     color: white;
 }
 
@@ -103,7 +104,7 @@ body {
 }
 
 .business-meta .category-badge {
-    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
+    background: #ff6600;
     color: white;
     padding: 5px 12px;
     border-radius: 20px;
@@ -217,7 +218,7 @@ body {
 }
 
 .star-selector .star.hovered {
-    color: #ffa366;
+    color: #ff6600;
 }
 
 .form-group {
@@ -278,7 +279,7 @@ body {
 
 .submit-review-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 8px;
@@ -286,12 +287,12 @@ body {
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .submit-review-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+    background: #e65c00;
 }
 
 .submit-review-btn:disabled {
@@ -493,7 +494,7 @@ body {
 
 .reply-submit-btn {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 6px;
@@ -501,6 +502,11 @@ body {
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
     cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.reply-submit-btn:hover {
+    background: #e65c00;
 }
 
 .reply-cancel-btn {
