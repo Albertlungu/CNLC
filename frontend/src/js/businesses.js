@@ -45,6 +45,7 @@ function createBusinessCard(business) {
 
     const addressText = formatAddress(business.address);
     const categoryText = business.category ? `Category: ${business.category}` : "";
+    const businessId = business.id || business.businessId;
 
     box.innerHTML = `
     <div class="dropdown-bar">
@@ -54,6 +55,7 @@ function createBusinessCard(business) {
     <div class="description">
         ${addressText}
         ${categoryText ? `<br><span class="category-tag">${categoryText}</span>` : ""}
+        <br><a href="business-detail.html?id=${businessId}" class="view-details-link">View Details & Reviews</a>
     </div>
   `;
 
