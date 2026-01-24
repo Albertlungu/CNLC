@@ -73,8 +73,8 @@ function createCustomIcon() {
 function createPopupContent(business) {
     const addressText = formatAddress(business.address);
     const businessId = business.id || business.businessId;
-    const lat = business.lat;
-    const lon = business.lon;
+    const lat = business.latitude;
+    const lon = business.longitude;
 
     return `
         <div class="popup-content">
@@ -97,8 +97,8 @@ function addMarkers(businesses) {
     markers = [];
 
     businesses.forEach(business => {
-        if (business.lat && business.lon) {
-            const marker = L.marker([business.lat, business.lon], {
+        if (business.latitude && business.longitude) {
+            const marker = L.marker([business.latitude, business.longitude], {
                 icon: createCustomIcon(),
             });
 
@@ -146,7 +146,7 @@ function renderBusinessList(businesses) {
         const businessId = business.id || business.businessId;
 
         return `
-            <div class="business-item" data-id="${businessId}" data-lat="${business.lat}" data-lon="${business.lon}">
+            <div class="business-item" data-id="${businessId}" data-lat="${business.latitude}" data-lon="${business.longitude}">
                 <h4>${business.name}</h4>
                 <p>${addressText}</p>
                 ${business.category ? `<span class="category-badge">${business.category}</span>` : ""}
@@ -182,8 +182,8 @@ function renderBusinessList(businesses) {
 function updateVisibleBusinesses() {
     const bounds = map.getBounds();
     const visible = filteredBusinesses.filter(business => {
-        if (!business.lat || !business.lon) return false;
-        return bounds.contains([business.lat, business.lon]);
+        if (!business.latitude || !business.longitude) return false;
+        return bounds.contains([business.latitude, business.longitude]);
     });
 
     renderBusinessList(visible);
@@ -196,13 +196,13 @@ async function loadBusinesses() {
         const result = await filterBusinesses(null, null, null, null, null, null, 0, 5000);
 
         if (result.status === "success") {
-            allBusinesses = result.businesses.filter(b => b.lat && b.lon);
+            allBusinesses = result.businesses.filter(b => b.latitude && b.longitude);
             filteredBusinesses = [...allBusinesses];
 
             addMarkers(filteredBusinesses);
 
             if (allBusinesses.length > 0) {
-                const bounds = L.latLngBounds(allBusinesses.map(b => [b.lat, b.lon]));
+                const bounds = L.latLngBounds(allBusinesses.map(b => [b.latitude, b.longitude]));
                 map.fitBounds(bounds, { padding: [50, 50] });
             }
 
@@ -266,8 +266,8 @@ function locateUser() {
 function openBusinessModal(business) {
     const addressText = formatAddress(business.address);
     const businessId = business.id || business.businessId;
-    const lat = business.lat;
-    const lon = business.lon;
+    const lat = business.latitude;
+    const lon = business.longitude;
 
     modalBusinessName.textContent = business.name;
     modalAddress.textContent = addressText;
@@ -299,7 +299,7 @@ function setupEventListeners() {
 
     resetViewBtn.addEventListener("click", () => {
         if (allBusinesses.length > 0) {
-            const bounds = L.latLngBounds(allBusinesses.map(b => [b.lat, b.lon]));
+            const bounds = L.latLngBounds(allBusinesses.map(b => [b.latitude, b.longitude]));
             map.fitBounds(bounds, { padding: [50, 50] });
         } else {
             map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
