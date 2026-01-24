@@ -6,6 +6,9 @@
         "rating": 5,
         "review": "Great business, really liked the vibe!",
         "helpful": 0,
-        "reviewId": 10000000
+        "reviewId": 10000000,
+        "photos": [],
+        "replies": [],
+        "createdAt": "2025-01-15T12:00:00Z"
     }
 ]

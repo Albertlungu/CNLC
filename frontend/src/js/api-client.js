@@ -27,7 +27,7 @@ export async function logout() {
     }
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/api/auth/logout", {
+        const response = await fetch("http://127.0.0.1:5001/api/auth/logout", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export async function logout() {
 
 // Login
 export async function login(username, password) {
-    const response = await fetch("http://127.0.0.1:5000/api/auth/login", {
+    const response = await fetch("http://127.0.0.1:5001/api/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export async function register(
     city,
     country,
 ) {
-    const response = await fetch("http://127.0.0.1:5000/api/auth/register", {
+    const response = await fetch("http://127.0.0.1:5001/api/auth/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -116,7 +116,7 @@ export async function filterBusinesses(search, category, lat1, lon1, radius, min
     params.append('offset', offset);
     params.append('limit', limit);
 
-    const url = `http://127.0.0.1:5000/api/businesses?${params.toString()}`;
+    const url = `http://127.0.0.1:5001/api/businesses?${params.toString()}`;
 
     try {
         const response = await fetch(url, {
@@ -132,4 +132,111 @@ export async function filterBusinesses(search, category, lat1, lon1, radius, min
         console.error("Error fetching businesses:", error);
         throw error;
     }
+}
+
+export async function getBusinessById(businessId) {
+    const url = `http://127.0.0.1:5001/api/businesses/${businessId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function getReviewsForBusiness(businessId) {
+    const url = `http://127.0.0.1:5001/api/reviews?business_id=${businessId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function createReview(businessId, userId, username, rating, reviewText, photos = []) {
+    const response = await fetch("http://127.0.0.1:5001/api/reviews", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            businessID: businessId,
+            userID: userId,
+            username: username,
+            rating: rating,
+            review: reviewText,
+            photos: photos,
+        }),
+    });
+    return await response.json();
+}
+
+export async function updateReview(reviewId, username, rating, reviewText, photos) {
+    const body = { username };
+    if (rating !== undefined) body.rating = rating;
+    if (reviewText !== undefined) body.review = reviewText;
+    if (photos !== undefined) body.photos = photos;
+
+    const response = await fetch(`http://127.0.0.1:5001/api/reviews/${reviewId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+    });
+    return await response.json();
+}
+
+export async function deleteReview(reviewId, username) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reviews/${reviewId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+    });
+    return await response.json();
+}
+
+export async function addReplyToReview(reviewId, userId, username, content) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reviews/${reviewId}/replies`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userID: userId,
+            username: username,
+            content: content,
+        }),
+    });
+    return await response.json();
+}
+
+export async function deleteReply(reviewId, replyId, username) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reviews/${reviewId}/replies/${replyId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+    });
+    return await response.json();
+}
+
+export async function voteHelpful(reviewId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reviews/${reviewId}/helpful`, {
+        method: "POST",
+    });
+    return await response.json();
+}
+
+export async function checkUserReview(businessId, userId) {
+    const url = `http://127.0.0.1:5001/api/reviews/check?business_id=${businessId}&user_id=${userId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function uploadReviewPhoto(file) {
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    const response = await fetch("http://127.0.0.1:5001/api/reviews/upload", {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
 }

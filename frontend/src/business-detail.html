@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/business-detail.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html">Back to Directory</a></li>
+            <li><a href="#">Map</a></li>
+            <li><a href="#">Saved</a></li>
+            <li><a href="#">Favorites</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="business-container">
+            <div id="business-info" class="business-info">
+                <div class="loading">Loading business details...</div>
+            </div>
+
+            <div class="reviews-section">
+                <div class="reviews-header">
+                    <h2>Reviews</h2>
+                    <div class="rating-summary" id="rating-summary">
+                        <span class="avg-rating">--</span>
+                        <span class="star-display">-----</span>
+                        <span class="review-count">(0 reviews)</span>
+                    </div>
+                </div>
+
+                <div id="review-form-container" class="review-form-container">
+                    <h3>Write a Review</h3>
+                    <form id="review-form">
+                        <div class="star-rating-input">
+                            <label>Your Rating:</label>
+                            <div class="star-selector" id="star-selector">
+                                <span class="star" data-rating="1">*</span>
+                                <span class="star" data-rating="2">*</span>
+                                <span class="star" data-rating="3">*</span>
+                                <span class="star" data-rating="4">*</span>
+                                <span class="star" data-rating="5">*</span>
+                            </div>
+                            <input type="hidden" id="rating-input" name="rating" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="review-text">Your Review:</label>
+                            <textarea id="review-text" name="review" placeholder="Share your experience..." maxlength="1000" required></textarea>
+                            <span class="char-count"><span id="char-count">0</span>/1000</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo-input">Add Photos (optional):</label>
+                            <input type="file" id="photo-input" accept="image/*" multiple>
+                            <div id="photo-preview" class="photo-preview"></div>
+                        </div>
+                        <button type="submit" class="submit-review-btn">Submit Review</button>
+                    </form>
+                </div>
+
+                <div id="already-reviewed" class="already-reviewed" style="display: none;">
+                    <p>You have already reviewed this business.</p>
+                </div>
+
+                <div id="reviews-list" class="reviews-list">
+                    <div class="loading">Loading reviews...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/business-detail.js"></script>
+</body>
+</html>

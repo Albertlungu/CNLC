@@ -14,8 +14,8 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Ports
-BACKEND_PORT=5000
+# Ports (5001 to avoid macOS AirPlay Receiver conflict on 5000)
+BACKEND_PORT=5001
 FRONTEND_PORT=8080
 
 # PID and log file locations
