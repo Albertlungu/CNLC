@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html">Directory</a></li>
+            <li><a href="map.html" class="active">Map</a></li>
+            <li><a href="#">Saved</a></li>
+            <li><a href="#">Favorites</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="map-container">
+        <div class="map-sidebar">
+            <div class="sidebar-header">
+                <h2>Businesses</h2>
+            </div>
+            <div class="search-box">
+                <input type="text" id="map-search" placeholder="Search businesses...">
+                <button id="search-btn">Search</button>
+            </div>
+            <div class="filter-section">
+                <label for="category-filter">Category:</label>
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="hairdresser">Hairdresser</option>
+                    <option value="beauty">Beauty</option>
+                    <option value="convenience">Convenience</option>
+                    <option value="supermarket">Supermarket</option>
+                    <option value="bakery">Bakery</option>
+                </select>
+            </div>
+            <div class="business-count">
+                <span id="visible-count">0</span> businesses shown
+            </div>
+            <div id="business-list" class="business-list">
+                <div class="loading">Loading businesses...</div>
+            </div>
+        </div>
+
+        <div class="map-area">
+            <div id="map"></div>
+            <div class="map-controls">
+                <button id="locate-me" class="map-btn" title="Find my location">My Location</button>
+                <button id="reset-view" class="map-btn" title="Reset to default view">Reset View</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="street-view-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-business-name">Business Name</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="business-info-modal">
+                    <p id="modal-address"></p>
+                    <p id="modal-category"></p>
+                </div>
+                <div class="street-view-options">
+                    <a id="street-view-link" href="#" target="_blank" class="street-view-btn">
+                        Open Street View
+                    </a>
+                    <a id="directions-link" href="#" target="_blank" class="directions-btn">
+                        Get Directions
+                    </a>
+                    <a id="detail-link" href="#" class="detail-btn">
+                        View Reviews
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script type="module" src="js/map.js"></script>
+</body>
+</html>

@@ -3,84 +3,98 @@
         "username": "albertlungu",
         "session_id": "2Dxdbch5kvSe67v3W2lKACtBXlCYvI7YAmeMrRmY0U0",
         "created_at": "2026-01-12T14:09:19.229271",
-        "expiration": "2026-01-19T14:09:19.229276",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913882",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "Jr-PYn-bMhqKIt5K4lf6dOz3Nzc7RCWBSXo0O8AV_dk",
         "created_at": "2026-01-12T14:17:24.323524",
-        "expiration": "2026-01-19T14:17:24.323534",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913910",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "hBI4iRz9H_Xs3FePP2eDCoT2APN7VFXoJuCwQ3i_GB0",
         "created_at": "2026-01-12T15:31:31.051473",
-        "expiration": "2026-01-19T15:31:31.051479",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913912",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "8JXAcEW0aDEhJAAup4OaA5oq_z3qOd7Hx79IZoDJkNA",
         "created_at": "2026-01-12T15:31:32.116947",
-        "expiration": "2026-01-19T15:31:32.116952",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913914",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "xS55c2nzO67rGQAvpj4GewOYPEgVe775XdaWvqG6zis",
         "created_at": "2026-01-12T21:12:45.822753",
-        "expiration": "2026-01-19T21:12:45.822759",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913916",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "Y6U7M66gStQmxyYPKQJqjig25ksgbmPtQbOmCwVHgHs",
         "created_at": "2026-01-12T21:15:18.027937",
-        "expiration": "2026-01-19T21:15:18.027943",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913917",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "7_i8TCoXCou7VLrneRLNZQ-aSDUpfG5XdWOnoxgTvQQ",
         "created_at": "2026-01-15T11:54:57.119693",
-        "expiration": "2026-01-22T11:54:57.119697",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913919",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "CODuUlLOpY9DMVaZlBRD6Bp92H-iqyEEkZrrex7_bPQ",
         "created_at": "2026-01-15T12:06:15.105275",
-        "expiration": "2026-01-22T12:06:15.105281",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913920",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "4aUoOF0z7Aegpb8j8b3UaQGGyiETaxlrGjhZ52Vc1nU",
         "created_at": "2026-01-15T12:08:05.645395",
-        "expiration": "2026-01-22T12:08:05.645402",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913922",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "_QtOEVsNk_42O2-zd8ULkf_WGS_blThG6DAzWRbIOMI",
         "created_at": "2026-01-15T12:08:31.992614",
-        "expiration": "2026-01-22T12:08:31.992617",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913923",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "-fXWxuUPnHh0aXxNlpjHy2fTuEpVCY6GtjCissASYz4",
         "created_at": "2026-01-15T12:15:31.225982",
-        "expiration": "2026-01-22T12:15:31.225985",
-        "is_active": true
+        "expiration": "2026-01-23T22:25:04.913925",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "QEhSSPIsC9BWGE58y4w6EX2SOHeQVIllBZ7hB5clBEk",
         "created_at": "2026-01-23T20:08:39.404663",
-        "expiration": "2026-01-30T20:08:39.404666",
+        "expiration": "2026-01-23T22:25:04.913926",
+        "is_active": false
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "wl7kW02JeF8sDtfIFZmE6GkTa0N4imZma4xWx5zwZFY",
+        "created_at": "2026-01-23T22:16:13.227390",
+        "expiration": "2026-01-23T22:25:04.913928",
+        "is_active": false
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "8Q3NTGtybPHG0ELpB5gQm-k2rC_SxP245UC5oy1pbpw",
+        "created_at": "2026-01-23T22:25:29.441205",
+        "expiration": "2026-01-30T22:25:29.441211",
         "is_active": true
     }
 ]
