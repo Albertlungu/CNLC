@@ -1,10 +1,13 @@
-import { filterBusinesses, requireAuth, logout, getSession } from "./api-client.js";
+import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection } from "./api-client.js";
 import { getUserLocation } from "./utils/helper.js";
 
 // Check authentication before loading page
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+
+const session = getSession();
+const userId = session.userId;
 
 const filterState = {
     searchQuery: "",
@@ -20,9 +23,21 @@ const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const logoutBtn = document.getElementById("logout-btn");
 
+// Collection Modal Elements
+const collectionModal = document.getElementById("collection-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalBusinessName = document.getElementById("modal-business-name");
+const collectionList = document.getElementById("collection-list");
+const modalCancelBtn = document.getElementById("modal-cancel-btn");
+const modalConfirmBtn = document.getElementById("modal-confirm-btn");
+const modalClose = document.querySelector(".modal-close");
+
 let currentPage = 1;
 let totalResults = 0;
 const businessesPerPage = 30;
+let selectedCollectionId = null;
+let pendingSaveBusinessId = null;
+let pendingSaveBtn = null;
 
 
 
@@ -39,7 +54,7 @@ function formatAddress(address) {
     return streetLine || "Address not available";
 }
 
-function createBusinessCard(business) {
+async function createBusinessCard(business) {
     const box = document.createElement("div");
     box.className = "business-box";
 
@@ -47,10 +62,24 @@ function createBusinessCard(business) {
     const categoryText = business.category ? `Category: ${business.category}` : "";
     const businessId = business.id || business.businessId;
 
+    // Check if business is saved
+    let isSaved = false;
+    try {
+        const savedResult = await checkBusinessSaved(userId, businessId);
+        isSaved = savedResult.saved;
+    } catch (error) {
+        console.error("Error checking saved status:", error);
+    }
+
     box.innerHTML = `
     <div class="dropdown-bar">
       ${business.name}
-      <span class="arrow">&#9662;</span>
+      <div class="bar-actions">
+        <button class="save-btn ${isSaved ? 'saved' : ''}" data-business-id="${businessId}" title="${isSaved ? 'Saved' : 'Save to collection'}">
+          ${isSaved ? '★' : '☆'}
+        </button>
+        <span class="arrow">&#9662;</span>
+      </div>
     </div>
     <div class="description">
         ${addressText}
@@ -62,9 +91,25 @@ function createBusinessCard(business) {
     const bar = box.querySelector(".dropdown-bar");
     const arrow = bar.querySelector(".arrow");
     const desc = box.querySelector(".description");
-    bar.addEventListener("click", () => {
+    const saveBtn = box.querySelector(".save-btn");
+
+    bar.addEventListener("click", (e) => {
+        if (e.target.classList.contains("save-btn") || e.target.closest(".save-btn")) {
+            return;
+        }
         desc.classList.toggle("show");
         arrow.classList.toggle("rotate");
+    });
+
+    saveBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const businessId = parseInt(saveBtn.dataset.businessId);
+
+        if (saveBtn.classList.contains("saved")) {
+            await handleUnsave(businessId, saveBtn);
+        } else {
+            await handleSave(businessId, business.name, saveBtn);
+        }
     });
 
     return box;
@@ -125,10 +170,10 @@ async function renderPage(page) {
             if (result.businesses.length === 0) {
                 grid.innerHTML = '<div class="no-results">No businesses found matching your criteria.</div>';
             } else {
-                result.businesses.forEach(business => {
-                    const card = createBusinessCard(business);
+                for (const business of result.businesses) {
+                    const card = await createBusinessCard(business);
                     grid.appendChild(card);
-                });
+                }
             }
 
             updatePaginationButtons();
@@ -196,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeFilters();
     setupEventListeners();
     setupSearchListeners();
+    setupModalListeners();
     logFilterState();
 
     renderPage(currentPage);
@@ -223,6 +269,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function setupModalListeners() {
+    modalCancelBtn.addEventListener('click', closeCollectionModal);
+    modalClose.addEventListener('click', closeCollectionModal);
+    modalConfirmBtn.addEventListener('click', confirmSaveToCollection);
+
+    // Close modal when clicking outside
+    collectionModal.addEventListener('click', (e) => {
+        if (e.target === collectionModal) {
+            closeCollectionModal();
+        }
+    });
+}
 
 function setupSearchListeners() {
     searchBtn.addEventListener("click", () => {
@@ -334,6 +393,111 @@ function resetFilters() {
 
 function applyFilters() {
     console.log("Applying filters with state:", getFilterState());
+}
+
+// Modal Functions
+function openCollectionModal(businessId, businessName, collections, saveBtn) {
+    pendingSaveBusinessId = businessId;
+    pendingSaveBtn = saveBtn;
+    selectedCollectionId = collections[0].collectionId; // Default to first collection
+
+    modalBusinessName.textContent = `Save "${businessName}" to:`;
+
+    collectionList.innerHTML = collections.map(c => `
+        <div class="collection-option ${c.collectionId === selectedCollectionId ? 'selected' : ''}" data-collection-id="${c.collectionId}">
+            ${c.name}
+        </div>
+    `).join('');
+
+    // Add click listeners to collection options
+    document.querySelectorAll('.collection-option').forEach(option => {
+        option.addEventListener('click', () => {
+            selectedCollectionId = parseInt(option.dataset.collectionId);
+            document.querySelectorAll('.collection-option').forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+        });
+    });
+
+    collectionModal.classList.add('active');
+}
+
+function closeCollectionModal() {
+    collectionModal.classList.remove('active');
+    selectedCollectionId = null;
+    pendingSaveBusinessId = null;
+    pendingSaveBtn = null;
+}
+
+async function confirmSaveToCollection() {
+    if (!selectedCollectionId || !pendingSaveBusinessId || !pendingSaveBtn) return;
+
+    try {
+        const result = await saveBusiness(userId, pendingSaveBusinessId, selectedCollectionId);
+        if (result.status === "success") {
+            pendingSaveBtn.classList.add("saved");
+            pendingSaveBtn.textContent = "★";
+            pendingSaveBtn.title = "Saved";
+            closeCollectionModal();
+        } else {
+            alert("Failed to save: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error saving business:", error);
+        alert("An error occurred while saving the business.");
+    }
+}
+
+// Save/Unsave Handlers
+async function handleSave(businessId, businessName, saveBtn) {
+    try {
+        let collectionsResult = await getUserCollections(userId);
+        let collections = collectionsResult.status === "success" ? collectionsResult.collections : [];
+
+        // Auto-create "Favorites" collection if user has none
+        if (collections.length === 0) {
+            const createResult = await createCollection(userId, "Favorites");
+            if (createResult.status === "success") {
+                collections = [createResult.collection];
+            } else {
+                alert("Failed to create default collection: " + createResult.message);
+                return;
+            }
+        }
+
+        if (collections.length === 1) {
+            // If only one collection, save directly
+            const result = await saveBusiness(userId, businessId, collections[0].collectionId);
+            if (result.status === "success") {
+                saveBtn.classList.add("saved");
+                saveBtn.textContent = "★";
+                saveBtn.title = "Saved";
+            } else {
+                alert("Failed to save: " + result.message);
+            }
+        } else {
+            // Show collection selection modal
+            openCollectionModal(businessId, businessName, collections, saveBtn);
+        }
+    } catch (error) {
+        console.error("Error saving business:", error);
+        alert("An error occurred while saving the business.");
+    }
+}
+
+async function handleUnsave(businessId, saveBtn) {
+    try {
+        const result = await unsaveBusiness(userId, businessId);
+        if (result.status === "success") {
+            saveBtn.classList.remove("saved");
+            saveBtn.textContent = "☆";
+            saveBtn.title = "Save to collection";
+        } else {
+            alert("Failed to unsave: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error unsaving business:", error);
+        alert("An error occurred while removing the business.");
+    }
 }
 
 if (typeof module !== "undefined" && module.exports) {

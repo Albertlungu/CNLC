@@ -70,6 +70,7 @@ loginForm.addEventListener("submit", async (e) => {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
                 username: loginUsername,
+                userId: result.user.id,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));
@@ -110,6 +111,7 @@ signupForm.addEventListener("submit", async (e) => {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
                 username: signupUsername,
+                userId: result.user.id,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));

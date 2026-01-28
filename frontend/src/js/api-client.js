@@ -240,3 +240,118 @@ export async function uploadReviewPhoto(file) {
     });
     return await response.json();
 }
+
+// Saved Business / Collections API
+export async function getUserCollections(userId) {
+    const url = `http://127.0.0.1:5001/api/saved/collections?user_id=${userId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function getCollectionStats(userId) {
+    const url = `http://127.0.0.1:5001/api/saved/collections/stats?user_id=${userId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function createCollection(userId, name) {
+    const response = await fetch("http://127.0.0.1:5001/api/saved/collections", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: userId,
+            name: name,
+        }),
+    });
+    return await response.json();
+}
+
+export async function renameCollection(userId, collectionId, newName) {
+    const response = await fetch(`http://127.0.0.1:5001/api/saved/collections/${collectionId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: userId,
+            name: newName,
+        }),
+    });
+    return await response.json();
+}
+
+export async function deleteCollection(userId, collectionId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/saved/collections/${collectionId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: userId,
+        }),
+    });
+    return await response.json();
+}
+
+export async function getSavedBusinesses(userId, collectionId = null) {
+    let url = `http://127.0.0.1:5001/api/saved/businesses?user_id=${userId}`;
+    if (collectionId) {
+        url += `&collection_id=${collectionId}`;
+    }
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function saveBusiness(userId, businessId, collectionId) {
+    const response = await fetch("http://127.0.0.1:5001/api/saved/businesses", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: userId,
+            businessId: businessId,
+            collectionId: collectionId,
+        }),
+    });
+    return await response.json();
+}
+
+export async function unsaveBusiness(userId, businessId, collectionId = null) {
+    const body = { userId: userId };
+    if (collectionId) {
+        body.collectionId = collectionId;
+    }
+
+    const response = await fetch(`http://127.0.0.1:5001/api/saved/businesses/${businessId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+    });
+    return await response.json();
+}
+
+export async function checkBusinessSaved(userId, businessId) {
+    const url = `http://127.0.0.1:5001/api/saved/businesses/${businessId}/check?user_id=${userId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function moveBusinessToCollection(userId, businessId, oldCollectionId, newCollectionId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/saved/businesses/${businessId}/move`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: userId,
+            oldCollectionId: oldCollectionId,
+            newCollectionId: newCollectionId,
+        }),
+    });
+    return await response.json();
+}

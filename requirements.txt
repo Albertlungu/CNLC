@@ -1,10 +1,12 @@
 # Web Framework
-flask==3.0.0
-flask-cors==4.0.0
+flask
+flask-cors
 
 # Data Validation
-pydantic==2.5.0
+pydantic
 pydantic-extra-types
+phonenumbers
+pydantic[email]
 
 # Security & Verification (bot prevention, user auth)
 flask-limiter==3.5.0
@@ -29,3 +31,4 @@ python-Levenshtein
 
 # Math
 numpy
+dotenv

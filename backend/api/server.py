@@ -15,6 +15,7 @@ from backend.api.routes import (
     bookmarks_bp,
     businesses_bp,
     reviews_bp,
+    saved_bp,
     sessions_bp,
     users_bp,
     verification_bp,
@@ -80,6 +81,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(bookmarks_bp)
 app.register_blueprint(businesses_bp)
 app.register_blueprint(reviews_bp)
+app.register_blueprint(saved_bp)
 app.register_blueprint(sessions_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(verification_bp)

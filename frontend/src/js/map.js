@@ -1,8 +1,11 @@
-import { filterBusinesses, requireAuth, logout, getSession } from "./api-client.js";
+import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection } from "./api-client.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+
+const session = getSession();
+const userId = session.userId;
 
 const DEFAULT_CENTER = [45.4215, -75.6972];
 const DEFAULT_ZOOM = 13;
@@ -70,11 +73,20 @@ function createCustomIcon() {
     });
 }
 
-function createPopupContent(business) {
+async function createPopupContent(business) {
     const addressText = formatAddress(business.address);
     const businessId = business.id || business.businessId;
     const lat = business.latitude;
     const lon = business.longitude;
+
+    // Check if business is saved
+    let isSaved = false;
+    try {
+        const savedResult = await checkBusinessSaved(userId, businessId);
+        isSaved = savedResult.saved;
+    } catch (error) {
+        console.error("Error checking saved status:", error);
+    }
 
     return `
         <div class="popup-content">
@@ -82,6 +94,12 @@ function createPopupContent(business) {
             <p>${addressText}</p>
             ${business.category ? `<span class="popup-category">${business.category}</span>` : ""}
             <div class="popup-actions">
+                <button class="popup-btn save-popup-btn ${isSaved ? 'saved' : ''}"
+                        data-business-id="${businessId}"
+                        data-business-name="${business.name}"
+                        title="${isSaved ? 'Saved' : 'Save to collection'}">
+                    ${isSaved ? '★ Saved' : '☆ Save'}
+                </button>
                 <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}"
                    target="_blank" class="popup-btn street-view">Street View</a>
                 <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}"
@@ -92,17 +110,18 @@ function createPopupContent(business) {
     `;
 }
 
-function addMarkers(businesses) {
+async function addMarkers(businesses) {
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
 
-    businesses.forEach(business => {
+    for (const business of businesses) {
         if (business.latitude && business.longitude) {
             const marker = L.marker([business.latitude, business.longitude], {
                 icon: createCustomIcon(),
             });
 
-            marker.bindPopup(createPopupContent(business), {
+            const popupContent = await createPopupContent(business);
+            marker.bindPopup(popupContent, {
                 maxWidth: 300,
                 className: "custom-popup",
             });
@@ -113,10 +132,31 @@ function addMarkers(businesses) {
                 highlightBusinessInList(business);
             });
 
+            marker.on("popupopen", () => {
+                setupPopupSaveButton();
+            });
+
             marker.addTo(map);
             markers.push(marker);
         }
-    });
+    }
+}
+
+function setupPopupSaveButton() {
+    const saveBtn = document.querySelector(".save-popup-btn");
+    if (saveBtn) {
+        saveBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const businessId = parseInt(saveBtn.dataset.businessId);
+            const businessName = saveBtn.dataset.businessName;
+
+            if (saveBtn.classList.contains("saved")) {
+                await handleUnsaveMap(businessId, businessName, saveBtn);
+            } else {
+                await handleSaveMap(businessId, businessName, saveBtn);
+            }
+        });
+    }
 }
 
 function highlightBusinessInList(business) {
@@ -322,8 +362,85 @@ function setupEventListeners() {
     }
 }
 
+// Save/Unsave Map Handlers
+async function handleSaveMap(businessId, businessName, saveBtn) {
+    try {
+        let collectionsResult = await getUserCollections(userId);
+        let collections = collectionsResult.status === "success" ? collectionsResult.collections : [];
+
+        // Auto-create "Favorites" collection if user has none
+        if (collections.length === 0) {
+            const createResult = await createCollection(userId, "Favorites");
+            if (createResult.status === "success") {
+                collections = [createResult.collection];
+            } else {
+                alert("Failed to create default collection: " + createResult.message);
+                return;
+            }
+        }
+
+        if (collections.length === 1) {
+            const result = await saveBusiness(userId, businessId, collections[0].collectionId);
+            if (result.status === "success") {
+                saveBtn.classList.add("saved");
+                saveBtn.textContent = "★ Saved";
+                saveBtn.title = "Saved";
+            } else {
+                alert("Failed to save: " + result.message);
+            }
+        } else {
+            const collectionNames = collections.map((c, i) => `${i + 1}. ${c.name}`).join("\n");
+            const selection = prompt(`Save "${businessName}" to which collection?\n\n${collectionNames}\n\nEnter the number (or press Enter for "${collections[0].name}"):`);
+
+            if (selection === null) return; // User cancelled
+
+            let targetCollection;
+            if (selection === "" || selection === "1") {
+                targetCollection = collections[0];
+            } else {
+                const index = parseInt(selection) - 1;
+                if (index >= 0 && index < collections.length) {
+                    targetCollection = collections[index];
+                } else {
+                    alert("Invalid selection");
+                    return;
+                }
+            }
+
+            const result = await saveBusiness(userId, businessId, targetCollection.collectionId);
+            if (result.status === "success") {
+                saveBtn.classList.add("saved");
+                saveBtn.textContent = "★ Saved";
+                saveBtn.title = "Saved";
+            } else {
+                alert("Failed to save: " + result.message);
+            }
+        }
+    } catch (error) {
+        console.error("Error saving business:", error);
+        alert("An error occurred while saving the business.");
+    }
+}
+
+async function handleUnsaveMap(businessId, businessName, saveBtn) {
+    try {
+        const result = await unsaveBusiness(userId, businessId);
+        if (result.status === "success") {
+            saveBtn.classList.remove("saved");
+            saveBtn.textContent = "☆ Save";
+            saveBtn.title = "Save to collection";
+        } else {
+            alert("Failed to unsave: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error unsaving business:", error);
+        alert("An error occurred while removing the business.");
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initMap();
     setupEventListeners();
+    setupModalListeners();
     loadBusinesses();
 });

@@ -74,7 +74,7 @@ echo -e "${GREEN}Starting CNLC Application...${NC}"
 echo "========================================"
 
 # Activate virtual environment
-source venv/bin/activate
+# source venv/bin/activate
 
 # Start backend server
 echo -e "${YELLOW}Starting backend API server on port $BACKEND_PORT...${NC}"

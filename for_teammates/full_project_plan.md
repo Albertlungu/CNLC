@@ -3,67 +3,6 @@
 ## Project Overview
 CNLC (Canadian Non-chain Local Catalog) is a desktop application for discovering local, non-chain businesses in Canadian cities. Built with Python Flask backend and Electron frontend.
 
----
-
-## Phase 1: Core Business Features ✅ COMPLETED
-
-### Components
-- **Business Data Population**: OSM Overpass API integration with chain filtering
-- **Business Models**: Pydantic validation for Business and Address
-- **Business Manager**: Search, filter, radius operations
-- **Flask API**: RESTful endpoints with filter stacking
-- **Utilities**: Fuzzy search, geolocation (Haversine), JSON storage
-
-### Status
-- ✅ 553k+ businesses populated across 8 cities
-- ✅ Search by name (fuzzy matching with fuzzywuzzy)
-- ✅ Filter by category
-- ✅ Radius filtering with geolocation
-- ✅ Filter stacking (combine multiple filters)
-- ✅ RESTful API with CORS enabled
-- ✅ Error handling and validation
-- ✅ All user-related shenanigans
-- ✅ User authentication and authorization
-- ✅ User profile management
-- ✅ Bookmark management
-- ✅ Session handling
-
-### Files Implemented
-- `backend/models/business.py` - Pydantic models
-- `backend/core/business_manager.py` - Business logic
-- `backend/api/server.py` - Flask application
-- `backend/utils/search.py` - Search utilities
-- `backend/utils/geo.py` - Geolocation utilities
-- `backend/storage/json_handler.py` - JSON I/O
-- `data/businesses.json` - Business data
-- `scripts/overpass_api.py` - Data fetching
-- `scripts/populate_businesses.py` - Data pipeline
-
----
-
-## Phase 3: Review System 📋 PLANNED
-
-### Objective
-Allow users to write and read reviews for businesses.
-
-### Components
-- Review Model (`backend/models/review.py`)
-- Review Manager (`backend/core/review_manager.py`)
-- Review API routes
-- Optional: Fetch reviews from Google/Yelp APIs
-- Rating aggregation and sorting
-
-### Features
-- Create review with rating (1-5 stars)
-- Edit own reviews
-- Delete own reviews
-- Get reviews for business
-- Get reviews by user
-- Calculate average rating
-- Sort by date/rating/helpfulness
-
----
-
 ## Phase 4: Deals & Coupons 💰 PLANNED
 
 ### Objective

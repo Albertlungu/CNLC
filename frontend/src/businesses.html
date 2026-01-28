@@ -12,7 +12,7 @@
         <ul class="menu-links">
             <li><a href="businesses.html" class="active">Directory</a></li>
             <li><a href="map.html">Map</a></li>
-            <li><a href="#">Saved</a></li>
+            <li><a href="saved.html">Saved</a></li>
             <li><a href="#">Favorites</a></li>
             <li><a href="#">Profile</a></li>
             <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
@@ -83,6 +83,24 @@
             <div id="pagination">
                 <button id="prev-page">Previous Page</button>
                 <button id="next-page">Next Page</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Selection Modal -->
+    <div id="collection-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Save to Collection</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-business-name"></p>
+                <div id="collection-list" class="collection-options"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel-btn" class="modal-btn modal-btn-cancel">Cancel</button>
+                <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Save</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Businesses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/saved.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html">Directory</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="saved.html" class="active">Saved</a></li>
+            <li><a href="#">Favorites</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <aside class="collections-sidebar">
+            <div class="sidebar-header">
+                <h2>Collections</h2>
+                <button id="new-collection-btn" class="new-collection-btn" title="Create new collection">+</button>
+            </div>
+
+            <div class="collection-list" id="collection-list">
+                <div class="collection-item all-saved active" data-collection-id="all">
+                    <span class="collection-name">All Saved</span>
+                    <span class="collection-count">0</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div class="content-header">
+                <h1 id="collection-title">All Saved Businesses</h1>
+                <div class="collection-actions">
+                    <button id="rename-collection-btn" class="action-btn" style="display: none;">Rename</button>
+                    <button id="delete-collection-btn" class="action-btn danger" style="display: none;">Delete</button>
+                </div>
+            </div>
+
+            <div class="filter-controls">
+                <div class="search-group">
+                    <input type="text" id="search-input" placeholder="Search saved businesses...">
+                    <button id="search-btn">Search</button>
+                </div>
+
+                <div class="filter-group">
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="clothes">Clothes</option>
+                        <option value="hairdresser">Hairdresser</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="convenience">Convenience</option>
+                        <option value="supermarket">Supermarket</option>
+                        <option value="bakery">Bakery</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-filter">Sort by:</label>
+                    <select id="sort-filter">
+                        <option value="recent">Recently Saved</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name">Name (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="business-count">
+                Showing <span id="business-count">0</span> businesses
+            </div>
+
+            <div id="business-grid" class="business-grid"></div>
+        </main>
+    </div>
+
+    <!-- New Collection Modal -->
+    <div id="new-collection-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Collection</h3>
+                <button class="close-modal" id="close-new-collection">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="collection-name-input">Collection Name:</label>
+                <input type="text" id="collection-name-input" placeholder="e.g., Want to Visit, Date Ideas" maxlength="100">
+                <div class="modal-actions">
+                    <button id="create-collection-btn" class="primary-btn">Create</button>
+                    <button id="cancel-new-collection-btn" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Collection Modal -->
+    <div id="rename-collection-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rename Collection</h3>
+                <button class="close-modal" id="close-rename-collection">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="rename-collection-input">New Name:</label>
+                <input type="text" id="rename-collection-input" placeholder="Enter new name" maxlength="100">
+                <div class="modal-actions">
+                    <button id="confirm-rename-btn" class="primary-btn">Rename</button>
+                    <button id="cancel-rename-btn" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Move Business Modal -->
+    <div id="move-business-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Move to Collection</h3>
+                <button class="close-modal" id="close-move-business">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="move-business-name"></p>
+                <label for="move-collection-select">Select collection:</label>
+                <select id="move-collection-select"></select>
+                <div class="modal-actions">
+                    <button id="confirm-move-btn" class="primary-btn">Move</button>
+                    <button id="cancel-move-btn" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/saved.js"></script>
+</body>
+</html>

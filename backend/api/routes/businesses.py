@@ -80,6 +80,7 @@ def get_business_by_id(business_id: int) -> Response:
 
         resp = jsonify(
             {
+                "status": "success",
                 "business": results[0] if results else None,
             }
         )
