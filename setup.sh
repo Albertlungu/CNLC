@@ -4,7 +4,7 @@ which python # Should return something like ../../CNLC/venv/bin/python
 echo "Virtual environment created and activated."
 
 
-pip install -r requirements.txt --no-cache-dir # Forces python to install from scratch and make sure the requirements aren't corrupted
+pip install -r requirements.txt # Forces python to install from scratch and make sure the requirements aren't corrupted
 cat << EOF
 =======================================
 Setup Complete - Dependencies Installed.

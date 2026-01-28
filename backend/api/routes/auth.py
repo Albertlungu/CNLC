@@ -88,7 +88,9 @@ def login() -> Response:
             session_info = session_manager.create_session()
             jh.save_session(session_info)
 
-            resp = jsonify({"status": "success", "session_info": session_info})
+            user = um.get_user_by_username(username)
+
+            resp = jsonify({"status": "success", "session_info": session_info, "user": user})
             return make_response(resp, 200)
         else:
             resp = jsonify(

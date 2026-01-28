@@ -1,0 +1,14 @@
+[
+  {
+    "collectionId": 1,
+    "userId": 10000000,
+    "name": "Saved",
+    "createdAt": "2026-01-28T21:13:03.576499"
+  },
+  {
+    "collectionId": 2,
+    "userId": 10000000,
+    "name": "Want to visit",
+    "createdAt": "2026-01-28T22:10:27.239921"
+  }
+]

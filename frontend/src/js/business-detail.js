@@ -11,6 +11,11 @@ import {
     voteHelpful,
     checkUserReview,
     uploadReviewPhoto,
+    checkBusinessSaved,
+    saveBusiness,
+    unsaveBusiness,
+    getUserCollections,
+    createCollection,
 } from "./api-client.js";
 
 if (!requireAuth()) {
@@ -106,14 +111,47 @@ async function loadBusinessInfo() {
         const addressText = formatAddress(business.address);
         const categoryText = business.category || "Uncategorized";
 
+        // Check if business is saved
+        let isSaved = false;
+        try {
+            const session = getSession();
+            const userId = session.userId;
+            const savedResult = await checkBusinessSaved(userId, currentBusinessId);
+            isSaved = savedResult.saved;
+        } catch (error) {
+            console.error("Error checking saved status:", error);
+        }
+
         businessInfoEl.innerHTML = `
-            <h1>${business.name}</h1>
-            <div class="business-meta">
-                <span class="category-badge">${categoryText}</span>
-                <span>${addressText}</span>
+            <div class="business-header">
+                <div class="business-title-section">
+                    <h1>${business.name}</h1>
+                    <button id="save-business-btn" class="save-business-btn ${isSaved ? 'saved' : ''}" title="${isSaved ? 'Saved' : 'Save to collection'}">
+                        ${isSaved ? '★' : '☆'} ${isSaved ? 'Saved' : 'Save'}
+                    </button>
+                </div>
+                <div class="business-meta">
+                    <span class="category-badge">${categoryText}</span>
+                    <span>${addressText}</span>
+                </div>
+                ${business.description ? `<p class="business-description">${business.description}</p>` : ""}
             </div>
-            ${business.description ? `<p class="business-description">${business.description}</p>` : ""}
         `;
+
+        // Add save button listener
+        const saveBtn = document.getElementById("save-business-btn");
+        if (saveBtn) {
+            saveBtn.addEventListener("click", async () => {
+                const session = getSession();
+                const userId = session.userId;
+
+                if (saveBtn.classList.contains("saved")) {
+                    await handleUnsaveBusinessDetail(userId, currentBusinessId, business.name, saveBtn);
+                } else {
+                    await handleSaveBusinessDetail(userId, currentBusinessId, business.name, saveBtn);
+                }
+            });
+        }
     } catch (error) {
         console.error("Error loading business:", error);
         businessInfoEl.innerHTML = '<div class="error-message">Failed to load business details.</div>';
@@ -451,6 +489,134 @@ async function handleReviewSubmit(e) {
     }
 }
 
+// Modal Functions
+let selectedCollectionId = null;
+let pendingSaveBusinessId = null;
+let pendingSaveBtn = null;
+
+function openCollectionModal(businessId, businessName, collections, saveBtn) {
+    const collectionModal = document.getElementById("collection-modal");
+    const modalBusinessName = document.getElementById("modal-business-name");
+    const collectionList = document.getElementById("collection-list");
+
+    pendingSaveBusinessId = businessId;
+    pendingSaveBtn = saveBtn;
+    selectedCollectionId = collections[0].collectionId;
+
+    modalBusinessName.textContent = `Save "${businessName}" to:`;
+
+    collectionList.innerHTML = collections.map(c => `
+        <div class="collection-option ${c.collectionId === selectedCollectionId ? 'selected' : ''}" data-collection-id="${c.collectionId}">
+            ${c.name}
+        </div>
+    `).join('');
+
+    document.querySelectorAll('.collection-option').forEach(option => {
+        option.addEventListener('click', () => {
+            selectedCollectionId = parseInt(option.dataset.collectionId);
+            document.querySelectorAll('.collection-option').forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+        });
+    });
+
+    collectionModal.classList.add('active');
+}
+
+function closeCollectionModal() {
+    const collectionModal = document.getElementById("collection-modal");
+    collectionModal.classList.remove('active');
+    selectedCollectionId = null;
+    pendingSaveBusinessId = null;
+    pendingSaveBtn = null;
+}
+
+async function confirmSaveToCollection(userId) {
+    if (!selectedCollectionId || !pendingSaveBusinessId || !pendingSaveBtn) return;
+
+    try {
+        const result = await saveBusiness(userId, pendingSaveBusinessId, selectedCollectionId);
+        if (result.status === "success") {
+            pendingSaveBtn.classList.add("saved");
+            pendingSaveBtn.textContent = "★ Saved";
+            pendingSaveBtn.title = "Saved";
+            closeCollectionModal();
+        } else {
+            alert("Failed to save: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error saving business:", error);
+        alert("An error occurred while saving the business.");
+    }
+}
+
+// Save/Unsave Business Handlers
+async function handleSaveBusinessDetail(userId, businessId, businessName, saveBtn) {
+    try {
+        let collectionsResult = await getUserCollections(userId);
+        let collections = collectionsResult.status === "success" ? collectionsResult.collections : [];
+
+        // Auto-create "Favorites" collection if user has none
+        if (collections.length === 0) {
+            const createResult = await createCollection(userId, "Favorites");
+            if (createResult.status === "success") {
+                collections = [createResult.collection];
+            } else {
+                alert("Failed to create default collection: " + createResult.message);
+                return;
+            }
+        }
+
+        if (collections.length === 1) {
+            const result = await saveBusiness(userId, businessId, collections[0].collectionId);
+            if (result.status === "success") {
+                saveBtn.classList.add("saved");
+                saveBtn.textContent = "★ Saved";
+                saveBtn.title = "Saved";
+            } else {
+                alert("Failed to save: " + result.message);
+            }
+        } else {
+            openCollectionModal(businessId, businessName, collections, saveBtn);
+        }
+    } catch (error) {
+        console.error("Error saving business:", error);
+        alert("An error occurred while saving the business.");
+    }
+}
+
+async function handleUnsaveBusinessDetail(userId, businessId, businessName, saveBtn) {
+    try {
+        const result = await unsaveBusiness(userId, businessId);
+        if (result.status === "success") {
+            saveBtn.classList.remove("saved");
+            saveBtn.textContent = "☆ Save";
+            saveBtn.title = "Save to collection";
+        } else {
+            alert("Failed to unsave: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error unsaving business:", error);
+        alert("An error occurred while removing the business.");
+    }
+}
+
+function setupModalListeners(userId) {
+    const collectionModal = document.getElementById("collection-modal");
+    const modalCancelBtn = document.getElementById("modal-cancel-btn");
+    const modalConfirmBtn = document.getElementById("modal-confirm-btn");
+    const modalClose = document.querySelector(".modal-close");
+
+    modalCancelBtn.addEventListener('click', closeCollectionModal);
+    modalClose.addEventListener('click', closeCollectionModal);
+    modalConfirmBtn.addEventListener('click', () => confirmSaveToCollection(userId));
+
+    collectionModal.addEventListener('click', (e) => {
+        if (e.target === collectionModal) {
+            closeCollectionModal();
+        }
+    });
+}
+
 async function init() {
     const session = getSession();
     if (!session) {
@@ -473,6 +639,7 @@ async function init() {
 
     setupStarRating();
     setupCharCounter();
+    setupModalListeners(session.userId);
     setupPhotoUpload();
 
     reviewForm.addEventListener("submit", handleReviewSubmit);
