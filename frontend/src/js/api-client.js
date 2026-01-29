@@ -355,3 +355,142 @@ export async function moveBusinessToCollection(userId, businessId, oldCollection
     });
     return await response.json();
 }
+
+// ==================== Deals API ====================
+
+export async function getDeals(businessId = null, activeOnly = true) {
+    const params = new URLSearchParams();
+    if (businessId) params.append("business_id", businessId);
+    params.append("active_only", activeOnly);
+    const response = await fetch(`http://127.0.0.1:5001/api/deals?${params.toString()}`);
+    return await response.json();
+}
+
+export async function createDeal(businessId, title, description, discountType, discountValue, expiresAt, createdByUserId) {
+    const response = await fetch("http://127.0.0.1:5001/api/deals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ businessId, title, description, discountType, discountValue, expiresAt, createdByUserId }),
+    });
+    return await response.json();
+}
+
+export async function deleteDeal(dealId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/deals/${dealId}`, { method: "DELETE" });
+    return await response.json();
+}
+
+export async function saveDeal(userId, dealId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/deals/${dealId}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    return await response.json();
+}
+
+export async function unsaveDeal(userId, dealId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/deals/${dealId}/unsave?user_id=${userId}`, { method: "DELETE" });
+    return await response.json();
+}
+
+export async function scrapeDeals(businessId, businessName, city = "Ottawa") {
+    const response = await fetch("http://127.0.0.1:5001/api/deals/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ businessId, businessName, city }),
+    });
+    return await response.json();
+}
+
+// ==================== Friends API ====================
+
+export async function sendFriendRequest(fromUserId, toUserId) {
+    const response = await fetch("http://127.0.0.1:5001/api/friends/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fromUserId, toUserId }),
+    });
+    return await response.json();
+}
+
+export async function getFriendRequests(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/requests?user_id=${userId}`);
+    return await response.json();
+}
+
+export async function acceptFriendRequest(requestId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/requests/${requestId}/accept`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    return await response.json();
+}
+
+export async function rejectFriendRequest(requestId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/requests/${requestId}/reject`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    return await response.json();
+}
+
+export async function getFriends(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends?user_id=${userId}`);
+    return await response.json();
+}
+
+export async function removeFriend(friendshipId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/${friendshipId}?user_id=${userId}`, { method: "DELETE" });
+    return await response.json();
+}
+
+export async function getFriendActivity(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/activity?user_id=${userId}`);
+    return await response.json();
+}
+
+export async function searchUsers(query, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/friends/search?q=${encodeURIComponent(query)}&user_id=${userId}`);
+    return await response.json();
+}
+
+// ==================== Trending API ====================
+
+export async function getTrending(limit = 50) {
+    const response = await fetch(`http://127.0.0.1:5001/api/trending?limit=${limit}`);
+    return await response.json();
+}
+
+export async function uploadReceipt(userId, businessId, amount, receiptImage) {
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("businessId", businessId);
+    formData.append("amount", amount);
+    formData.append("receiptImage", receiptImage);
+
+    const response = await fetch("http://127.0.0.1:5001/api/trending/receipts", {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
+}
+
+export async function getBusinessTrendingStats(businessId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/trending/${businessId}/stats`);
+    return await response.json();
+}
+
+export async function getUserReceipts(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/trending/receipts?user_id=${userId}`);
+    return await response.json();
+}
+
+// ==================== User Profile API ====================
+
+export async function getUserProfile(username) {
+    const response = await fetch(`http://127.0.0.1:5001/api/users/${username}`);
+    return await response.json();
+}

@@ -194,4 +194,42 @@ def authenticate_user(
     raise ValueError("ERROR: Could not find user.")
 
 
+def get_user_by_id(user_id: int, users: Optional[list[dict]] = None) -> Optional[dict]:
+    """
+    Gets a user by their ID.
+
+    Args:
+        user_id (int): The user's ID.
+        users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+
+    Returns:
+        Optional[dict]: User dict if found, None otherwise.
+    """
+    if not users:
+        users = jh.load_users()
+
+    for user in users:
+        if user["id"] == user_id:
+            return user
+    return None
+
+
+def search_users(query: str, users: Optional[list[dict]] = None) -> list[dict]:
+    """
+    Searches users by username (case-insensitive partial match).
+
+    Args:
+        query (str): Search string.
+        users (list[dict], optional): Contains all users. Defaults to jh.load_users().
+
+    Returns:
+        list[dict]: Matching users.
+    """
+    if not users:
+        users = jh.load_users()
+
+    query_lower = query.lower()
+    return [u for u in users if query_lower in u["username"].lower()]
+
+
 # TODO: (Maybe: Implement a "Forgot Password" feature)
