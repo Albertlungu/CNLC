@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deals & Coupons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/deals.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html">Directory</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="trending.html">Trending</a></li>
+            <li><a href="deals.html" class="active">Deals</a></li>
+            <li><a href="saved.html">Saved</a></li>
+            <li><a href="friends.html">Friends</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="deals-header">
+            <h1>Deals & Coupons</h1>
+            <div class="deals-actions">
+                <button id="create-deal-btn" class="action-btn">Create Deal</button>
+                <button id="fetch-deals-btn" class="action-btn action-btn-secondary">Fetch Deals from Web</button>
+            </div>
+        </div>
+
+        <div id="deals-grid" class="deals-grid">
+            <div class="loading">Loading deals...</div>
+        </div>
+    </div>
+
+    <!-- Create Deal Modal -->
+    <div id="create-deal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create a Deal</h2>
+                <span class="modal-close" id="create-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="create-deal-form">
+                    <div class="form-group">
+                        <label for="deal-business-search">Business</label>
+                        <input type="text" id="deal-business-search" placeholder="Search for a business..." autocomplete="off">
+                        <div id="business-search-results" class="search-dropdown"></div>
+                        <input type="hidden" id="deal-business-id">
+                    </div>
+                    <div class="form-group">
+                        <label for="deal-title">Deal Title</label>
+                        <input type="text" id="deal-title" placeholder="e.g. 20% off all items" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deal-description">Description</label>
+                        <textarea id="deal-description" placeholder="Details about the deal..." rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="deal-type">Discount Type</label>
+                            <select id="deal-type">
+                                <option value="percentage">Percentage Off</option>
+                                <option value="fixed">Dollar Amount Off</option>
+                                <option value="bogo">Buy One Get One</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deal-value">Value</label>
+                            <input type="number" id="deal-value" placeholder="e.g. 20" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deal-expires">Expires (optional)</label>
+                        <input type="date" id="deal-expires">
+                    </div>
+                    <button type="submit" class="submit-btn">Create Deal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fetch Deals Modal -->
+    <div id="fetch-deals-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Fetch Deals from Web</h2>
+                <span class="modal-close" id="fetch-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="fetch-business-search">Business Name</label>
+                    <input type="text" id="fetch-business-search" placeholder="Search for a business..." autocomplete="off">
+                    <div id="fetch-search-results" class="search-dropdown"></div>
+                    <input type="hidden" id="fetch-business-id">
+                    <input type="hidden" id="fetch-business-name">
+                </div>
+                <div class="form-group">
+                    <label for="fetch-city">City</label>
+                    <input type="text" id="fetch-city" value="Ottawa">
+                </div>
+                <button id="fetch-submit-btn" class="submit-btn">Search Web for Deals</button>
+                <div id="fetch-status" class="fetch-status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/deals.js"></script>
+</body>
+</html>

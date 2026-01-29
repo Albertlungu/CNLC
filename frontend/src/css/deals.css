@@ -1,0 +1,436 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #fff3e6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-bar {
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.menu-links {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-links li {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #e0e0e0;
+}
+
+.menu-links li:last-child {
+    border-right: none;
+}
+
+.menu-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 20px 15px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.menu-links li a:hover,
+.menu-links li a.active {
+    background: #ff6600;
+    color: white;
+}
+
+.menu-links li a.logout-link {
+    color: #d32f2f;
+}
+
+.menu-links li a.logout-link:hover {
+    background: #d32f2f;
+    color: white;
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.deals-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.deals-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+}
+
+.deals-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #ff6600;
+    color: white;
+}
+
+.action-btn:hover {
+    background: #e65c00;
+    transform: translateY(-2px);
+}
+
+.action-btn-secondary {
+    background: white;
+    color: #ff6600;
+    border: 2px solid #ff6600;
+}
+
+.action-btn-secondary:hover {
+    background: #fff3e6;
+}
+
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+}
+
+.deal-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid #ff6600;
+}
+
+.deal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.deal-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.deal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    flex: 1;
+}
+
+.deal-badge {
+    background: #ff6600;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.deal-description {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.deal-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #999;
+}
+
+.deal-source {
+    font-style: italic;
+}
+
+.deal-source a {
+    color: #ff6600;
+    text-decoration: none;
+}
+
+.deal-source a:hover {
+    text-decoration: underline;
+}
+
+.deal-expires {
+    color: #d32f2f;
+    font-weight: 600;
+}
+
+.deal-business-name {
+    font-size: 14px;
+    color: #ff6600;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.deal-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.deal-save-btn, .deal-delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.deal-save-btn {
+    background: #fff3e6;
+    color: #ff6600;
+}
+
+.deal-save-btn:hover {
+    background: #ffe0b2;
+}
+
+.deal-delete-btn {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.deal-delete-btn:hover {
+    background: #ffcdd2;
+}
+
+.no-deals {
+    text-align: center;
+    padding: 60px;
+    color: #999;
+    font-size: 16px;
+    grid-column: 1 / -1;
+}
+
+.loading {
+    text-align: center;
+    padding: 60px;
+    color: #999;
+    grid-column: 1 / -1;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid #ff6600;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.modal-close {
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #ff6600;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #ff6600;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    background: #e65c00;
+    transform: translateY(-2px);
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 100;
+}
+
+.search-dropdown.active {
+    display: block;
+}
+
+.search-dropdown-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.search-dropdown-item:hover {
+    background: #fff3e6;
+    color: #ff6600;
+}
+
+.fetch-status {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+}
+
+.fetch-status.active {
+    display: block;
+}
+
+.fetch-status.loading {
+    background: #fff3e6;
+    color: #ff6600;
+}
+
+.fetch-status.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.fetch-status.error {
+    background: #ffebee;
+    color: #d32f2f;
+}
