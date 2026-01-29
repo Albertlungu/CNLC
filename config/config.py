@@ -18,7 +18,13 @@ USERS_JSON = DATA_DIR / "users.json"
 REVIEWS_JSON = DATA_DIR / "reviews.json"
 SESSIONS_JSON = DATA_DIR / "sessions.json"
 BOOKMARKS_JSON = DATA_DIR / "bookmarks.json"  # If you add this later
-DEALS_JSON = DATA_DIR / "deals.json"  # For future Phase 4
+DEALS_JSON = DATA_DIR / "deals.json"
+FRIENDS_JSON = DATA_DIR / "friends.json"
+FRIEND_REQUESTS_JSON = DATA_DIR / "friend_requests.json"
+RECEIPTS_JSON = DATA_DIR / "receipts.json"
+TRENDING_POINTS_JSON = DATA_DIR / "trending_points.json"
+COLLECTIONS_JSON = DATA_DIR / "collections.json"
+SAVED_BUSINESSES_JSON = DATA_DIR / "saved_businesses.json"
 
 # Backend directories
 BACKEND_DIR = PROJECT_ROOT / "backend"

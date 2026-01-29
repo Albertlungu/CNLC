@@ -12,14 +12,20 @@ from backend.api.routes.saved import saved_bp
 from backend.api.routes.sessions import sessions_bp
 from backend.api.routes.users import users_bp
 from backend.api.routes.verification import verification_bp
+from backend.api.routes.deals import deals_bp
+from backend.api.routes.friends import friends_bp
+from backend.api.routes.trending import trending_bp
 
 __all__ = [
     "auth_bp",
     "bookmarks_bp",
     "businesses_bp",
+    "deals_bp",
+    "friends_bp",
     "reviews_bp",
     "saved_bp",
     "sessions_bp",
+    "trending_bp",
     "users_bp",
     "verification_bp",
 ]

@@ -14,9 +14,12 @@ from backend.api.routes import (
     auth_bp,
     bookmarks_bp,
     businesses_bp,
+    deals_bp,
+    friends_bp,
     reviews_bp,
     saved_bp,
     sessions_bp,
+    trending_bp,
     users_bp,
     verification_bp,
 )
@@ -80,9 +83,12 @@ def health_check():
 app.register_blueprint(auth_bp)
 app.register_blueprint(bookmarks_bp)
 app.register_blueprint(businesses_bp)
+app.register_blueprint(deals_bp)
+app.register_blueprint(friends_bp)
 app.register_blueprint(reviews_bp)
 app.register_blueprint(saved_bp)
 app.register_blueprint(sessions_bp)
+app.register_blueprint(trending_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(verification_bp)
 
