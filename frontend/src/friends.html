@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/friends.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html">Directory</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="trending.html">Trending</a></li>
+            <li><a href="deals.html">Deals</a></li>
+            <li><a href="saved.html">Saved</a></li>
+            <li><a href="friends.html" class="active">Friends</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="friends-layout">
+            <!-- Left panel: Friends list & search -->
+            <div class="friends-panel">
+                <h2>Friends</h2>
+
+                <div class="search-section">
+                    <input type="text" id="user-search" placeholder="Search users to add...">
+                    <div id="user-search-results" class="search-results"></div>
+                </div>
+
+                <div class="requests-section">
+                    <h3>Pending Requests</h3>
+                    <div id="pending-requests" class="requests-list">
+                        <p class="empty-text">No pending requests</p>
+                    </div>
+                </div>
+
+                <div class="friends-list-section">
+                    <h3>Your Friends</h3>
+                    <div id="friends-list" class="friends-list">
+                        <p class="empty-text">No friends yet. Search for users above.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right panel: Activity feed -->
+            <div class="activity-panel">
+                <h2>Friend Activity</h2>
+                <div id="activity-feed" class="activity-feed">
+                    <p class="empty-text">No recent activity from friends.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/friends.js"></script>
+</body>
+</html>
