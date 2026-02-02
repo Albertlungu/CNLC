@@ -4,7 +4,7 @@
 
 body {
     font-family: 'Montserrat', Arial, sans-serif;
-    background-color: #fff3e6;
+    background-color: var(--bg-primary);
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -13,8 +13,8 @@ body {
 }
 
 .menu-bar {
-    background: white;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    background: var(--bg-secondary);
+    box-shadow: 0 4px 16px var(--shadow-md);
     padding: 0;
     width: 100%;
     position: sticky;
@@ -34,7 +34,7 @@ body {
 .menu-links li {
     flex: 1;
     text-align: center;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid var(--border-color);
 }
 
 .menu-links li:last-child {
@@ -43,7 +43,7 @@ body {
 
 .menu-links li a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 16px;
     padding: 20px 15px;
@@ -53,8 +53,8 @@ body {
 
 .menu-links li a:hover,
 .menu-links li a.active {
-    background: #ff6600;
-    color: white;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #ffa366 100%);
+    color: var(--bg-secondary);
 }
 
 .menu-links li a.logout-link {
@@ -62,8 +62,8 @@ body {
 }
 
 .menu-links li a.logout-link:hover {
-    background: #d32f2f;
-    color: white;
+    background: linear-gradient(135deg, #d32f2f 0%, #f77f7f 100%);
+    color: var(--bg-secondary);
 }
 
 .main-container {
@@ -75,8 +75,8 @@ body {
 /* Collections Sidebar */
 .collections-sidebar {
     width: 280px;
-    background: white;
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
+    background: var(--bg-secondary);
+    box-shadow: 4px 0 16px var(--shadow-md);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -84,7 +84,7 @@ body {
 
 .sidebar-header {
     padding: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -93,15 +93,15 @@ body {
 .sidebar-header h2 {
     margin: 0;
     font-size: 20px;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .new-collection-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     border: none;
     font-size: 24px;
     font-weight: 700;
@@ -114,7 +114,7 @@ body {
 
 .new-collection-btn:hover {
     transform: scale(1.1);
-    background: #e65c00;
+    background: var(--accent-hover);
 }
 
 .collection-list {
@@ -135,14 +135,14 @@ body {
 }
 
 .collection-item:hover {
-    background: #fff3e6;
-    border-left-color: #ff6600;
+    background: var(--bg-primary);
+    border-left-color: var(--accent-primary);
     transform: translateX(5px);
 }
 
 .collection-item.active {
-    background: #fff3e6;
-    border-left-color: #ff6600;
+    background: var(--bg-primary);
+    border-left-color: var(--accent-primary);
 }
 
 .collection-item.all-saved {
@@ -157,13 +157,13 @@ body {
 
 .collection-name {
     font-size: 15px;
-    color: #333;
+    color: var(--text-primary);
     flex: 1;
 }
 
 .collection-count {
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     padding: 4px 10px;
     border-radius: 12px;
     font-size: 12px;
@@ -193,7 +193,7 @@ body {
 .content-header h1 {
     margin: 0;
     font-size: 28px;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .collection-actions {
@@ -210,13 +210,13 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    background: #e65c00;
+    background: var(--accent-hover);
 }
 
 .action-btn.danger {
@@ -246,7 +246,7 @@ body {
 .search-group input {
     flex: 1;
     padding: 12px 15px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     border-radius: 6px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -254,13 +254,13 @@ body {
 
 .search-group input:focus {
     outline: none;
-    border-color: #ff6600;
+    border-color: var(--accent-primary);
 }
 
 .search-group button {
     padding: 12px 20px;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     border: none;
     border-radius: 6px;
     font-weight: 600;
@@ -271,7 +271,7 @@ body {
 
 .search-group button:hover {
     transform: translateY(-2px);
-    background: #e65c00;
+    background: var(--accent-hover);
 }
 
 .filter-group {
@@ -282,35 +282,35 @@ body {
 
 .filter-group label {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .filter-group select {
     padding: 10px 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     border-radius: 6px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     cursor: pointer;
-    background: white;
+    background: var(--bg-secondary);
 }
 
 .filter-group select:focus {
     outline: none;
-    border-color: #ff6600;
+    border-color: var(--accent-primary);
 }
 
 .business-count {
     padding: 10px 0;
     font-size: 14px;
-    color: #666;
+    color: var(--text-tertiary);
     margin-bottom: 20px;
 }
 
 .business-count span {
     font-weight: 700;
-    color: #ff6600;
+    color: var(--accent-primary);
 }
 
 /* Business Grid */
@@ -321,10 +321,10 @@ body {
 }
 
 .business-card {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px var(--shadow-md);
     transition: all 0.3s ease;
     position: relative;
 }
@@ -344,7 +344,7 @@ body {
 .business-card h3 {
     margin: 0;
     font-size: 18px;
-    color: #333;
+    color: var(--text-primary);
     flex: 1;
 }
 
@@ -369,13 +369,13 @@ body {
 .business-card p {
     margin: 8px 0;
     font-size: 14px;
-    color: #666;
+    color: var(--text-tertiary);
 }
 
 .category-badge {
     display: inline-block;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     padding: 4px 10px;
     border-radius: 12px;
     font-size: 12px;
@@ -385,7 +385,7 @@ body {
 
 .date-saved {
     font-size: 12px;
-    color: #999;
+    color: var(--text-muted);
     margin-top: 10px;
     font-style: italic;
 }
@@ -394,8 +394,8 @@ body {
     display: inline-block;
     margin-top: 12px;
     padding: 10px 16px;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     text-decoration: none;
     border-radius: 6px;
     font-weight: 600;
@@ -404,14 +404,14 @@ body {
 }
 
 .view-details-link:hover {
-    background: #e65c00;
+    background: var(--accent-hover);
     transform: translateY(-2px);
 }
 
 .no-results {
     text-align: center;
     padding: 60px 20px;
-    color: #666;
+    color: var(--text-tertiary);
     font-size: 16px;
 }
 
@@ -434,7 +434,7 @@ body {
 }
 
 .modal-content {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 15px;
     max-width: 500px;
     width: 90%;
@@ -447,8 +447,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
 }
 
 .modal-header h3 {
@@ -459,7 +459,7 @@ body {
 .close-modal {
     background: none;
     border: none;
-    color: white;
+    color: var(--bg-secondary);
     font-size: 28px;
     cursor: pointer;
     line-height: 1;
@@ -473,14 +473,14 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .modal-body input,
 .modal-body select {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     border-radius: 6px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -490,12 +490,12 @@ body {
 .modal-body input:focus,
 .modal-body select:focus {
     outline: none;
-    border-color: #ff6600;
+    border-color: var(--accent-primary);
 }
 
 .modal-body p {
     margin: 0 0 15px 0;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .modal-actions {
@@ -517,18 +517,18 @@ body {
 }
 
 .primary-btn {
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
 }
 
 .primary-btn:hover {
-    background: #e65c00;
+    background: var(--accent-hover);
     transform: translateY(-2px);
 }
 
 .secondary-btn {
-    background: #e0e0e0;
-    color: #333;
+    background: var(--border-color);
+    color: var(--text-primary);
 }
 
 .secondary-btn:hover {

@@ -6,14 +6,14 @@
 }
 
 body {
-    background-color: #fff3e6;
-    color: #333;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     display: flex;
     flex-direction: column;
 }
 
 .menu-bar {
-    background: white;
+    background: var(--bg-secondary);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     padding: 0;
     width: 100%;
@@ -34,7 +34,7 @@ body {
 .menu-links li {
     flex: 1;
     text-align: center;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid var(--border-color);
 }
 
 .menu-links li:last-child {
@@ -43,7 +43,7 @@ body {
 
 .menu-links li a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 16px;
     padding: 20px 15px;
@@ -53,8 +53,8 @@ body {
 
 .menu-links li a:hover,
 .menu-links li a.active {
-    background: #ff6600;
-    color: white;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #ffa366 100%);
+    color: var(--bg-secondary);
 }
 
 .menu-links li a.logout-link {
@@ -62,8 +62,8 @@ body {
 }
 
 .menu-links li a.logout-link:hover {
-    background: #d32f2f;
-    color: white;
+    background: linear-gradient(135deg, #d32f2f 0%, #f77f7f 100%);
+    color: var(--bg-secondary);
 }
 
 .main-content {
@@ -82,7 +82,7 @@ body {
 .deals-header h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .deals-actions {
@@ -99,23 +99,23 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
 }
 
 .action-btn:hover {
-    background: #e65c00;
+    background: var(--accent-hover);
     transform: translateY(-2px);
 }
 
 .action-btn-secondary {
-    background: white;
-    color: #ff6600;
-    border: 2px solid #ff6600;
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+    border: 2px solid var(--accent-primary);
 }
 
 .action-btn-secondary:hover {
-    background: #fff3e6;
+    background: var(--bg-primary);
 }
 
 .deals-grid {
@@ -125,12 +125,12 @@ body {
 }
 
 .deal-card {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 4px solid #ff6600;
+    border-left: 4px solid var(--accent-primary);
 }
 
 .deal-card:hover {
@@ -148,23 +148,23 @@ body {
 .deal-title {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
     flex: 1;
 }
 
 .deal-badge {
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 700;
-    white-space: nowrap;
+    var(--bg-secondary)-space: nowrap;
     margin-left: 10px;
 }
 
 .deal-description {
-    color: #666;
+    color: var(--text-tertiary);
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 15px;
@@ -175,7 +175,7 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
-    color: #999;
+    color: var(--text-muted);
 }
 
 .deal-source {
@@ -183,7 +183,7 @@ body {
 }
 
 .deal-source a {
-    color: #ff6600;
+    color: var(--accent-primary);
     text-decoration: none;
 }
 
@@ -198,7 +198,7 @@ body {
 
 .deal-business-name {
     font-size: 14px;
-    color: #ff6600;
+    color: var(--accent-primary);
     font-weight: 600;
     margin-bottom: 8px;
 }
@@ -221,8 +221,8 @@ body {
 }
 
 .deal-save-btn {
-    background: #fff3e6;
-    color: #ff6600;
+    background: var(--bg-primary);
+    color: var(--accent-primary);
 }
 
 .deal-save-btn:hover {
@@ -241,7 +241,7 @@ body {
 .no-deals {
     text-align: center;
     padding: 60px;
-    color: #999;
+    color: var(--text-muted);
     font-size: 16px;
     grid-column: 1 / -1;
 }
@@ -249,7 +249,7 @@ body {
 .loading {
     text-align: center;
     padding: 60px;
-    color: #999;
+    color: var(--text-muted);
     grid-column: 1 / -1;
 }
 
@@ -272,11 +272,11 @@ body {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--bg-secondary);
     border-radius: 12px;
     width: 90%;
     max-width: 550px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 40px var(--shadow-sm);
     animation: slideUp 0.3s ease;
 }
 
@@ -290,26 +290,26 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 25px;
-    border-bottom: 2px solid #ff6600;
+    border-bottom: 2px solid var(--accent-primary);
 }
 
 .modal-header h2 {
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .modal-close {
     font-size: 28px;
-    color: #999;
+    color: var(--text-muted);
     cursor: pointer;
     transition: color 0.2s ease;
     line-height: 1;
 }
 
 .modal-close:hover {
-    color: #ff6600;
+    color: var(--accent-primary);
 }
 
 .modal-body {
@@ -325,7 +325,7 @@ body {
     display: block;
     font-weight: 600;
     font-size: 14px;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 6px;
 }
 
@@ -334,7 +334,7 @@ body {
 .form-group select {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -346,7 +346,7 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #ff6600;
+    border-color: var(--accent-primary);
 }
 
 .form-row {
@@ -361,8 +361,8 @@ body {
 .submit-btn {
     width: 100%;
     padding: 14px;
-    background: #ff6600;
-    color: white;
+    background: var(--accent-primary);
+    color: var(--bg-secondary);
     border: none;
     border-radius: 8px;
     font-family: 'Montserrat', sans-serif;
@@ -373,7 +373,7 @@ body {
 }
 
 .submit-btn:hover {
-    background: #e65c00;
+    background: var(--accent-hover);
     transform: translateY(-2px);
 }
 
@@ -382,8 +382,8 @@ body {
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 2px solid #e0e0e0;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
     border-top: none;
     border-radius: 0 0 8px 8px;
     max-height: 200px;
@@ -404,8 +404,8 @@ body {
 }
 
 .search-dropdown-item:hover {
-    background: #fff3e6;
-    color: #ff6600;
+    background: var(--bg-primary);
+    color: var(--accent-primary);
 }
 
 .fetch-status {
@@ -421,8 +421,8 @@ body {
 }
 
 .fetch-status.loading {
-    background: #fff3e6;
-    color: #ff6600;
+    background: var(--bg-primary);
+    color: var(--accent-primary);
 }
 
 .fetch-status.success {

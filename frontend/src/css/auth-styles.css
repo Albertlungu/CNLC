@@ -94,7 +94,7 @@ body {
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333; }
+    color: var(--text-primary); }
 
 .input-icon { position: relative; margin-bottom: 15px; }
 .input-icon .icon {
@@ -121,7 +121,7 @@ h2 {
 button {
   padding: 12px;
   background: #ff6b6b;
-  color: white;
+  color: var(--bg-secondary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -134,7 +134,7 @@ p {
     text-align: center;
     font-size: 14px;
     margin-top: 15px;
-    color: #555;
+    color: var(--text-secondary);
 }
 span {
     color: #ff6b6b;
@@ -151,7 +151,7 @@ span {
 }
 .info-text {
     font-size: 14px;
-    color: #666;
+    color: var(--text-tertiary);
     margin-bottom: 15px;
     line-height: 1.4;
 }
