@@ -131,7 +131,6 @@ body {
     justify-content: space-between;
     align-items: center;
     transition: all 0.2s ease;
-    border-left: 4px solid transparent;
 }
 
 .collection-item:hover {
@@ -157,7 +156,7 @@ body {
 
 .collection-name {
     font-size: 15px;
-    color: var(--text-primary);
+    color: black;
     flex: 1;
 }
 
@@ -293,7 +292,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     cursor: pointer;
-    background: var(--bg-secondary);
+    background: white;
 }
 
 .filter-group select:focus {
