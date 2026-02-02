@@ -53,7 +53,7 @@ body {
 
 .menu-links li a:hover,
 .menu-links li a.active {
-    background: #ff6600;
+    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
     color: white;
 }
 
@@ -62,7 +62,7 @@ body {
 }
 
 .menu-links li a.logout-link:hover {
-    background: #d32f2f;
+    background: linear-gradient(135deg, #d32f2f 0%, #f77f7f 100%);
     color: white;
 }
 
@@ -91,6 +91,13 @@ body {
     margin-top: 6px;
 }
 
+.upload-btn-wrapper {
+    display: flex;
+    justify-content: left;
+    margin: 20px 0;
+}
+
+
 .upload-btn {
     padding: 14px 28px;
     background: #ff6600;
@@ -107,10 +114,151 @@ body {
 
 .upload-btn:hover {
     background: #e65c00;
-    transform: translateY(-2px);
 }
 
-/* Trending List */
+/* Podium Section */
+.podium-section {
+    margin-bottom: 80px;
+}
+
+.podium-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.podium-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px 18px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 260px;
+}
+
+.podium-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.podium-1 {
+    order: 2;
+}
+
+.podium-2 {
+    order: 1;
+}
+
+.podium-3 {
+    order: 3;
+}
+
+.crown {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+}
+
+.rank-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+}
+
+.rank-1 { background: #FFD700; }
+.rank-2 { background: #C0C0C0; }
+.rank-3 { background: #CD7F32; }
+
+.podium-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 18px;
+    margin-bottom: 4px;
+    min-height: 22px;
+}
+
+.podium-category {
+    font-size: 12px;
+    color: #999;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    min-height: 16px;
+}
+
+.podium-points {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ff6600;
+    margin-bottom: 2px;
+}
+
+.podium-meta {
+    font-size: 11px;
+    color: #bbb;
+    margin-bottom: 16px;
+}
+
+.podium-base {
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.podium-base-1 {
+    height: 70px;
+    background: rgba(255, 215, 0, 0.15);
+}
+
+.podium-base-2 {
+    height: 50px;
+    background: rgba(192, 192, 192, 0.15);
+}
+
+.podium-base-3 {
+    height: 35px;
+    background: rgba(205, 127, 50, 0.15);
+}
+
+.medal {
+    font-size: 26px;
+}
+
+/* Leaderboard Section */
+.leaderboard-section {
+    margin-top: 10px;
+}
+
+.leaderboard-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+/* Trending List (ranks 4-15) */
 .trending-list {
     display: flex;
     flex-direction: column;
@@ -123,13 +271,15 @@ body {
     background: white;
     border-radius: 12px;
     padding: 20px 25px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
 }
 
 .trending-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 .trending-rank {
@@ -139,10 +289,6 @@ body {
     min-width: 50px;
     text-align: center;
 }
-
-.trending-item:nth-child(1) .trending-rank { color: #ff6600; }
-.trending-item:nth-child(2) .trending-rank { color: #ff8533; }
-.trending-item:nth-child(3) .trending-rank { color: #ffa366; }
 
 .trending-info {
     flex: 1;
@@ -154,15 +300,6 @@ body {
     font-weight: 700;
     color: #333;
     margin-bottom: 4px;
-}
-
-.trending-name a {
-    color: #333;
-    text-decoration: none;
-}
-
-.trending-name a:hover {
-    color: #ff6600;
 }
 
 .trending-category {
@@ -204,7 +341,6 @@ body {
     height: 100%;
     background: #ff6600;
     border-radius: 4px;
-    transition: width 0.5s ease;
 }
 
 .trending-meta {

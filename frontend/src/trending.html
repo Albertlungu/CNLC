@@ -26,11 +26,60 @@
                 <h1>Trending Businesses</h1>
                 <p class="trending-subtitle">Ranked by community spending. Upload a receipt to support your favorite local business.</p>
             </div>
+        </div>
+
+        <div class="upload-btn-wrapper">
             <button id="upload-receipt-btn" class="upload-btn">Upload Receipt</button>
         </div>
 
-        <div id="trending-list" class="trending-list">
-            <div class="loading">Loading trending businesses...</div>
+        <!-- Podium: Top 3 -->
+        <div id="podium-section" class="podium-section">
+            <div class="podium-container">
+                <!-- 2nd Place -->
+                <a href="#" class="podium-card podium-2" id="podium-2">
+                    <div class="rank-badge rank-2">2</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-2">
+                        <div class="medal">🥈</div>
+                    </div>
+                </a>
+
+                <!-- 1st Place -->
+                <a href="#" class="podium-card podium-1" id="podium-1">
+                    <div class="crown">👑</div>
+                    <div class="rank-badge rank-1">1</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-1">
+                        <div class="medal">🥇</div>
+                    </div>
+                </a>
+
+                <!-- 3rd Place -->
+                <a href="#" class="podium-card podium-3" id="podium-3">
+                    <div class="rank-badge rank-3">3</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-3">
+                        <div class="medal">🥉</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Leaderboard: Ranks 4-50 -->
+        <div class="leaderboard-section">
+            <h2 class="leaderboard-title">Full Rankings</h2>
+            <div id="trending-list" class="trending-list">
+                <div class="loading">Loading trending businesses...</div>
+            </div>
         </div>
     </div>
 

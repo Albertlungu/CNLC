@@ -38,6 +38,22 @@ async function getBusinessName(businessId) {
     return null;
 }
 
+// Populate the top 3 podium cards
+function populatePodiumCard(rank, trending, business) {
+    const card = document.getElementById(`podium-${rank}`);
+    if (!card) return;
+
+    const name = business ? business.name : `Business #${trending.businessId}`;
+    const category = business ? (business.category || "") : "";
+    const meta = `${trending.receiptCount} receipt${trending.receiptCount !== 1 ? 's' : ''} - $${trending.totalSpent.toFixed(2)} total`;
+
+    card.href = `business-detail.html?id=${trending.businessId}`;
+    card.querySelector(".podium-name").textContent = name;
+    card.querySelector(".podium-category").textContent = category;
+    card.querySelector(".podium-points").textContent = trending.points.toFixed(1);
+    card.querySelector(".podium-meta").textContent = meta;
+}
+
 async function loadTrending() {
     trendingList.innerHTML = '<div class="loading">Loading trending businesses...</div>';
 
@@ -51,9 +67,16 @@ async function loadTrending() {
         // Find max points for bar scaling
         const maxPoints = Math.max(...result.trending.map(t => t.points), 1);
 
+        // Populate podium (top 3)
+        for (let i = 0; i < Math.min(3, result.trending.length); i++) {
+            const t = result.trending[i];
+            const business = await getBusinessName(t.businessId);
+            populatePodiumCard(i + 1, t, business);
+        }
+
         trendingList.innerHTML = "";
 
-        for (let i = 0; i < result.trending.length; i++) {
+        for (let i = 3; i < result.trending.length; i++) {
             const t = result.trending[i];
             const business = await getBusinessName(t.businessId);
             const name = business ? business.name : `Business #${t.businessId}`;
