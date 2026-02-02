@@ -12,6 +12,9 @@
 
   <link rel="stylesheet" href="css/auth-styles.css">
   <link rel="icon" href="data:,">
+  
+  <!-- Google reCAPTCHA v2 -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -34,6 +37,13 @@
         <input id='password' type="password" placeholder="Password" required>
       </div>
       <p class="forgot" onclick="showForgot()">Forgot password?</p>
+      
+      <!-- Google reCAPTCHA v2 -->
+      <div class="recaptcha-container">
+        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+        <p class="captcha-hint">Verify you're human</p>
+      </div>
+      
       <button type="submit">Login</button>
       <p>Don't have an account? <span onclick="showSignup()">Sign up</span></p>
     </form>
@@ -76,6 +86,13 @@
         <div id="strength-bar"></div>
       </div>
       <p id="strength-text"></p>
+      
+      <!-- Google reCAPTCHA v2 for Signup -->
+      <div class="recaptcha-container">
+        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+        <p class="captcha-hint">Verify you're human</p>
+      </div>
+      
       <button type="submit">Create Account</button>
       <p>Already have an account? <span onclick="showLogin()">Login</span></p>
     </form>

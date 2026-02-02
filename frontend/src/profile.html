@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/profile.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+  <!-- Navigation Menu Bar -->
+  <nav class="menu-bar">
+    <ul class="menu-links">
+      <li><a href="businesses.html">Businesses</a></li>
+      <li><a href="saved.html">Saved</a></li>
+      <li><a href="friends.html">Friends</a></li>
+      <li><a href="profile.html" class="active">Profile</a></li>
+      <li><a href="#" class="logout-link" id="logoutBtn">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- Profile Header Section -->
+    <section class="profile-header">
+      <div class="profile-picture-container">
+        <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture">
+        <label for="profilePictureInput" class="upload-overlay">
+          <span>📷 Change Photo</span>
+        </label>
+        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+      </div>
+      
+      <div class="profile-info">
+        <h1 id="displayUsername">Loading...</h1>
+        <p id="displayEmail" class="email-text">email@example.com</p>
+        <p class="member-since">Member since: <span id="memberSince">Jan 2024</span></p>
+      </div>
+    </section>
+
+    <!-- Edit Profile Section -->
+    <section class="edit-profile-section">
+      <h2>Personal Information</h2>
+      
+      <form id="profileForm" class="profile-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1-XXX-XXX-XXXX" required>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Street Address</label>
+            <input type="text" id="address" name="address" placeholder="123 Main Street">
+          </div>
+
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="City" required>
+          </div>
+
+          <div class="form-group">
+            <label for="province">Province/State</label>
+            <input type="text" id="province" name="province" placeholder="Province/State">
+          </div>
+
+          <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" id="postalCode" name="postalCode" placeholder="A1A 1A1">
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" placeholder="Country" required>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="save-btn">💾 Save Changes</button>
+          <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Friends List Section -->
+    <section class="friends-section">
+      <div class="section-header">
+        <h2>👥 Friends List</h2>
+        <button class="add-friend-btn" id="openInviteModal">➕ Invite Friend</button>
+      </div>
+
+      <div id="friendsList" class="friends-list">
+        <!-- Friends will be loaded here dynamically -->
+        <p class="empty-text">Loading friends...</p>
+      </div>
+    </section>
+
+    <!-- Reservations & Notifications Section -->
+    <section class="notifications-section">
+      <h2>🔔 Reservations & Notifications</h2>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="all">All</button>
+        <button class="tab-btn" data-tab="reservations">Reservations</button>
+        <button class="tab-btn" data-tab="deals">Deals</button>
+        <button class="tab-btn" data-tab="events">Events</button>
+      </div>
+
+      <div id="notificationsList" class="notifications-list">
+        <!-- Notifications will be loaded here -->
+        <p class="empty-text">No notifications yet</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Invite Friend Modal -->
+  <div id="inviteModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Invite Friend by Email</h2>
+      <form id="inviteForm">
+        <div class="form-group">
+          <label for="friendEmail">Friend's Email</label>
+          <input type="email" id="friendEmail" placeholder="friend@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="inviteMessage">Personal Message (Optional)</label>
+          <textarea id="inviteMessage" rows="3" placeholder="Hey! Join me on this awesome local business platform..."></textarea>
+        </div>
+        <button type="submit" class="invite-submit-btn">Send Invitation</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/components/profile.js"></script>
+</body>
+</html>
