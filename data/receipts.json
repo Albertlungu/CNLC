@@ -1,1 +1,38 @@
-[]
+[
+    {
+        "receiptId": 40245996,
+        "userId": 10000000,
+        "businessId": 192375715,
+        "amount": 67000.0,
+        "receiptImagePath": "receipts/e22bc4df8fdc425daf06fb4d23c298a3.jpeg",
+        "submittedAt": "2026-01-30T18:41:44.200125",
+        "verified": false
+    },
+    {
+        "receiptId": 38137383,
+        "userId": 10000000,
+        "businessId": 1109955206,
+        "amount": 9.458673986759848e+17,
+        "receiptImagePath": "receipts/7b1901a1c2c24a9b98a5cd9ab2ea1720.jpeg",
+        "submittedAt": "2026-01-30T18:42:08.516271",
+        "verified": false
+    },
+    {
+        "receiptId": 94133019,
+        "userId": 10000000,
+        "businessId": 7553898543,
+        "amount": 20.0,
+        "receiptImagePath": "receipts/ecba84fadb134de7b9b038717b388428.jpeg",
+        "submittedAt": "2026-01-30T18:42:25.215712",
+        "verified": false
+    },
+    {
+        "receiptId": 32811470,
+        "userId": 10000000,
+        "businessId": 8477771163,
+        "amount": 670.0,
+        "receiptImagePath": "receipts/91344392d5ed41fbad5a556c564173d7.jpeg",
+        "submittedAt": "2026-01-30T18:42:42.347696",
+        "verified": false
+    }
+]

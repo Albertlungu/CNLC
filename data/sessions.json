@@ -101,14 +101,21 @@
         "username": "albertlungu",
         "session_id": "E3ClFTADJS4o-9CG78FS2MOcA4RjCj_FYB-1Xh28q7A",
         "created_at": "2026-01-28T16:08:00.953777",
-        "expiration": "2026-02-04T16:08:00.953781",
-        "is_active": true
+        "expiration": "2026-01-30T14:06:56.794335",
+        "is_active": false
     },
     {
         "username": "albertlungu",
         "session_id": "khgQ5Jo-OJtpKPEP9KqNRqHSoKlEUKM0PNk_r10EaMA",
         "created_at": "2026-01-28T16:12:56.950729",
-        "expiration": "2026-02-04T16:12:56.950732",
-        "is_active": true
+        "expiration": "2026-01-30T14:06:56.794350",
+        "is_active": false
+    },
+    {
+        "username": "albertlungu",
+        "session_id": "K2txutiDyYNuCC9Xof894K5FQY8kdBzTrb8xCHqUstc",
+        "created_at": "2026-01-30T13:33:59.325300",
+        "expiration": "2026-01-30T14:06:56.794353",
+        "is_active": false
     }
 ]

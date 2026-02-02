@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "businessId": 192375715,
+        "totalSpent": 67000.0,
+        "points": 1024.2,
+        "receiptCount": 1
+    },
+    {
+        "businessId": 1109955206,
+        "totalSpent": 9.458673986759848e+17,
+        "points": 7079.88,
+        "receiptCount": 1
+    },
+    {
+        "businessId": 7553898543,
+        "totalSpent": 20.0,
+        "points": 0.25,
+        "receiptCount": 1
+    },
+    {
+        "businessId": 8477771163,
+        "totalSpent": 670.0,
+        "points": 133.65,
+        "receiptCount": 1
+    }
+]
