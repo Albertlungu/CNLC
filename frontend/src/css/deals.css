@@ -74,10 +74,10 @@ body {
 
 .deals-header {
     display: flex;
-    flex-direction: column; /* stack h1 and buttons vertically */
+    flex-direction: column; 
     gap: 15px; 
-    align-items: center; /* centers the content horizontally */
-    text-align: center; /* ensures text inside h1 is centered */
+    align-items: center;
+    text-align: center; 
 }
 
 
@@ -132,7 +132,6 @@ body {
     padding: 25px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 4px solid var(--accent-primary);
 }
 
 .deal-card:hover {
