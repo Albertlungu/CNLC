@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/reservations.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/mobile-nav.css">
+    <link rel="stylesheet" href="css/voice-control.css">
+    <link rel="stylesheet" href="css/tts.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6600">
+    <script src="js/theme.js"></script>
+    <script src="js/mobile.js"></script>
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="businesses.html"><span class="menu-emoji">🏠</span><span class="menu-text">Directory</span></a></li>
+            <li><a href="map.html"><span class="menu-emoji">📍</span><span class="menu-text">Map</span></a></li>
+            <li><a href="trending.html"><span class="menu-emoji">🔥</span><span class="menu-text">Trending</span></a></li>
+            <li><a href="deals.html"><span class="menu-emoji">💰</span><span class="menu-text">Deals</span></a></li>
+            <li><a href="saved.html"><span class="menu-emoji">⭐</span><span class="menu-text">Saved</span></a></li>
+            <li><a href="friends.html"><span class="menu-emoji">👥</span><span class="menu-text">Friends</span></a></li>
+            <li><a href="reservations.html" class="active"><span class="menu-emoji">📅</span><span class="menu-text">Reservations</span></a></li>
+            <li class="notification-bell" id="notification-bell">
+                <a href="#" class="bell-icon">Notifications</a>
+                <span class="notification-badge hidden" id="notification-badge">0</span>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-dropdown-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read-btn" id="mark-all-read-btn">Mark all read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-empty">No notifications</div>
+                    </div>
+                </div>
+            </li>
+            <li><a href="#" id="logout-btn" class="logout-link"><span class="menu-emoji">🚪</span><span class="menu-text">Logout</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="reservations-header">
+            <h1>Reservations</h1>
+            <button class="action-btn" id="new-reservation-btn">New Reservation</button>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
+            <button class="tab-btn" data-tab="all">All</button>
+            <button class="tab-btn" data-tab="calendar">Calendar</button>
+        </div>
+
+        <div id="tab-upcoming" class="tab-content active">
+            <div id="upcoming-list" class="reservations-list">
+                <div class="no-reservations">Loading...</div>
+            </div>
+        </div>
+
+        <div id="tab-all" class="tab-content">
+            <div id="all-list" class="reservations-list">
+                <div class="no-reservations">Loading...</div>
+            </div>
+        </div>
+
+        <div id="tab-calendar" class="tab-content">
+            <div class="calendar-container">
+                <div class="calendar-nav">
+                    <button id="prev-month">&lt; Prev</button>
+                    <h2 id="calendar-title"></h2>
+                    <button id="next-month">Next &gt;</button>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Reservation Modal -->
+    <div id="reservation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Reservation</h2>
+                <span class="modal-close" id="reservation-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="reservation-form">
+                    <div class="form-group">
+                        <label for="res-business-search">Business</label>
+                        <input type="text" id="res-business-search" placeholder="Search for a business..." autocomplete="off">
+                        <div id="res-search-results" class="search-dropdown"></div>
+                        <input type="hidden" id="res-business-id">
+                        <input type="hidden" id="res-business-name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="res-date">Date</label>
+                            <input type="date" id="res-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="res-time">Time</label>
+                            <input type="time" id="res-time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="res-party-size">Party Size</label>
+                        <input type="number" id="res-party-size" min="1" max="50" value="2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="res-notes">Notes (optional)</label>
+                        <textarea id="res-notes" rows="3" placeholder="Any special requests..." maxlength="500"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Confirm Reservation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/reservations.js"></script>
+    <script src="js/pwa.js"></script>
+    <script type="module" src="js/voice-control.js"></script>
+    <script type="module" src="js/tts.js"></script>
+</body>
+</html>

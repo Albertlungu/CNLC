@@ -1,0 +1,127 @@
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+}
+
+.notification-bell .bell-icon {
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    background: #d32f2f;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.notification-badge.hidden {
+    display: none;
+}
+
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 360px;
+    max-height: 420px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 3000;
+    overflow: hidden;
+}
+
+.notification-dropdown.active {
+    display: block;
+}
+
+.notification-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 2px solid #ff6600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.notification-dropdown-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.mark-all-read-btn {
+    border: none;
+    background: none;
+    color: #ff6600;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.mark-all-read-btn:hover {
+    text-decoration: underline;
+}
+
+.notification-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+    background: #fff8f0;
+}
+
+.notification-item.unread {
+    background: #fff3e6;
+    border-left: 3px solid #ff6600;
+}
+
+.notification-item-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.notification-item-message {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.notification-item-time {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.notification-empty {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 14px;
+}

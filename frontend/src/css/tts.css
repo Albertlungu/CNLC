@@ -1,0 +1,242 @@
+/* Text-to-Speech Styles */
+
+/* TTS Button */
+.tts-btn {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.tts-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.tts-btn.playing {
+    background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+    animation: pulse-tts 1.5s infinite;
+}
+
+.tts-btn .tts-icon {
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@keyframes pulse-tts {
+    0% {
+        box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(56, 161, 105, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(56, 161, 105, 0);
+    }
+}
+
+/* TTS Control Bar */
+.tts-control-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    padding: 15px 20px;
+    z-index: 9999;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    animation: slideUpBar 0.3s ease;
+}
+
+.tts-control-bar.hidden {
+    display: none;
+}
+
+@keyframes slideUpBar {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.tts-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tts-ctrl-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.tts-ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.tts-ctrl-btn .hidden {
+    display: none;
+}
+
+.tts-close {
+    margin-left: auto;
+    font-size: 18px;
+    padding: 5px 10px;
+}
+
+/* Speed Controls */
+.tts-speed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 20px;
+}
+
+.tts-speed label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.speed-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.speed-btn:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: white;
+}
+
+.speed-btn.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+/* Progress Bar */
+.tts-progress {
+    margin-top: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.tts-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.1s linear;
+}
+
+/* TTS Feedback Toast */
+.tts-feedback {
+    position: fixed;
+    bottom: 170px;
+    right: 30px;
+    background: rgba(102, 126, 234, 0.95);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    max-width: 300px;
+    z-index: 9997;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.tts-feedback.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dark mode adjustments */
+body.dark-mode .tts-control-bar {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .tts-btn {
+        bottom: 80px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .tts-btn .tts-icon {
+        font-size: 10px;
+    }
+
+    .tts-control-bar {
+        padding: 12px 15px;
+    }
+
+    .tts-controls {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tts-speed {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .tts-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        margin-left: 0;
+    }
+
+    .tts-feedback {
+        right: 20px;
+        bottom: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .speed-btn {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+}

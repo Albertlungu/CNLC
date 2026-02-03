@@ -1,0 +1,21 @@
+{
+    "name": "CNLC - Community Neighbourhood Local Commerce",
+    "short_name": "CNLC",
+    "description": "Discover and support local businesses in your community",
+    "start_url": "/businesses.html",
+    "display": "standalone",
+    "background_color": "#fff3e6",
+    "theme_color": "#ff6600",
+    "icons": [
+        {
+            "src": "assets/images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
