@@ -15,6 +15,9 @@ from backend.api.routes.verification import verification_bp
 from backend.api.routes.deals import deals_bp
 from backend.api.routes.friends import friends_bp
 from backend.api.routes.trending import trending_bp
+from backend.api.routes.reservations import reservations_bp
+from backend.api.routes.notifications import notifications_bp
+from backend.api.routes.recommendations import recommendations_bp
 
 __all__ = [
     "auth_bp",
@@ -22,10 +25,13 @@ __all__ = [
     "businesses_bp",
     "deals_bp",
     "friends_bp",
+    "notifications_bp",
+    "reservations_bp",
     "reviews_bp",
     "saved_bp",
     "sessions_bp",
     "trending_bp",
     "users_bp",
+    "recommendations_bp",
     "verification_bp",
 ]

@@ -749,3 +749,19 @@ body {
     cursor: not-allowed;
     transform: none;
 }
+
+/* 3D Model Viewer */
+.model-viewer-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.model-viewer-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+}

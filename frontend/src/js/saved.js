@@ -12,11 +12,13 @@ import {
     moveBusinessToCollection,
     getBusinessById,
 } from "./api-client.js";
+import { initNotifications } from "./notifications.js";
 
 // Check authentication
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNotifications();
 
 const session = getSession();
 const userId = session.userId;

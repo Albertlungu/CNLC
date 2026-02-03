@@ -8,8 +8,14 @@
     <link rel="stylesheet" href="css/business-detail.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/mobile-nav.css">
+    <link rel="stylesheet" href="css/voice-control.css">
+    <link rel="stylesheet" href="css/tts.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6600">
     <script src="js/theme.js"></script>
     <script src="js/mobile.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 </head>
 <body>
         <nav class="menu-bar">
@@ -20,6 +26,7 @@
             <li><a href="deals.html"><span class="menu-emoji">💰</span><span class="menu-text">Deals</span></a></li>
             <li><a href="saved.html"><span class="menu-emoji">⭐</span><span class="menu-text">Saved</span></a></li>
             <li><a href="friends.html"><span class="menu-emoji">👥</span><span class="menu-text">Friends</span></a></li>
+            <li><a href="reservations.html"><span class="menu-emoji">📅</span><span class="menu-text">Reservations</span></a></li>
             <li><a href="#" id="logout-btn" class="logout-link"><span class="menu-emoji">🚪</span><span class="menu-text">Logout</span></a></li>
         </ul>
     </nav>
@@ -28,6 +35,19 @@
         <div class="business-container">
             <div id="business-info" class="business-info">
                 <div class="loading">Loading business details...</div>
+            </div>
+
+            <div id="model-viewer-section" class="model-viewer-section" style="display:none;">
+                <h2>3D Interior View</h2>
+                <model-viewer
+                    id="business-3d-model"
+                    src="assets/models/demo-restaurant.glb"
+                    alt="3D interior view of the business"
+                    auto-rotate
+                    camera-controls
+                    shadow-intensity="1"
+                    style="width:100%;height:450px;border-radius:12px;background:#f5f5f5;"
+                ></model-viewer>
             </div>
 
             <div class="reviews-section">
@@ -97,6 +117,9 @@
         </div>
     </div>
 
+    <script src="js/pwa.js"></script>
     <script type="module" src="js/business-detail.js"></script>
+    <script type="module" src="js/voice-control.js"></script>
+    <script type="module" src="js/tts.js"></script>
 </body>
 </html>

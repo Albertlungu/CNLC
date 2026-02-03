@@ -1,8 +1,10 @@
 import { requireAuth, logout, getSession, searchUsers, sendFriendRequest, getFriendRequests, acceptFriendRequest, rejectFriendRequest, getFriends, removeFriend, getFriendActivity, getBusinessById } from "./api-client.js";
+import { initNotifications } from "./notifications.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNotifications();
 
 const session = getSession();
 const userId = session.userId;
