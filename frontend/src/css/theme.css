@@ -10,6 +10,7 @@
     --accent-primary: #ff6600;
     --accent-hover: #e65c00;
     --accent-light: #fff3e6;
+    --bg-third: #fafafa;
 }
 
 [data-theme="dark"] {
@@ -24,6 +25,7 @@
     --accent-primary: #ff8800;
     --accent-hover: #ffa533;
     --accent-light: #332200;
+    --bg-third: #494949;
 }
 
 /* Theme Toggle Button */
@@ -43,6 +45,7 @@
     background-color: transparent;
     transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
     z-index: 1500;
+}
 
 .theme-toggle:hover {
     transform: scale(1.2);

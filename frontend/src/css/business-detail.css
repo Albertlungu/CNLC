@@ -193,6 +193,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    color: var(--bg-secondary);
 }
 
 .avg-rating {
@@ -221,7 +222,7 @@ body {
 }
 
 .review-form-container {
-    background: #fafafa;
+    background: var(--bg-third);
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 30px;
