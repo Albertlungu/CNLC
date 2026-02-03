@@ -1,0 +1,301 @@
+/* Voice Control Styles */
+
+/* Floating Mic Button */
+.voice-control-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.voice-control-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
+}
+
+.voice-control-btn.listening {
+    background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
+    animation: pulse-btn 1.5s infinite;
+}
+
+.voice-control-btn .mic-icon {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+@keyframes pulse-btn {
+    0% {
+        box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(211, 47, 47, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+    }
+}
+
+/* Listening Indicator */
+.voice-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.voice-indicator.hidden {
+    display: none;
+}
+
+.voice-indicator-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pulse-ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 102, 0, 0.2);
+    animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.listening-text {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Command Palette */
+.command-palette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.command-palette.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.command-palette-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.command-palette-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #ff6600;
+    background: #fafafa;
+}
+
+.command-palette-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+.close-palette-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-palette-btn:hover {
+    color: #ff6600;
+}
+
+.command-palette-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.command-section {
+    margin-bottom: 20px;
+}
+
+.command-section:last-child {
+    margin-bottom: 0;
+}
+
+.command-section h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff6600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.command-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.command-section li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+.command-section li:last-child {
+    border-bottom: none;
+}
+
+.command-section code {
+    background: #f5f5f5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    color: #d32f2f;
+}
+
+/* Voice Feedback Toast */
+.voice-feedback {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    max-width: 300px;
+    z-index: 9998;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.voice-feedback.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dark mode support */
+body.dark-mode .command-palette-content {
+    background: #2d2d2d;
+}
+
+body.dark-mode .command-palette-header {
+    background: #333;
+}
+
+body.dark-mode .command-palette-header h3 {
+    color: #fff;
+}
+
+body.dark-mode .command-section h4 {
+    color: #ff8533;
+}
+
+body.dark-mode .command-section li {
+    color: #ccc;
+    border-bottom-color: #444;
+}
+
+body.dark-mode .command-section code {
+    background: #444;
+    color: #ff8533;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .voice-control-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .voice-control-btn .mic-icon {
+        font-size: 12px;
+    }
+
+    .command-palette-content {
+        width: 95%;
+        max-height: 85vh;
+    }
+
+    .voice-feedback {
+        right: 20px;
+        bottom: 90px;
+        max-width: 250px;
+    }
+}
