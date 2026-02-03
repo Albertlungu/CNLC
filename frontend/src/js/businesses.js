@@ -1,10 +1,12 @@
-import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection } from "./api-client.js";
+import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection, getRecommendations } from "./api-client.js";
 import { getUserLocation } from "./utils/helper.js";
+import { initNotifications } from "./notifications.js";
 
 // Check authentication before loading page
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNotifications();
 
 const session = getSession();
 const userId = session.userId;
@@ -242,8 +244,13 @@ document.addEventListener("DOMContentLoaded", function () {
     setupEventListeners();
     setupSearchListeners();
     setupModalListeners();
+    setupSearchHistoryTracking();
     logFilterState();
 
+    // Load recommendations (non-blocking)
+    loadRecommendations();
+
+    // Load businesses
     renderPage(currentPage);
 
     prevPageBtn.addEventListener("click", () => {
@@ -497,6 +504,47 @@ async function handleUnsave(businessId, saveBtn) {
     } catch (error) {
         console.error("Error unsaving business:", error);
         alert("An error occurred while removing the business.");
+    }
+}
+
+// ==================== AI Recommendations ====================
+async function loadRecommendations() {
+    try {
+        const searchHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
+        const result = await getRecommendations(userId, searchHistory);
+        if (result.status === "success" && result.recommendations && result.recommendations.length > 0) {
+            const section = document.getElementById("recommendations-section");
+            const recGrid = document.getElementById("recommendations-grid");
+            if (section && recGrid) {
+                section.style.display = "block";
+                recGrid.innerHTML = result.recommendations.map(rec => `
+                    <div class="recommendation-card" onclick="window.location.href='business-detail.html?id=${rec.businessId}'">
+                        <div class="rec-name">${rec.businessName || "Business"}</div>
+                        <div class="rec-category">${rec.category || ""}</div>
+                        <div class="rec-reason">${rec.reason || ""}</div>
+                    </div>
+                `).join("");
+            }
+        }
+    } catch (err) {
+        console.error("Recommendations error:", err);
+        // Silently fail - recommendations are optional
+    }
+}
+
+// Track search history in localStorage
+function setupSearchHistoryTracking() {
+    if (searchInput) {
+        searchInput.addEventListener("change", () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                const history = JSON.parse(localStorage.getItem("searchHistory") || "[]");
+                if (!history.includes(query)) {
+                    history.unshift(query);
+                    localStorage.setItem("searchHistory", JSON.stringify(history.slice(0, 20)));
+                }
+            }
+        });
     }
 }
 

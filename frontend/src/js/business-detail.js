@@ -17,10 +17,12 @@ import {
     getUserCollections,
     createCollection,
 } from "./api-client.js";
+import { initNotifications } from "./notifications.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNotifications();
 
 const businessInfoEl = document.getElementById("business-info");
 const ratingSummaryEl = document.getElementById("rating-summary");
@@ -151,6 +153,16 @@ async function loadBusinessInfo() {
                     await handleSaveBusinessDetail(userId, currentBusinessId, business.name, saveBtn);
                 }
             });
+        }
+
+        // Show 3D model viewer for demo business (first business or specific ID)
+        // To enable for a specific business, set DEMO_3D_BUSINESS_ID to that business's ID
+        const DEMO_3D_BUSINESS_ID = null; // Set to a specific business ID, or null to show for all
+        const modelSection = document.getElementById("model-viewer-section");
+        if (modelSection) {
+            if (DEMO_3D_BUSINESS_ID === null || currentBusinessId === DEMO_3D_BUSINESS_ID) {
+                modelSection.style.display = "block";
+            }
         }
     } catch (error) {
         console.error("Error loading business:", error);

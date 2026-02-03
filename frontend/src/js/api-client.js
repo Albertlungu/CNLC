@@ -46,16 +46,16 @@ export async function logout() {
 }
 
 // Login
-export async function login(username, password) {
+export async function login(username, password, captchaToken = null) {
+    const body = { username, password };
+    if (captchaToken) body.recaptchaToken = captchaToken;
+
     const response = await fetch("http://127.0.0.1:5001/api/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            username: username,
-            password: password,
-        }),
+        body: JSON.stringify(body),
     });
     const result = await response.json();
     console.log("Login function has been run.");
@@ -73,22 +73,17 @@ export async function register(
     lastName,
     city,
     country,
+    captchaToken = null,
 ) {
+    const body = { username, email, phone, password, firstName, lastName, city, country };
+    if (captchaToken) body.recaptchaToken = captchaToken;
+
     const response = await fetch("http://127.0.0.1:5001/api/auth/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            phone: phone,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
-            city: city,
-            country: country,
-        }),
+        body: JSON.stringify(body),
     });
     const result = await response.json();
     console.log("RESULT: ", result);
@@ -492,5 +487,78 @@ export async function getUserReceipts(userId) {
 
 export async function getUserProfile(username) {
     const response = await fetch(`http://127.0.0.1:5001/api/users/${username}`);
+    return await response.json();
+}
+
+// ==================== Reservations API ====================
+
+export async function createReservation(userId, businessId, businessName, date, time, partySize, notes = null) {
+    const response = await fetch("http://127.0.0.1:5001/api/reservations/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, businessId, businessName, date, time, partySize, notes }),
+    });
+    return await response.json();
+}
+
+export async function getUserReservations(userId, status = null) {
+    let url = `http://127.0.0.1:5001/api/reservations/?user_id=${userId}`;
+    if (status) url += `&status=${status}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function cancelReservation(reservationId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reservations/${reservationId}/cancel`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    return await response.json();
+}
+
+export async function downloadICS(reservationId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reservations/${reservationId}/ics`);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `reservation-${reservationId}.ics`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+export async function checkReminders(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/reservations/reminders/check?user_id=${userId}`);
+    return await response.json();
+}
+
+// ==================== Notifications API ====================
+
+export async function getNotifications(userId, unreadOnly = false) {
+    const response = await fetch(`http://127.0.0.1:5001/api/notifications/?user_id=${userId}&unread_only=${unreadOnly}`);
+    return await response.json();
+}
+
+export async function markNotificationRead(notificationId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/notifications/${notificationId}/read`, {
+        method: "PUT",
+    });
+    return await response.json();
+}
+
+export async function markAllNotificationsRead(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/notifications/read-all?user_id=${userId}`, {
+        method: "PUT",
+    });
+    return await response.json();
+}
+
+// ==================== Recommendations API ====================
+
+export async function getRecommendations(userId, searchHistory = []) {
+    const params = new URLSearchParams({ user_id: userId });
+    if (searchHistory.length > 0) params.append("search_history", searchHistory.join(","));
+    const response = await fetch(`http://127.0.0.1:5001/api/recommendations/?${params.toString()}`);
     return await response.json();
 }

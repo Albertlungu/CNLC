@@ -1,5 +1,17 @@
 import { login, register, isLoggedIn } from "../api-client.js";
 
+const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+
+async function getCaptchaToken(action) {
+    try {
+        await new Promise((resolve) => grecaptcha.ready(resolve));
+        return await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action });
+    } catch (err) {
+        console.error("reCAPTCHA error:", err);
+        return null;
+    }
+}
+
 // Redirect to businesses page if already logged in
 if (isLoggedIn()) {
     window.location.href = "businesses.html";
@@ -65,7 +77,8 @@ loginForm.addEventListener("submit", async (e) => {
     const loginPassword = document.getElementById("password").value;
 
     try {
-        const result = await login(loginUsername, loginPassword);
+        const captchaToken = await getCaptchaToken("login");
+        const result = await login(loginUsername, loginPassword, captchaToken);
         if (result.status === "success") {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
@@ -97,6 +110,7 @@ signupForm.addEventListener("submit", async (e) => {
     const signupCountry = document.getElementById("signupCountry").value;
 
     try {
+        const captchaToken = await getCaptchaToken("register");
         const result = await register(
             signupUsername,
             signupEmail,
@@ -106,6 +120,7 @@ signupForm.addEventListener("submit", async (e) => {
             signupLastName,
             signupCity,
             signupCountry,
+            captchaToken,
         );
         if (result.status === "success") {
             // Store session info in localStorage

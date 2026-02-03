@@ -1,8 +1,10 @@
 import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection } from "./api-client.js";
+import { initNotifications } from "./notifications.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNotifications();
 
 const session = getSession();
 const userId = session.userId;

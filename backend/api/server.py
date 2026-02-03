@@ -16,11 +16,14 @@ from backend.api.routes import (
     businesses_bp,
     deals_bp,
     friends_bp,
+    notifications_bp,
+    reservations_bp,
     reviews_bp,
     saved_bp,
     sessions_bp,
     trending_bp,
     users_bp,
+    recommendations_bp,
     verification_bp,
 )
 from config.config import PROJECT_ROOT
@@ -91,6 +94,9 @@ app.register_blueprint(sessions_bp)
 app.register_blueprint(trending_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(verification_bp)
+app.register_blueprint(reservations_bp)
+app.register_blueprint(notifications_bp)
+app.register_blueprint(recommendations_bp)
 
 
 if __name__ == "__main__":

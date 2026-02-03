@@ -25,6 +25,9 @@ RECEIPTS_JSON = DATA_DIR / "receipts.json"
 TRENDING_POINTS_JSON = DATA_DIR / "trending_points.json"
 COLLECTIONS_JSON = DATA_DIR / "collections.json"
 SAVED_BUSINESSES_JSON = DATA_DIR / "saved_businesses.json"
+RESERVATIONS_JSON = DATA_DIR / "reservations.json"
+NOTIFICATIONS_JSON = DATA_DIR / "notifications.json"
+RECOMMENDATIONS_CACHE_JSON = DATA_DIR / "recommendations_cache.json"
 
 # Backend directories
 BACKEND_DIR = PROJECT_ROOT / "backend"

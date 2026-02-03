@@ -32,3 +32,6 @@ python-Levenshtein
 # Math
 numpy
 dotenv
+
+# AI Recommendations
+google-generativeai

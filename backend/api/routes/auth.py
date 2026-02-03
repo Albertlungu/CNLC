@@ -4,6 +4,7 @@
 Authentication-related API endpoints.
 """
 
+import os
 import time
 
 from flask import Blueprint, Response, jsonify, make_response, request
@@ -11,6 +12,7 @@ from pydantic import ValidationError
 
 import backend.core.user_manager as um
 import backend.storage.json_handler as jh
+from backend.core.verification import verify_recaptcha
 from backend.utils.session import SessionManager
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
@@ -24,6 +26,14 @@ def register() -> Response:
     if not request.json:
         resp = jsonify({"status": "error", "message": "No data provided."})
         return make_response(resp, 400)
+
+    recaptcha_token = request.json.get("recaptchaToken")
+    if recaptcha_token:
+        secret_key = os.environ.get("RECAPTCHA_SECRET_KEY")
+        if secret_key:
+            success, message = verify_recaptcha(recaptcha_token, secret_key, request.remote_addr)
+            if not success:
+                return make_response(jsonify({"status": "error", "message": message}), 403)
 
     username = request.json.get("username")
     email = request.json.get("email")
@@ -79,6 +89,14 @@ def register() -> Response:
 def login() -> Response:
     username = request.json.get("username") if request.json else None
     password = request.json.get("password") if request.json else None
+
+    recaptcha_token = request.json.get("recaptchaToken") if request.json else None
+    if recaptcha_token:
+        secret_key = os.environ.get("RECAPTCHA_SECRET_KEY")
+        if secret_key:
+            success, message = verify_recaptcha(recaptcha_token, secret_key, request.remote_addr)
+            if not success:
+                return make_response(jsonify({"status": "error", "message": message}), 403)
 
     try:
         if username and password:
