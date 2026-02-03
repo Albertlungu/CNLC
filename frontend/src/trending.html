@@ -5,32 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Businesses</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/trending.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/theme.js"></script>
+    <script src="js/mobile.js"></script>
 </head>
 <body>
     <nav class="menu-bar">
         <ul class="menu-links">
-            <li><a href="businesses.html">Directory</a></li>
-            <li><a href="map.html">Map</a></li>
-            <li><a href="trending.html" class="active">Trending</a></li>
-            <li><a href="deals.html">Deals</a></li>
-            <li><a href="saved.html">Saved</a></li>
-            <li><a href="friends.html">Friends</a></li>
-            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+            <li><a href="businesses.html"><span class="menu-emoji">🏠</span><span class="menu-text">Directory</span></a></li>
+            <li><a href="map.html"><span class="menu-emoji">📍</span><span class="menu-text">Map</span></a></li>
+            <li><a href="trending.html" class="active"><span class="menu-emoji">🔥</span><span class="menu-text">Trending</span></a></li>
+            <li><a href="deals.html"><span class="menu-emoji">💰</span><span class="menu-text">Deals</span></a></li>
+            <li><a href="saved.html"><span class="menu-emoji">⭐</span><span class="menu-text">Saved</span></a></li>
+            <li><a href="friends.html"><span class="menu-emoji">👥</span><span class="menu-text">Friends</span></a></li>
+            <li><a href="#" id="logout-btn" class="logout-link"><span class="menu-emoji">🚪</span><span class="menu-text">Logout</span></a></li>
         </ul>
     </nav>
 
     <div class="main-content">
-        <div class="trending-header">
+       <div class="trending-header">
             <div>
                 <h1>Trending Businesses</h1>
                 <p class="trending-subtitle">Ranked by community spending. Upload a receipt to support your favorite local business.</p>
             </div>
+        </div>
+
+        <div class="upload-btn-wrapper">
             <button id="upload-receipt-btn" class="upload-btn">Upload Receipt</button>
         </div>
 
-        <div id="trending-list" class="trending-list">
-            <div class="loading">Loading trending businesses...</div>
+        <!-- Podium: Top 3 -->
+        <div id="podium-section" class="podium-section">
+            <div class="podium-container">
+                <!-- 2nd Place -->
+                <a href="#" class="podium-card podium-2" id="podium-2">
+                    <div class="rank-badge rank-2">2</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-2">
+                        <div class="medal">🥈</div>
+                    </div>
+                </a>
+
+                <!-- 1st Place -->
+                <a href="#" class="podium-card podium-1" id="podium-1">
+                    <div class="crown">👑</div>
+                    <div class="rank-badge rank-1">1</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-1">
+                        <div class="medal">🥇</div>
+                    </div>
+                </a>
+
+                <!-- 3rd Place -->
+                <a href="#" class="podium-card podium-3" id="podium-3">
+                    <div class="rank-badge rank-3">3</div>
+                    <div class="podium-name"></div>
+                    <div class="podium-category"></div>
+                    <div class="podium-points"></div>
+                    <div class="podium-meta"></div>
+                    <div class="podium-base podium-base-3">
+                        <div class="medal">🥉</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Leaderboard: Ranks 4-15 -->
+        <div class="leaderboard-section">
+            <h2 class="leaderboard-title">Full Rankings</h2>
+            <div id="trending-list" class="trending-list">
+                <div class="loading">Loading trending businesses...</div>
+            </div>
         </div>
     </div>
 
