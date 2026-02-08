@@ -22,7 +22,7 @@
         "username": "easonyang",
         "email": "eyang11@ocdsb.ca",
         "phone": "+1-111-111-1111",
-        "password_hash": "hashed_password_here",
+        "password_hash": "$2b$12$A93uUeCkeF0jtWzFC8II8OsDWaAnRI6gpmvyVAQJs9aSBSqmQpho2",
         "isActive": true,
         "roles": ["admin"],
         "bookmarks": [],
