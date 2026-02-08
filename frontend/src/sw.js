@@ -1,4 +1,4 @@
-const CACHE_NAME = "cnlc-v2";
+const CACHE_NAME = "cnlc-v3";
 const STATIC_ASSETS = [
     "/businesses.html",
     "/business-detail.html",
@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
     "/trending.html",
     "/map.html",
     "/reservations.html",
+    "/profile.html",
     "/auth.html",
     "/css/businesses.css",
     "/css/business-detail.css",
@@ -18,6 +19,7 @@ const STATIC_ASSETS = [
     "/css/map.css",
     "/css/reservations.css",
     "/css/notifications.css",
+    "/css/profile.css",
     "/css/auth-styles.css",
     "/css/theme.css",
     "/css/mobile.css",

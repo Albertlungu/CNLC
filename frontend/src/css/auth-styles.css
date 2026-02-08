@@ -175,3 +175,34 @@ span {
     margin-bottom: 15px;
     text-align: left;
 }
+
+/* Google reCAPTCHA Styles */
+.recaptcha-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.g-recaptcha {
+    transform: scale(0.95);
+    transform-origin: center center;
+}
+
+.captcha-hint {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 380px) {
+    .container {
+        width: 95%;
+    }
+
+    .g-recaptcha {
+        transform: scale(0.85);
+    }
+}

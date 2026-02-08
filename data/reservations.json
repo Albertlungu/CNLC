@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "reservationId": 24651671,
+        "userId": 10000000,
+        "businessId": 5125090821,
+        "businessName": "SUP Book Store",
+        "date": "2026-02-05",
+        "time": "11:12",
+        "partySize": 6,
+        "status": "cancelled",
+        "notes": "Can we have manga?",
+        "createdAt": "2026-02-04T14:12:33.190700",
+        "reminderSent": true
+    }
+]

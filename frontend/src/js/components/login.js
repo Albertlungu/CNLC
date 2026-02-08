@@ -1,15 +1,12 @@
 import { login, register, isLoggedIn } from "../api-client.js";
 
-const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
-
-async function getCaptchaToken(action) {
-    try {
-        await new Promise((resolve) => grecaptcha.ready(resolve));
-        return await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action });
-    } catch (err) {
-        console.error("reCAPTCHA error:", err);
-        return null;
+function validateRecaptcha() {
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (recaptchaResponse.length === 0) {
+        alert("Please complete the reCAPTCHA verification");
+        return false;
     }
+    return recaptchaResponse;
 }
 
 // Redirect to businesses page if already logged in
@@ -76,9 +73,13 @@ loginForm.addEventListener("submit", async (e) => {
     const loginUsername = document.getElementById("username").value;
     const loginPassword = document.getElementById("password").value;
 
+    const recaptchaToken = validateRecaptcha();
+    if (!recaptchaToken) {
+        return;
+    }
+
     try {
-        const captchaToken = await getCaptchaToken("login");
-        const result = await login(loginUsername, loginPassword, captchaToken);
+        const result = await login(loginUsername, loginPassword);
         if (result.status === "success") {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
@@ -91,9 +92,11 @@ loginForm.addEventListener("submit", async (e) => {
             window.location.href = "businesses.html";
         } else {
             alert("Login failed: " + (result.message || "Unknown error"));
+            grecaptcha.reset();
         }
     } catch (error) {
         alert("Login error: " + error.message);
+        grecaptcha.reset();
     }
 });
 
@@ -109,8 +112,12 @@ signupForm.addEventListener("submit", async (e) => {
     const signupCity = document.getElementById("signupCity").value;
     const signupCountry = document.getElementById("signupCountry").value;
 
+    const recaptchaToken = validateRecaptcha();
+    if (!recaptchaToken) {
+        return;
+    }
+
     try {
-        const captchaToken = await getCaptchaToken("register");
         const result = await register(
             signupUsername,
             signupEmail,
@@ -120,7 +127,6 @@ signupForm.addEventListener("submit", async (e) => {
             signupLastName,
             signupCity,
             signupCountry,
-            captchaToken,
         );
         if (result.status === "success") {
             // Store session info in localStorage
@@ -136,9 +142,11 @@ signupForm.addEventListener("submit", async (e) => {
             alert(
                 "Registration failed: " + (result.message || "Unknown error"),
             );
+            grecaptcha.reset();
         }
     } catch (error) {
         alert("Registration error: " + error.message);
+        grecaptcha.reset();
     }
 });
 
