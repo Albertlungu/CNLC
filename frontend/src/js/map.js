@@ -232,16 +232,21 @@ function updateVisibleBusinesses() {
 }
 
 async function loadBusinesses() {
+    console.log("[DEBUG] loadBusinesses() started");
     businessListEl.innerHTML = '<div class="loading">Loading businesses...</div>';
 
     try {
+        console.log("[DEBUG] Calling filterBusinesses API...");
         const result = await filterBusinesses(null, null, null, null, null, null, 0, 5000);
+        console.log("[DEBUG] API response:", result.status, "businesses:", result.businesses?.length, "total:", result.total);
 
         if (result.status === "success") {
             allBusinesses = result.businesses.filter(b => b.latitude && b.longitude);
+            console.log("[DEBUG] Businesses with coords:", allBusinesses.length);
             filteredBusinesses = [...allBusinesses];
 
             addMarkers(filteredBusinesses);
+            console.log("[DEBUG] Markers added");
 
             if (allBusinesses.length > 0) {
                 const bounds = L.latLngBounds(allBusinesses.map(b => [b.latitude, b.longitude]));
@@ -249,11 +254,13 @@ async function loadBusinesses() {
             }
 
             updateVisibleBusinesses();
+            console.log("[DEBUG] loadBusinesses() complete");
         } else {
+            console.error("[DEBUG] API returned non-success:", result);
             businessListEl.innerHTML = '<div class="loading">Failed to load businesses.</div>';
         }
     } catch (error) {
-        console.error("Error loading businesses:", error);
+        console.error("[DEBUG] Error loading businesses:", error);
         businessListEl.innerHTML = '<div class="loading">Error loading businesses.</div>';
     }
 }
@@ -441,8 +448,23 @@ async function handleUnsaveMap(businessId, businessName, saveBtn) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initMap();
-    setupEventListeners();
-    setupModalListeners();
-    loadBusinesses();
+    console.log("[DEBUG] DOMContentLoaded fired");
+    try {
+        initMap();
+        console.log("[DEBUG] initMap() done");
+    } catch (e) {
+        console.error("[DEBUG] initMap() failed:", e);
+    }
+    try {
+        setupEventListeners();
+        console.log("[DEBUG] setupEventListeners() done");
+    } catch (e) {
+        console.error("[DEBUG] setupEventListeners() failed:", e);
+    }
+    try {
+        loadBusinesses();
+        console.log("[DEBUG] loadBusinesses() called");
+    } catch (e) {
+        console.error("[DEBUG] loadBusinesses() failed:", e);
+    }
 });
