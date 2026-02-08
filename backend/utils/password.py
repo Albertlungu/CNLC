@@ -20,7 +20,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def main():
-    return hash_password("")
+    return hash_password("12345678")
 
 
 if __name__ == "__main__":
