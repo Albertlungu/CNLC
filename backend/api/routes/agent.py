@@ -126,4 +126,5 @@ def chat():
         "message": result.get("message", ""),
         "cards": result.get("cards", []),
         "navigation": result.get("navigation", []),
+        "businessMap": {str(k): v for k, v in result.get("business_map", {}).items()},
     }), 200

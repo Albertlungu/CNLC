@@ -3,8 +3,8 @@
 /* Floating Mic Button */
 .voice-control-btn {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 90px;
+    left: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -228,8 +228,8 @@
 /* Voice Feedback Toast */
 .voice-feedback {
     position: fixed;
-    bottom: 110px;
-    right: 30px;
+    bottom: 170px;
+    left: 20px;
     background: rgba(0, 0, 0, 0.85);
     color: white;
     padding: 12px 20px;
@@ -278,8 +278,8 @@ body.dark-mode .command-section code {
 /* Mobile responsive */
 @media (max-width: 768px) {
     .voice-control-btn {
-        bottom: 20px;
-        right: 20px;
+        bottom: 80px;
+        left: 16px;
         width: 50px;
         height: 50px;
     }
@@ -294,8 +294,8 @@ body.dark-mode .command-section code {
     }
 
     .voice-feedback {
-        right: 20px;
-        bottom: 90px;
+        left: 16px;
+        bottom: 150px;
         max-width: 250px;
     }
 }

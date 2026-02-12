@@ -14,7 +14,7 @@
     <script src="js/theme.js"></script>
     <script src="js/mobile.js"></script>
 </head>
-<body>
+<body class="agent-page">
     <nav class="menu-bar">
         <ul class="menu-links">
             <li><a href="agent.html" class="active"><span class="menu-emoji">🤖</span><span class="menu-text">Agent</span></a></li>
@@ -31,22 +31,20 @@
     </nav>
 
     <div class="agent-layout">
+        <div class="chat-glow-left"></div>
+        <div class="chat-glow-right"></div>
+
         <div class="chat-panel">
-            <div class="chat-glow-left"></div>
-            <div class="chat-glow-right"></div>
-
-            <div class="chat-header">
-                <div class="agent-avatar">C</div>
-                <div class="chat-header-text">
-                    <h2>CNLC Assistant</h2>
-                    <p>Ask me anything about local businesses</p>
-                </div>
-            </div>
-
             <div class="chat-messages" id="chat-messages">
-                <div class="message agent-message">
-                    <div class="message-content">
-                        <p>Hello! I'm your CNLC assistant. I can help you find restaurants, make reservations, check deals, and more. What are you looking for today?</p>
+                <div class="welcome-state" id="welcome-state">
+                    <div class="welcome-avatar">C</div>
+                    <h1 class="welcome-title">CNLC Assistant</h1>
+                    <p class="welcome-subtitle">Your AI concierge for local businesses across Canada</p>
+                    <div class="suggestion-chips" id="suggestion-chips">
+                        <button class="chip" data-message="Find me a good restaurant nearby">Find a restaurant</button>
+                        <button class="chip" data-message="What are the best deals right now?">Browse deals</button>
+                        <button class="chip" data-message="Show my upcoming reservations">My reservations</button>
+                        <button class="chip" data-message="What have my friends been up to?">Friend activity</button>
                     </div>
                 </div>
             </div>
@@ -57,20 +55,11 @@
                     Agent is thinking...
                 </div>
                 <form id="chat-form" class="chat-form">
-                    <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off" maxlength="2000">
-                    <button type="submit" id="send-btn">Send</button>
+                    <input type="text" id="chat-input" placeholder="Ask me anything about local businesses..." autocomplete="off" maxlength="2000">
+                    <button type="submit" id="send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
                 </form>
-            </div>
-        </div>
-
-        <div class="preview-panel">
-            <div class="preview-header">
-                <span class="preview-dot"></span>
-                <span id="preview-label">Live Preview</span>
-            </div>
-            <iframe id="preview-iframe" src="businesses.html" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-            <div class="preview-fallback" id="preview-fallback" style="display: none;">
-                Preview unavailable
             </div>
         </div>
     </div>

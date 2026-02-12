@@ -11,6 +11,11 @@ body {
     overflow: hidden;
 }
 
+/* Hide the floating dark mode toggle on the agent page */
+body.agent-page .theme-toggle {
+    display: none;
+}
+
 /* ========== Nav (same as other pages) ========== */
 
 .menu-bar {
@@ -69,12 +74,15 @@ body {
     display: flex;
     flex: 1;
     overflow: hidden;
+    justify-content: center;
+    position: relative;
 }
 
 /* ========== Chat panel ========== */
 
 .chat-panel {
-    flex: 0 0 65%;
+    flex: 1;
+    max-width: 820px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -88,7 +96,7 @@ body {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 80px;
+    width: 120px;
     pointer-events: none;
     z-index: 1;
     animation: breathe 4s ease-in-out infinite;
@@ -96,12 +104,12 @@ body {
 
 .chat-glow-left {
     left: 0;
-    background: linear-gradient(to right, rgba(255, 102, 0, 0.08), transparent);
+    background: linear-gradient(to right, rgba(255, 102, 0, 0.06), transparent);
 }
 
 .chat-glow-right {
     right: 0;
-    background: linear-gradient(to left, rgba(255, 102, 0, 0.08), transparent);
+    background: linear-gradient(to left, rgba(255, 102, 0, 0.06), transparent);
 }
 
 @keyframes breathe {
@@ -109,21 +117,21 @@ body {
     50% { opacity: 1; }
 }
 
-/* Chat header */
-.chat-header {
+/* ========== Welcome state ========== */
+
+.welcome-state {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 14px;
-    padding: 20px 30px;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    z-index: 2;
-    flex-shrink: 0;
+    justify-content: center;
+    padding: 60px 30px 40px;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
 }
 
-.agent-avatar {
-    width: 44px;
-    height: 44px;
+.welcome-avatar {
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     background: linear-gradient(135deg, #ff6600, #ffa366);
     color: white;
@@ -131,21 +139,54 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 20px;
-    flex-shrink: 0;
+    font-size: 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.3);
+    animation: breathe 4s ease-in-out infinite;
 }
 
-.chat-header-text h2 {
+.welcome-title {
     margin: 0;
-    font-size: 18px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--text-primary);
 }
 
-.chat-header-text p {
-    margin: 2px 0 0 0;
+.welcome-subtitle {
+    margin: 8px 0 0 0;
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 400px;
+}
+
+/* Suggestion chips */
+.suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 32px;
+    max-width: 500px;
+}
+
+.chip {
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--border-color);
+    border-radius: 20px;
+    padding: 10px 18px;
     font-size: 13px;
-    color: var(--text-muted);
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip:hover {
+    border-color: #ff6600;
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.05);
+    transform: translateY(-1px);
 }
 
 /* Messages area */
@@ -161,7 +202,7 @@ body {
 
 /* Message bubbles */
 .message {
-    max-width: 80%;
+    max-width: 85%;
     animation: fadeInUp 0.3s ease;
 }
 
@@ -180,16 +221,16 @@ body {
 
 .message-content {
     padding: 14px 18px;
-    border-radius: 16px;
+    border-radius: 18px;
     font-size: 14px;
-    line-height: 1.55;
+    line-height: 1.6;
 }
 
 .agent-message .message-content {
     background: var(--bg-secondary);
     color: var(--text-primary);
     border-bottom-left-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .user-message .message-content {
@@ -345,7 +386,8 @@ body {
     30% { opacity: 1; transform: scale(1); }
 }
 
-/* Input area */
+/* ========== Input area ========== */
+
 .chat-input-area {
     border-top: 1px solid var(--border-color);
     background: var(--bg-secondary);
@@ -355,18 +397,19 @@ body {
 
 .chat-form {
     display: flex;
+    align-items: center;
     gap: 10px;
-    padding: 16px 30px;
+    padding: 16px 24px;
 }
 
 .chat-form input {
     flex: 1;
-    padding: 14px 18px;
+    padding: 14px 20px;
     border: 2px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 24px;
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     background: var(--bg-primary);
     color: var(--text-primary);
 }
@@ -374,6 +417,7 @@ body {
 .chat-form input:focus {
     outline: none;
     border-color: #ff6600;
+    box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
 }
 
 .chat-form input::placeholder {
@@ -381,68 +425,31 @@ body {
 }
 
 .chat-form button {
-    padding: 14px 28px;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #ff6600, #ff8533);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
+    border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .chat-form button:hover {
-    transform: translateY(-2px);
+    transform: scale(1.05);
 }
 
 .chat-form button:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     transform: none;
 }
 
-/* ========== Preview panel ========== */
-
-.preview-panel {
-    flex: 0 0 35%;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-}
-
-.preview-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-}
-
-.preview-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #22c55e;
-    animation: breathe 4s ease-in-out infinite;
-}
-
-.preview-panel iframe {
-    flex: 1;
-    width: 100%;
-    border: none;
-}
-
-.preview-fallback {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 14px;
+.chat-form button svg {
+    width: 20px;
+    height: 20px;
 }
