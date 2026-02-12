@@ -8,13 +8,12 @@ state server-side, and returns structured responses for the frontend.
 
 import json
 import os
-import re
 import time
 import threading
 from datetime import datetime
-from typing import Optional
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 from backend.core import business_manager, reservation_manager, review_manager, deal_manager, saved_manager, friend_manager
 from backend.storage.json_handler import load_businesses
@@ -45,132 +44,130 @@ Guidelines:
 """
 
 # ---------------------------------------------------------------------------
-# Tool declarations for Gemini function calling
+# Tool declarations for Gemini function calling (new google.genai SDK)
 # ---------------------------------------------------------------------------
 
-TOOL_DECLARATIONS = [
-    genai.protos.Tool(function_declarations=[
-        genai.protos.FunctionDeclaration(
-            name="search_businesses",
-            description="Search for businesses by name, category, or location. Returns a list of matching businesses.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "query": genai.protos.Schema(type=genai.protos.Type.STRING, description="Search query (business name or keyword)"),
-                    "category": genai.protos.Schema(type=genai.protos.Type.STRING, description="Business category filter (e.g. restaurant, cafe, bakery, hairdresser, beauty, clothes, convenience, supermarket)"),
-                    "city": genai.protos.Schema(type=genai.protos.Type.STRING, description="City to search in (e.g. Ottawa, Toronto, Vancouver, Calgary, Edmonton, Winnipeg, Regina)"),
-                },
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="get_business_details",
-            description="Get full details of a specific business by its ID.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "business_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The business ID"),
-                },
-                required=["business_id"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="get_reviews_summary",
-            description="Get reviews for a business including average rating and top reviews.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "business_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The business ID"),
-                },
-                required=["business_id"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="make_reservation",
-            description="Create a reservation at a business. Always confirm details with the user before calling this.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "business_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The business ID"),
-                    "business_name": genai.protos.Schema(type=genai.protos.Type.STRING, description="The business name"),
-                    "date": genai.protos.Schema(type=genai.protos.Type.STRING, description="Reservation date in YYYY-MM-DD format"),
-                    "time": genai.protos.Schema(type=genai.protos.Type.STRING, description="Reservation time in HH:MM format (24h)"),
-                    "party_size": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="Number of guests"),
-                    "notes": genai.protos.Schema(type=genai.protos.Type.STRING, description="Optional notes for the reservation"),
-                },
-                required=["business_id", "business_name", "date", "time", "party_size"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="get_user_reservations",
-            description="Get all reservations for the current user.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={},
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="cancel_reservation",
-            description="Cancel a reservation. Always confirm with the user before calling this.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "reservation_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The reservation ID to cancel"),
-                },
-                required=["reservation_id"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="find_deals",
-            description="Find active deals/coupons for a specific business.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "business_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The business ID"),
-                },
-                required=["business_id"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="save_business",
-            description="Save a business to the user's collection. Always confirm with the user first.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "business_id": genai.protos.Schema(type=genai.protos.Type.INTEGER, description="The business ID to save"),
-                    "collection_name": genai.protos.Schema(type=genai.protos.Type.STRING, description="Name of the collection to save to (created if it doesn't exist). Defaults to 'Favorites'."),
-                },
-                required=["business_id"],
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="get_saved_businesses",
-            description="Get all businesses the user has saved.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={},
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="get_friend_activity",
-            description="Get recent activity (reviews) from the user's friends.",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={},
-            ),
-        ),
-        genai.protos.FunctionDeclaration(
-            name="search_web",
-            description="Search the web for additional information about a business (menus, atmosphere, hours, etc).",
-            parameters=genai.protos.Schema(
-                type=genai.protos.Type.OBJECT,
-                properties={
-                    "query": genai.protos.Schema(type=genai.protos.Type.STRING, description="The search query"),
-                },
-                required=["query"],
-            ),
-        ),
-    ])
-]
+TOOL_DECLARATIONS = types.Tool(function_declarations=[
+    types.FunctionDeclaration(
+        name="search_businesses",
+        description="Search for businesses by name, category, or location. Returns a list of matching businesses.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search query (business name or keyword)"},
+                "category": {"type": "string", "description": "Business category filter (e.g. restaurant, cafe, bakery, hairdresser, beauty, clothes, convenience, supermarket)"},
+                "city": {"type": "string", "description": "City to search in (e.g. Ottawa, Toronto, Vancouver, Calgary, Edmonton, Winnipeg, Regina)"},
+            },
+        },
+    ),
+    types.FunctionDeclaration(
+        name="get_business_details",
+        description="Get full details of a specific business by its ID.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "business_id": {"type": "integer", "description": "The business ID"},
+            },
+            "required": ["business_id"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="get_reviews_summary",
+        description="Get reviews for a business including average rating and top reviews.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "business_id": {"type": "integer", "description": "The business ID"},
+            },
+            "required": ["business_id"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="make_reservation",
+        description="Create a reservation at a business. Always confirm details with the user before calling this.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "business_id": {"type": "integer", "description": "The business ID"},
+                "business_name": {"type": "string", "description": "The business name"},
+                "date": {"type": "string", "description": "Reservation date in YYYY-MM-DD format"},
+                "time": {"type": "string", "description": "Reservation time in HH:MM format (24h)"},
+                "party_size": {"type": "integer", "description": "Number of guests"},
+                "notes": {"type": "string", "description": "Optional notes for the reservation"},
+            },
+            "required": ["business_id", "business_name", "date", "time", "party_size"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="get_user_reservations",
+        description="Get all reservations for the current user.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {},
+        },
+    ),
+    types.FunctionDeclaration(
+        name="cancel_reservation",
+        description="Cancel a reservation. Always confirm with the user before calling this.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "reservation_id": {"type": "integer", "description": "The reservation ID to cancel"},
+            },
+            "required": ["reservation_id"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="find_deals",
+        description="Find active deals/coupons for a specific business.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "business_id": {"type": "integer", "description": "The business ID"},
+            },
+            "required": ["business_id"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="save_business",
+        description="Save a business to the user's collection. Always confirm with the user first.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "business_id": {"type": "integer", "description": "The business ID to save"},
+                "collection_name": {"type": "string", "description": "Name of the collection to save to (created if it doesn't exist). Defaults to 'Favorites'."},
+            },
+            "required": ["business_id"],
+        },
+    ),
+    types.FunctionDeclaration(
+        name="get_saved_businesses",
+        description="Get all businesses the user has saved.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {},
+        },
+    ),
+    types.FunctionDeclaration(
+        name="get_friend_activity",
+        description="Get recent activity (reviews) from the user's friends.",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {},
+        },
+    ),
+    types.FunctionDeclaration(
+        name="search_web",
+        description="Search the web for additional information about a business (menus, atmosphere, hours, etc).",
+        parameters_json_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "The search query"},
+            },
+            "required": ["query"],
+        },
+    ),
+])
 
 
 # ---------------------------------------------------------------------------
@@ -428,7 +425,7 @@ def _get_history(user_id: int, session_id: str) -> list:
         entry = _conversations.get(key)
         if entry:
             entry["lastAccess"] = time.time()
-            return entry["history"]
+            return list(entry["history"])
         return []
 
 
@@ -451,12 +448,15 @@ def _truncate(text: str, limit: int) -> str:
 # Gemini API call with retry
 # ---------------------------------------------------------------------------
 
-def _call_gemini_with_retry(chat, message_parts, max_retries=3):
-    """Call Gemini with exponential backoff on rate limits."""
+def _call_gemini_with_retry(client, contents, config, max_retries=3):
+    """Call Gemini generate_content with exponential backoff on rate limits."""
     for attempt in range(max_retries):
         try:
-            response = chat.send_message(message_parts)
-            # Validate response has content
+            response = client.models.generate_content(
+                model="gemini-3-flash-preview",
+                contents=contents,
+                config=config,
+            )
             if not response.candidates:
                 raise ValueError("Empty response from Gemini")
             return response
@@ -492,33 +492,30 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
             "navigation": [],
         }
 
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
 
     today = datetime.utcnow().strftime("%A, %B %d, %Y")
     system_with_date = f"{SYSTEM_PROMPT}\n\nToday's date is {today}."
 
-    model = genai.GenerativeModel(
-        "gemini-2.0-flash",
-        tools=TOOL_DECLARATIONS,
+    config = types.GenerateContentConfig(
+        tools=[TOOL_DECLARATIONS],
         system_instruction=system_with_date,
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
     )
 
-    # Restore conversation history
+    # Restore conversation history and append user message
     history = _get_history(user_id, session_id)
-
-    try:
-        chat_session = model.start_chat(history=history)
-    except Exception:
-        # If history is corrupted, start fresh
-        history = []
-        chat_session = model.start_chat(history=[])
+    history.append(types.Content(
+        role="user",
+        parts=[types.Part.from_text(text=message)],
+    ))
 
     cards = []
     navigation = []
 
     try:
-        response = _call_gemini_with_retry(chat_session, message)
-    except Exception as e:
+        response = _call_gemini_with_retry(client, history, config)
+    except Exception:
         return {
             "message": "I'm having trouble connecting right now. Please try again in a moment.",
             "cards": [],
@@ -530,26 +527,18 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
     while iterations < _MAX_TOOL_ITERS:
         iterations += 1
 
-        # Check if response has function calls
-        candidate = response.candidates[0]
-        has_function_call = False
-
-        for part in candidate.content.parts:
-            if part.function_call and part.function_call.name:
-                has_function_call = True
-                break
-
-        if not has_function_call:
+        if not response.function_calls:
             break
 
-        # Execute all function calls in the response
-        tool_responses = []
-        for part in candidate.content.parts:
-            if not (part.function_call and part.function_call.name):
-                continue
+        # Append the model's response (containing function calls) to history
+        model_content = response.candidates[0].content
+        history.append(model_content)
 
-            fn_name = part.function_call.name
-            fn_args = dict(part.function_call.args) if part.function_call.args else {}
+        # Execute all function calls in the response
+        tool_parts = []
+        for fc in response.function_calls:
+            fn_name = fc.name
+            fn_args = dict(fc.args) if fc.args else {}
 
             executor = _TOOL_MAP.get(fn_name)
             if not executor:
@@ -579,36 +568,46 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
             # Truncate tool result before sending back
             result_str = _truncate(json.dumps(result, default=str), _MAX_TOOL_RESULT)
 
-            tool_responses.append(
-                genai.protos.Part(function_response=genai.protos.FunctionResponse(
-                    name=fn_name,
-                    response={"result": result_str},
-                ))
-            )
+            tool_parts.append(types.Part.from_function_response(
+                name=fn_name,
+                response={"result": result_str},
+            ))
+
+        # Append tool results to history
+        history.append(types.Content(role="tool", parts=tool_parts))
 
         # Send tool results back to Gemini
         try:
-            response = _call_gemini_with_retry(chat_session, tool_responses)
+            response = _call_gemini_with_retry(client, history, config)
         except Exception:
-            # If Gemini fails mid-loop, return what we have
-            _save_history(user_id, session_id, chat_session.history)
+            _save_history(user_id, session_id, history)
             return {
                 "message": "I found some results but had trouble summarizing them. Here's what I found so far.",
                 "cards": cards,
                 "navigation": navigation,
             }
 
+    # Append the final model response to history
+    try:
+        final_content = response.candidates[0].content
+        history.append(final_content)
+    except (IndexError, AttributeError):
+        pass
+
     # Extract final text response
     final_text = ""
     try:
         for part in response.candidates[0].content.parts:
-            if part.text:
+            if hasattr(part, "text") and part.text:
                 final_text += part.text
     except (IndexError, AttributeError):
         final_text = "I processed your request but couldn't generate a summary."
 
+    if not final_text:
+        final_text = "I processed your request but couldn't generate a summary."
+
     # Save updated history
-    _save_history(user_id, session_id, chat_session.history)
+    _save_history(user_id, session_id, history)
 
     return {
         "message": final_text,
