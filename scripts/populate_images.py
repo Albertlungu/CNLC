@@ -20,7 +20,7 @@ import time
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from backend.storage.json_handler import load_businesses
 
 from config.config import BUSINESSES_JSON
