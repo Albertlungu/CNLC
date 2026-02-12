@@ -35,4 +35,4 @@ numpy
 dotenv
 
 # AI Recommendations
-google-generativeai
+google-genai
