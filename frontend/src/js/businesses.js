@@ -73,7 +73,14 @@ async function createBusinessCard(business) {
         console.error("Error checking saved status:", error);
     }
 
+    const imageHtml = business.image_url
+        ? `<div class="image-container">
+             <img class="business-image" src="${business.image_url}" alt="${business.name}" onerror="this.parentElement.style.display='none'" loading="lazy">
+           </div>`
+        : "";
+
     box.innerHTML = `
+    ${imageHtml}
     <div class="dropdown-bar">
       ${business.name}
       <div class="bar-actions">

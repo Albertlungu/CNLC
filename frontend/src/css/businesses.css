@@ -320,7 +320,8 @@ input[type="radio"] {
 
 .business-image {
   width: 100%;
-  height: auto;
+  height: 160px;
+  object-fit: cover;
   display: block;
 }
 
