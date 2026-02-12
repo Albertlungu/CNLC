@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNLC Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/agent.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6600">
+    <script src="js/theme.js"></script>
+</head>
+<body>
+    <nav class="menu-bar">
+        <ul class="menu-links">
+            <li><a href="agent.html" class="active">Agent</a></li>
+            <li><a href="businesses.html">Directory</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="trending.html">Trending</a></li>
+            <li><a href="deals.html">Deals</a></li>
+            <li><a href="saved.html">Saved</a></li>
+            <li><a href="friends.html">Friends</a></li>
+            <li><a href="reservations.html">Reservations</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="#" id="logout-btn" class="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="agent-layout">
+        <div class="chat-panel">
+            <div class="chat-glow-left"></div>
+            <div class="chat-glow-right"></div>
+
+            <div class="chat-header">
+                <div class="agent-avatar">C</div>
+                <div class="chat-header-text">
+                    <h2>CNLC Assistant</h2>
+                    <p>Ask me anything about local businesses</p>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message agent-message">
+                    <div class="message-content">
+                        <p>Hello! I'm your CNLC assistant. I can help you find restaurants, make reservations, check deals, and more. What are you looking for today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                    <span></span><span></span><span></span>
+                    Agent is thinking...
+                </div>
+                <form id="chat-form" class="chat-form">
+                    <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off" maxlength="2000">
+                    <button type="submit" id="send-btn">Send</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <div class="preview-header">
+                <span class="preview-dot"></span>
+                <span id="preview-label">Live Preview</span>
+            </div>
+            <iframe id="preview-iframe" src="businesses.html" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+            <div class="preview-fallback" id="preview-fallback" style="display: none;">
+                Preview unavailable
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/agent.js"></script>
+</body>
+</html>

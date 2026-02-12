@@ -18,8 +18,10 @@ from backend.api.routes.trending import trending_bp
 from backend.api.routes.reservations import reservations_bp
 from backend.api.routes.notifications import notifications_bp
 from backend.api.routes.recommendations import recommendations_bp
+from backend.api.routes.agent import agent_bp
 
 __all__ = [
+    "agent_bp",
     "auth_bp",
     "bookmarks_bp",
     "businesses_bp",

@@ -11,7 +11,7 @@ function validateRecaptcha() {
 
 // Redirect to businesses page if already logged in
 if (isLoggedIn()) {
-    window.location.href = "businesses.html";
+    window.location.href = "agent.html";
 }
 
 console.log("app.js loaded successfully!");
@@ -89,7 +89,7 @@ loginForm.addEventListener("submit", async (e) => {
                 loggedInAt: new Date().toISOString()
             }));
             // Redirect to businesses page on successful login
-            window.location.href = "businesses.html";
+            window.location.href = "agent.html";
         } else {
             alert("Login failed: " + (result.message || "Unknown error"));
             grecaptcha.reset();
@@ -137,7 +137,7 @@ signupForm.addEventListener("submit", async (e) => {
                 loggedInAt: new Date().toISOString()
             }));
             // Redirect to businesses page on successful registration
-            window.location.href = "businesses.html";
+            window.location.href = "agent.html";
         } else {
             alert(
                 "Registration failed: " + (result.message || "Unknown error"),
