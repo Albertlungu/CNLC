@@ -1,4 +1,4 @@
-const CACHE_NAME = "cnlc-v5";
+const CACHE_NAME = "cnlc-v9";
 const STATIC_ASSETS = [
     "/agent.html",
     "/businesses.html",

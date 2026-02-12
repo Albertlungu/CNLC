@@ -7,10 +7,14 @@ state server-side, and returns structured responses for the frontend.
 """
 
 import json
+import logging
 import os
 import time
+import traceback
 import threading
 from datetime import datetime
+
+log = logging.getLogger(__name__)
 
 from google import genai
 from google.genai import types
@@ -33,14 +37,27 @@ SYSTEM_PROMPT = """You are the CNLC assistant -- a helpful AI concierge for disc
 You have access to tools that let you search businesses, read reviews, make reservations, find deals, save favorites, and look up web information. Use them proactively to answer the user's questions.
 
 Guidelines:
-- When the user asks for a recommendation, search for matching businesses and present 2-4 options with key details (name, category, address, rating).
 - Always CONFIRM with the user before making a reservation or saving a business. State the details and ask "Shall I go ahead?"
-- When presenting businesses, include the business ID so the frontend can render cards.
 - Keep responses concise but informative.
 - If a tool call fails, explain the issue simply and suggest an alternative.
-- You can chain multiple tool calls to build a complete answer (e.g., search businesses, then get reviews for the top result).
 - For date/time references like "this Friday" or "tomorrow", calculate the actual date based on today's date which is provided in the context.
 - Never fabricate business data. Only present information returned by your tools.
+
+When recommending businesses, follow this process:
+1. Search for businesses matching the user's request.
+2. Pick the best 3 (or fewer if there aren't enough good matches).
+3. For each of those businesses, call get_reviews_summary AND find_deals to gather reviews and any active deals/coupons.
+4. Present each business ONE AT A TIME using this exact format:
+
+   Write a short paragraph about the business: what it is, what it's known for, pros from customer reviews, any cons worth noting, the average rating, and any active deals or coupons. Then, on its own line, write the marker {{CARD:business_id}} (replacing business_id with the actual numeric ID). This marker tells the UI to display the business card inline.
+
+   Example:
+   **Joe's Diner** is a beloved family restaurant in downtown Ottawa. Customers love the generous portions and friendly staff (4.2 average from 15 reviews). A few reviewers mention slow service during peak hours. They currently have a 15% off coupon for first-time visitors.
+   {{CARD:42}}
+
+5. After presenting all businesses, add a brief closing line asking if the user wants more details, to make a reservation, or to see other options.
+
+Important: Always use the {{CARD:id}} marker on its own line after each business description. Do not skip this marker -- it is required for the UI to render properly. Do not dump all businesses at once without individual descriptions.
 """
 
 # ---------------------------------------------------------------------------
@@ -194,7 +211,7 @@ def _exec_search_businesses(args: dict) -> dict:
     if query:
         results = business_manager.search_by_name(results, query)
 
-    results = results[:15]
+    results = results[:5]
     return {
         "businesses": [
             {
@@ -453,18 +470,21 @@ def _call_gemini_with_retry(client, contents, config, max_retries=3):
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-3-flash-preview",
+                model="gemini-2.5-flash",
                 contents=contents,
                 config=config,
             )
             if not response.candidates:
+                log.warning("Gemini returned empty candidates")
                 raise ValueError("Empty response from Gemini")
             return response
         except Exception as e:
             err_str = str(e).lower()
             is_rate_limit = "429" in err_str or "resource exhausted" in err_str or "quota" in err_str
+            log.error("Gemini API error (attempt %d/%d): %s", attempt + 1, max_retries, e)
             if is_rate_limit and attempt < max_retries - 1:
                 wait = (2 ** attempt)  # 1s, 2s, 4s
+                log.info("Rate limited, waiting %ds before retry", wait)
                 time.sleep(wait)
                 continue
             raise
@@ -490,6 +510,7 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
             "message": "The AI assistant is not configured. Please set the GEMINI_API_KEY.",
             "cards": [],
             "navigation": [],
+            "business_map": {},
         }
 
     client = genai.Client(api_key=api_key)
@@ -512,14 +533,17 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
 
     cards = []
     navigation = []
+    business_map = {}  # id -> business data, for frontend {{CARD:id}} lookup
 
     try:
         response = _call_gemini_with_retry(client, history, config)
-    except Exception:
+    except Exception as e:
+        log.error("Initial Gemini call failed: %s\n%s", e, traceback.format_exc())
         return {
             "message": "I'm having trouble connecting right now. Please try again in a moment.",
             "cards": [],
             "navigation": [],
+            "business_map": {},
         }
 
     # Tool-calling loop
@@ -554,12 +578,18 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
             if nav_url:
                 navigation.append({"url": nav_url, "label": f"Checking {fn_name.replace('_', ' ')}..."})
 
-            # Collect cards from business search results
+            # Collect cards from tool results
             if isinstance(result, dict):
                 if "businesses" in result and result["businesses"]:
-                    cards.extend([{"type": "business", "data": b} for b in result["businesses"]])
+                    for b in result["businesses"]:
+                        cards.append({"type": "business", "data": b})
+                        if b.get("id"):
+                            business_map[b["id"]] = b
                 if "business" in result:
                     cards.append({"type": "business", "data": result["business"]})
+                    bid = result["business"].get("id")
+                    if bid:
+                        business_map[bid] = result["business"]
                 if "reservation" in result:
                     cards.append({"type": "reservation", "data": result["reservation"]})
                 if "deals" in result and result["deals"]:
@@ -579,12 +609,21 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
         # Send tool results back to Gemini
         try:
             response = _call_gemini_with_retry(client, history, config)
-        except Exception:
+        except Exception as e:
+            log.error("Gemini summary call failed: %s\n%s", e, traceback.format_exc())
+            # Add a synthetic model response so history stays well-formed
+            # (must end with model role, not tool role, for future calls)
+            fallback_msg = "I found some results but had trouble summarizing them. Here's what I found so far."
+            history.append(types.Content(
+                role="model",
+                parts=[types.Part.from_text(text=fallback_msg)],
+            ))
             _save_history(user_id, session_id, history)
             return {
-                "message": "I found some results but had trouble summarizing them. Here's what I found so far.",
+                "message": fallback_msg,
                 "cards": cards,
                 "navigation": navigation,
+                "business_map": business_map,
             }
 
     # Append the final model response to history
@@ -613,4 +652,5 @@ def chat(user_id: int, session_id: str, message: str) -> dict:
         "message": final_text,
         "cards": cards,
         "navigation": navigation,
+        "business_map": business_map,
     }

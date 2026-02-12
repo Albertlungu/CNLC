@@ -12,13 +12,29 @@ const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 const typingIndicator = document.getElementById("typing-indicator");
-const previewIframe = document.getElementById("preview-iframe");
-const previewLabel = document.getElementById("preview-label");
-const previewFallback = document.getElementById("preview-fallback");
 const logoutBtn = document.getElementById("logout-btn");
+const welcomeState = document.getElementById("welcome-state");
+const suggestionChips = document.getElementById("suggestion-chips");
 
 let agentSessionId = null;
 let isProcessing = false;
+
+// ==================== Welcome state ====================
+
+function hideWelcome() {
+    if (welcomeState) {
+        welcomeState.style.display = "none";
+    }
+}
+
+if (suggestionChips) {
+    suggestionChips.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if (chip && chip.dataset.message) {
+            handleSend(chip.dataset.message);
+        }
+    });
+}
 
 // ==================== Message rendering ====================
 
@@ -69,7 +85,7 @@ function renderBusinessCard(business) {
 
     if (business.id) {
         card.addEventListener("click", () => {
-            updatePreview(`business-detail.html?id=${business.id}`);
+            window.open(`business-detail.html?id=${business.id}`, "_blank");
         });
     }
 
@@ -144,28 +160,6 @@ function appendToChat(element) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// ==================== Preview control ====================
-
-function updatePreview(url) {
-    previewLabel.textContent = url.split("?")[0];
-    previewFallback.style.display = "none";
-    previewIframe.style.display = "block";
-    previewIframe.src = url;
-}
-
-async function playNavigation(navEvents) {
-    for (const nav of navEvents) {
-        previewLabel.textContent = nav.label || nav.url;
-        updatePreview(nav.url);
-        await new Promise((r) => setTimeout(r, 1200));
-    }
-}
-
-previewIframe.addEventListener("error", () => {
-    previewIframe.style.display = "none";
-    previewFallback.style.display = "flex";
-});
-
 // ==================== Chat logic ====================
 
 async function handleSend(messageText) {
@@ -175,6 +169,9 @@ async function handleSend(messageText) {
     isProcessing = true;
     sendBtn.disabled = true;
     chatInput.value = "";
+
+    // Hide welcome state on first message
+    hideWelcome();
 
     // Render user message
     appendToChat(renderTextMessage(text, "user"));
@@ -194,25 +191,70 @@ async function handleSend(messageText) {
         // Validate response
         const message = result.message || "";
         const cards = Array.isArray(result.cards) ? result.cards : [];
-        const navigation = Array.isArray(result.navigation) ? result.navigation : [];
+        const businessMap = result.businessMap || {};
 
-        // Render agent text
-        if (message) {
-            appendToChat(renderTextMessage(message, "agent"));
-        }
+        // Check if the message contains {{CARD:id}} markers for interleaved rendering
+        const cardMarkerRegex = /\{\{CARD:(\d+)\}\}/g;
+        const hasMarkers = cardMarkerRegex.test(message);
 
-        // Render cards
-        const cardGrid = renderCards(cards);
-        if (cardGrid) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "message agent-message";
-            wrapper.appendChild(cardGrid);
-            appendToChat(wrapper);
-        }
+        if (hasMarkers && Object.keys(businessMap).length > 0) {
+            // Interleaved rendering: split text on markers, render text + card alternating
+            const usedBusinessIds = new Set();
+            const segments = message.split(/\{\{CARD:(\d+)\}\}/);
 
-        // Play navigation events
-        if (navigation.length > 0) {
-            playNavigation(navigation);
+            // segments alternates: [text, id, text, id, text, ...]
+            for (let i = 0; i < segments.length; i++) {
+                if (i % 2 === 0) {
+                    // Text segment
+                    const txt = segments[i].trim();
+                    if (txt) {
+                        appendToChat(renderTextMessage(txt, "agent"));
+                    }
+                } else {
+                    // Business ID segment -- render the card
+                    const bizId = segments[i];
+                    const bizData = businessMap[bizId];
+                    if (bizData) {
+                        usedBusinessIds.add(bizId);
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "message agent-message";
+                        const grid = document.createElement("div");
+                        grid.className = "card-grid";
+                        grid.appendChild(renderBusinessCard(bizData));
+                        wrapper.appendChild(grid);
+                        appendToChat(wrapper);
+                    }
+                }
+            }
+
+            // Render any remaining non-business cards (reservations, deals) that weren't inline
+            const remainingCards = cards.filter(c => {
+                if (c.type === "business") {
+                    return !usedBusinessIds.has(String(c.data && c.data.id));
+                }
+                return c.type === "reservation" || c.type === "deal";
+            }).filter(c => c.type !== "business"); // only non-business leftovers
+
+            const leftoverGrid = renderCards(remainingCards);
+            if (leftoverGrid) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "message agent-message";
+                wrapper.appendChild(leftoverGrid);
+                appendToChat(wrapper);
+            }
+        } else {
+            // Fallback: no markers, render text then all cards (original behavior)
+            if (message) {
+                appendToChat(renderTextMessage(message, "agent"));
+            }
+
+            const cardGrid = renderCards(cards);
+            if (cardGrid) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "message agent-message";
+                wrapper.appendChild(cardGrid);
+                appendToChat(wrapper);
+            }
         }
 
     } catch (err) {
