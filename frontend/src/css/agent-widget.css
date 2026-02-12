@@ -1,0 +1,303 @@
+/* ==================== Agent Widget FAB ==================== */
+
+#agent-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: "Montserrat", sans-serif;
+}
+
+.agent-widget-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff6600, #ff8533);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 4px 16px rgba(255, 102, 0, 0.35),
+        0 0 20px rgba(255, 102, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: widget-breathe 4s ease-in-out infinite;
+}
+
+.agent-widget-fab:hover {
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 20px rgba(255, 102, 0, 0.45),
+        0 0 30px rgba(255, 102, 0, 0.15);
+}
+
+.agent-widget-fab.active {
+    animation: none;
+    background: #444;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.agent-widget-fab svg {
+    width: 24px;
+    height: 24px;
+}
+
+@keyframes widget-breathe {
+    0%, 100% { box-shadow: 0 4px 16px rgba(255, 102, 0, 0.25), 0 0 15px rgba(255, 102, 0, 0.05); }
+    50% { box-shadow: 0 4px 20px rgba(255, 102, 0, 0.45), 0 0 30px rgba(255, 102, 0, 0.15); }
+}
+
+/* ==================== Chat Panel ==================== */
+
+.agent-widget-panel {
+    position: absolute;
+    bottom: 72px;
+    right: 0;
+    width: 370px;
+    max-height: 520px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.agent-widget-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* ==================== Header ==================== */
+
+.agent-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #ff6600, #ff8533);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.agent-widget-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.agent-widget-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.agent-widget-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.agent-widget-status {
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+.agent-widget-expand {
+    color: #fff;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.agent-widget-expand:hover {
+    opacity: 1;
+}
+
+/* ==================== Messages ==================== */
+
+.agent-widget-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 200px;
+    max-height: 340px;
+}
+
+.agent-widget-msg {
+    display: flex;
+    max-width: 85%;
+}
+
+.agent-widget-msg-user {
+    align-self: flex-end;
+}
+
+.agent-widget-msg-agent {
+    align-self: flex-start;
+}
+
+.agent-widget-msg-error {
+    align-self: flex-start;
+}
+
+.agent-widget-msg-content {
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.agent-widget-msg-user .agent-widget-msg-content {
+    background: linear-gradient(135deg, #ff6600, #ff8533);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.agent-widget-msg-agent .agent-widget-msg-content {
+    background: #f3f3f3;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+.agent-widget-msg-error .agent-widget-msg-content {
+    background: #fff0f0;
+    color: #cc3333;
+    border: 1px solid #ffcccc;
+    border-bottom-left-radius: 4px;
+    font-size: 12px;
+}
+
+/* ==================== Typing indicator ==================== */
+
+.agent-widget-typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px 10px;
+}
+
+.agent-widget-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ccc;
+    animation: widget-dot 1.2s ease-in-out infinite;
+}
+
+.agent-widget-typing span:nth-child(2) { animation-delay: 0.15s; }
+.agent-widget-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes widget-dot {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ==================== Input ==================== */
+
+.agent-widget-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.agent-widget-input input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-family: "Montserrat", sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.agent-widget-input input:focus {
+    border-color: #ff6600;
+}
+
+.agent-widget-input button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #ff6600;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.agent-widget-input button:hover {
+    background: #e65c00;
+}
+
+.agent-widget-input button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* ==================== Scrollbar ==================== */
+
+.agent-widget-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.agent-widget-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.agent-widget-messages::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 2px;
+}
+
+/* ==================== Responsive ==================== */
+
+@media (max-width: 480px) {
+    #agent-widget {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .agent-widget-panel {
+        width: calc(100vw - 32px);
+        max-height: 70vh;
+        right: -8px;
+    }
+
+    .agent-widget-fab {
+        width: 48px;
+        height: 48px;
+    }
+
+    .agent-widget-fab svg {
+        width: 20px;
+        height: 20px;
+    }
+}

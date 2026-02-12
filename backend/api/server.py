@@ -11,6 +11,7 @@ from flask_cors import CORS
 load_dotenv()
 
 from backend.api.routes import (
+    agent_bp,
     auth_bp,
     bookmarks_bp,
     businesses_bp,
@@ -37,12 +38,28 @@ app.config["JSON_AS_ASCII"] = False
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 UPLOAD_FOLDER = PROJECT_ROOT / "data" / "uploads"
+FRONTEND_FOLDER = PROJECT_ROOT / "frontend" / "src"
 
 
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
     """Serve uploaded files (review photos)"""
     return send_from_directory(str(UPLOAD_FOLDER), filename)
+
+
+# ================== Frontend Static Files ================
+
+
+@app.route("/")
+def serve_index():
+    """Serve the frontend index page"""
+    return send_from_directory(str(FRONTEND_FOLDER), "index.html")
+
+
+@app.route("/<path:filename>")
+def serve_frontend(filename):
+    """Serve frontend static files (HTML, CSS, JS, assets)"""
+    return send_from_directory(str(FRONTEND_FOLDER), filename)
 
 
 # ================== Error Handling ================
@@ -83,6 +100,7 @@ def health_check():
 
 # ================== Register Blueprints ================
 
+app.register_blueprint(agent_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(bookmarks_bp)
 app.register_blueprint(businesses_bp)

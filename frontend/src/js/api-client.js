@@ -562,3 +562,28 @@ export async function getRecommendations(userId, searchHistory = []) {
     const response = await fetch(`http://127.0.0.1:5001/api/recommendations/?${params.toString()}`);
     return await response.json();
 }
+
+// ==================== Agent API ====================
+
+export async function sendAgentMessage(userId, message, sessionId = null) {
+    const body = { userId, message };
+    if (sessionId) body.sessionId = sessionId;
+
+    const response = await fetch("http://127.0.0.1:5001/api/agent/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
+
+    if (response.status === 429) {
+        const data = await response.json().catch(() => ({}));
+        throw { status: 429, retryAfter: data.retryAfter || 60, message: data.error || "Rate limit exceeded" };
+    }
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw { status: response.status, message: data.error || "Something went wrong" };
+    }
+
+    return await response.json();
+}
