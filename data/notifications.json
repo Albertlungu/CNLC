@@ -26,7 +26,37 @@
         "title": "Reservation Cancelled",
         "message": "Your reservation has been cancelled.",
         "relatedId": 24651671,
-        "read": false,
+        "read": true,
         "createdAt": "2026-02-04T14:13:58.395385"
+    },
+    {
+        "notificationId": 11740778,
+        "userId": 10000000,
+        "type": "reservation_reminder",
+        "title": "Upcoming Reservation",
+        "message": "Reminder: You have a reservation at Chantal's Hot Fries on 2026-02-13 at 15:00.",
+        "relatedId": 89661327,
+        "read": true,
+        "createdAt": "2026-02-12T21:18:21.613258"
+    },
+    {
+        "notificationId": 25163374,
+        "userId": 10000000,
+        "type": "reservation_cancelled",
+        "title": "Reservation Cancelled",
+        "message": "Your reservation has been cancelled.",
+        "relatedId": 89661327,
+        "read": true,
+        "createdAt": "2026-02-12T21:18:33.439755"
+    },
+    {
+        "notificationId": 37192747,
+        "userId": 10000000,
+        "type": "reservation_reminder",
+        "title": "Upcoming Reservation",
+        "message": "Reminder: You have a reservation at Chantal's Hot Fries on 2026-02-15 at 18:57.",
+        "relatedId": 38328341,
+        "read": false,
+        "createdAt": "2026-02-14T00:28:54.081368"
     }
 ]
