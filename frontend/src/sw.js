@@ -1,4 +1,4 @@
-const CACHE_NAME = "cnlc-v9";
+const CACHE_NAME = "cnlc-v14";
 const STATIC_ASSETS = [
     "/agent.html",
     "/businesses.html",
@@ -58,15 +58,21 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const url = new URL(event.request.url);
 
-    // Network-first for API calls
-    if (url.pathname.startsWith("/api/")) {
+    // Network-first for API calls, JS, CSS, and HTML (so code updates take effect immediately)
+    if (url.pathname.startsWith("/api/") || url.pathname.endsWith(".js") || url.pathname.endsWith(".css") || url.pathname.endsWith(".html") || url.pathname === "/") {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
+            fetch(event.request).then((response) => {
+                if (response.ok) {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                }
+                return response;
+            }).catch(() => caches.match(event.request))
         );
         return;
     }
 
-    // Cache-first for static assets
+    // Cache-first for other static assets (HTML, images, fonts)
     event.respondWith(
         caches.match(event.request).then((cached) => {
             return cached || fetch(event.request).then((response) => {
