@@ -1,0 +1,233 @@
+/* ==================== Shared Navbar ==================== */
+
+.menu-bar {
+    display: flex;
+    align-items: center;
+    background: var(--nav-bg, #ffffff);
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    padding: 0 16px;
+    height: 52px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.menu-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.menu-links li {
+    position: relative;
+}
+
+.menu-links li a,
+.menu-links li button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary, #333);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.menu-links li a:hover,
+.menu-links li button:hover {
+    background: var(--hover-bg, #f0f0f0);
+}
+
+.menu-links li a.active {
+    color: var(--accent-color, #ff6600);
+    font-weight: 600;
+}
+
+.menu-emoji {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.menu-text {
+    line-height: 1;
+}
+
+/* Sub-link (Map under Directory) */
+.has-sub {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.has-sub .sub-link {
+    padding: 8px 10px;
+    font-size: 13px;
+    opacity: 0.7;
+    border-left: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 0 8px 8px 0;
+    margin-left: -2px;
+}
+
+.has-sub .sub-link:hover {
+    opacity: 1;
+}
+
+.has-sub .sub-link.active {
+    opacity: 1;
+    color: var(--accent-color, #ff6600);
+    font-weight: 600;
+}
+
+.has-sub > a:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+/* Explore dropdown */
+.explore-dropdown {
+    position: relative;
+    margin-left: auto;
+}
+
+.explore-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary, #333);
+}
+
+.explore-arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    margin-left: 2px;
+    transition: transform 0.2s;
+}
+
+.explore-dropdown.open .explore-arrow {
+    transform: rotate(180deg);
+}
+
+.explore-active > .explore-toggle {
+    color: var(--accent-color, #ff6600);
+}
+
+.explore-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 6px;
+    min-width: 200px;
+    list-style: none;
+    z-index: 1001;
+}
+
+.explore-dropdown.open .explore-menu {
+    display: block;
+    animation: navbar-dropdown-in 0.15s ease-out;
+}
+
+@keyframes navbar-dropdown-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.explore-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-primary, #333);
+}
+
+.explore-menu li a:hover {
+    background: var(--hover-bg, #f5f5f5);
+}
+
+.explore-menu li a.active {
+    color: var(--accent-color, #ff6600);
+    font-weight: 600;
+    background: var(--accent-bg, rgba(255, 102, 0, 0.06));
+}
+
+/* Logout link */
+.logout-link {
+    color: var(--text-secondary, #888) !important;
+    opacity: 0.8;
+}
+
+.logout-link:hover {
+    color: #c0392b !important;
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-bar {
+        padding: 0 8px;
+        height: 48px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .menu-links {
+        gap: 0;
+    }
+
+    .menu-links li a,
+    .menu-links li button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .menu-text {
+        display: none;
+    }
+
+    .menu-emoji {
+        font-size: 18px;
+    }
+
+    .has-sub .sub-link {
+        padding: 6px 8px;
+    }
+
+    .explore-menu {
+        right: -8px;
+        min-width: 180px;
+    }
+
+    .explore-menu .menu-text {
+        display: inline;
+    }
+}

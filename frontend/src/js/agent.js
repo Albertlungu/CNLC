@@ -1,8 +1,10 @@
 import { sendAgentMessage, requireAuth, logout, getSession } from "./api-client.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
+initNavbar("agent");
 
 const session = getSession();
 const userId = session.userId;
@@ -12,7 +14,6 @@ const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 const typingIndicator = document.getElementById("typing-indicator");
-const logoutBtn = document.getElementById("logout-btn");
 const welcomeState = document.getElementById("welcome-state");
 const suggestionChips = document.getElementById("suggestion-chips");
 const chatListEl = document.getElementById("chat-list");
@@ -599,22 +600,6 @@ newChatBtn.addEventListener("click", () => {
 if (sidebarToggle && chatSidebar) {
     sidebarToggle.addEventListener("click", () => {
         chatSidebar.classList.toggle("open");
-    });
-}
-
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        // Clean up all chat data for this user
-        for (const chat of chatsIndex) {
-            localStorage.removeItem(`cnlc-chat-msgs-${chat.id}`);
-        }
-        localStorage.removeItem(CHATS_INDEX_KEY);
-        localStorage.removeItem(ACTIVE_CHAT_KEY);
-        // Also clean old keys just in case
-        localStorage.removeItem(`cnlc-agent-history-${userId}`);
-        localStorage.removeItem(`cnlc-agent-session-${userId}`);
-        logout();
     });
 }
 

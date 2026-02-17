@@ -1,10 +1,12 @@
 import { requireAuth, logout, getSession, searchUsers, sendFriendRequest, getFriendRequests, acceptFriendRequest, rejectFriendRequest, getFriends, removeFriend, getFriendActivity, getBusinessById } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("friends");
 
 const session = getSession();
 const userId = session.userId;
@@ -14,7 +16,6 @@ const userSearchResults = document.getElementById("user-search-results");
 const pendingRequestsEl = document.getElementById("pending-requests");
 const friendsListEl = document.getElementById("friends-list");
 const activityFeedEl = document.getElementById("activity-feed");
-const logoutBtn = document.getElementById("logout-btn");
 
 let searchTimeout = null;
 
@@ -144,13 +145,6 @@ async function loadActivity() {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFriendsData();
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 
     // User search
     userSearchInput.addEventListener("input", () => {

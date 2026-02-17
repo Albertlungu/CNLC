@@ -4,17 +4,13 @@ import {
     createReservation, getUserReservations, cancelReservation, downloadICS,
     getNotifications, markNotificationRead, markAllNotificationsRead, checkReminders,
 } from "./api-client.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) throw new Error("Not authenticated");
+initNavbar("reservations");
 
 const session = getSession();
 const userId = session.userId;
-
-// Logout
-document.getElementById("logout-btn").addEventListener("click", (e) => {
-    e.preventDefault();
-    logout();
-});
 
 // ==================== Tabs ====================
 const tabBtns = document.querySelectorAll(".tab-btn");
