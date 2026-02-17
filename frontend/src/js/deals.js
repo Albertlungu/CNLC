@@ -1,10 +1,12 @@
 import { requireAuth, logout, getSession, getDeals, createDeal, deleteDeal, scrapeDeals, filterBusinesses, getBusinessById } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("deals");
 
 const session = getSession();
 const userId = session.userId;
@@ -12,7 +14,6 @@ const userId = session.userId;
 const dealsGrid = document.getElementById("deals-grid");
 const createDealBtn = document.getElementById("create-deal-btn");
 const fetchDealsBtn = document.getElementById("fetch-deals-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 // Create Deal Modal
 const createModal = document.getElementById("create-deal-modal");
@@ -146,13 +147,6 @@ async function searchBusinesses(query, resultsContainer, onSelect) {
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 
     // Create Deal Modal
     createDealBtn.addEventListener("click", () => createModal.classList.add("active"));

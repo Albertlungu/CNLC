@@ -13,12 +13,14 @@ import {
     getBusinessById,
 } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 // Check authentication
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("saved");
 
 const session = getSession();
 const userId = session.userId;
@@ -35,7 +37,6 @@ const collectionList = document.getElementById("collection-list");
 const collectionTitle = document.getElementById("collection-title");
 const businessGrid = document.getElementById("business-grid");
 const businessCountEl = document.getElementById("business-count");
-const logoutBtn = document.getElementById("logout-btn");
 
 const newCollectionBtn = document.getElementById("new-collection-btn");
 const renameCollectionBtn = document.getElementById("rename-collection-btn");
@@ -429,14 +430,6 @@ searchInput.addEventListener("keypress", (e) => {
 });
 categoryFilter.addEventListener("change", applyFilters);
 sortFilter.addEventListener("change", applyFilters);
-
-// Logout
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        logout();
-    });
-}
 
 // Initialize
 async function init() {

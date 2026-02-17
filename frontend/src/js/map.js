@@ -1,10 +1,12 @@
 import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("map");
 
 const session = getSession();
 const userId = session.userId;
@@ -24,7 +26,6 @@ const searchBtn = document.getElementById("search-btn");
 const categoryFilter = document.getElementById("category-filter");
 const locateMeBtn = document.getElementById("locate-me");
 const resetViewBtn = document.getElementById("reset-view");
-const logoutBtn = document.getElementById("logout-btn");
 
 const modal = document.getElementById("street-view-modal");
 const modalBusinessName = document.getElementById("modal-business-name");
@@ -363,12 +364,6 @@ function setupEventListeners() {
         }
     });
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 }
 
 // Save/Unsave Map Handlers

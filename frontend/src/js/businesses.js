@@ -1,12 +1,14 @@
 import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection, getRecommendations } from "./api-client.js";
 import { getUserLocation } from "./utils/helper.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 // Check authentication before loading page
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("directory");
 
 const session = getSession();
 const userId = session.userId;
@@ -23,7 +25,6 @@ const prevPageBtn = document.getElementById("prev-page");
 const nextPageBtn = document.getElementById("next-page");
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 // Collection Modal Elements
 const collectionModal = document.getElementById("collection-modal");
@@ -275,13 +276,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Logout button handler
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 });
 
 function setupModalListeners() {

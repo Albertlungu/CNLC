@@ -1,9 +1,11 @@
 import { getSession, requireAuth, logout, getUserProfile } from "../api-client.js";
+import { initNavbar } from "../components/navbar.js";
 
 // Check authentication
 if (!requireAuth()) {
     throw new Error("Not authenticated");
 }
+initNavbar("profile");
 
 const session = getSession();
 const userId = session.userId;
@@ -17,7 +19,6 @@ const displayEmail = document.getElementById("displayEmail");
 const memberSince = document.getElementById("memberSince");
 const profileForm = document.getElementById("profileForm");
 const cancelBtn = document.getElementById("cancelBtn");
-const logoutBtn = document.getElementById("logoutBtn");
 const openInviteModal = document.getElementById("openInviteModal");
 const inviteModal = document.getElementById("inviteModal");
 const closeModal = document.querySelector(".close");
@@ -426,14 +427,6 @@ inviteForm.addEventListener("submit", async (e) => {
     } catch (error) {
         console.error("Error sending invite:", error);
         alert("Error sending invitation");
-    }
-});
-
-// Logout
-logoutBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    if (confirm("Are you sure you want to logout?")) {
-        await logout();
     }
 });
 
