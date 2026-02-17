@@ -361,7 +361,6 @@ def _process_scan(scan_id: int) -> None:
 
         # Try OpenMVS if available, otherwise use COLMAP's Poisson mesher
         openmvs_reconstruct = shutil.which("ReconstructMesh")
-        openmvs_texture = shutil.which("TextureMesh")
 
         mesh_ply = dense_dir / "mesh.ply"
 
