@@ -31,6 +31,7 @@ class User(BaseModel):
     bookmarks: list[int] = Field(..., description="Containing Bookmarked Business IDs")
     profile: UserProfile
     location: UserLocation
+    businessId: Optional[int] = Field(None, description="Linked business ID for business-role users")
 
     @field_validator("id")
     @classmethod
