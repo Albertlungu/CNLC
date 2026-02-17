@@ -17,6 +17,26 @@ export function requireAuth() {
     return true;
 }
 
+export function getUserRoles() {
+    const session = getSession();
+    return session?.roles || ["user"];
+}
+
+export function isBusinessOwner(businessId = null) {
+    const session = getSession();
+    if (!session) return false;
+    const roles = session.roles || [];
+    if (roles.includes("admin")) return true;
+    if (!roles.includes("business")) return false;
+    if (businessId === null) return true;
+    return session.businessId === businessId;
+}
+
+export function getUserBusinessId() {
+    const session = getSession();
+    return session?.businessId || null;
+}
+
 // Logout
 export async function logout() {
     const session = getSession();
@@ -563,6 +583,62 @@ export async function getRecommendations(userId, searchHistory = []) {
     return await response.json();
 }
 
+// ==================== Blog API ====================
+
+export async function getBlogPosts(businessId = null, limit = 20) {
+    let url = `http://127.0.0.1:5001/api/blogs?limit=${limit}`;
+    if (businessId) url += `&business_id=${businessId}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function createBlogPost(userId, businessId, title, content, tags = [], coverImage = null) {
+    const response = await fetch("http://127.0.0.1:5001/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, businessId, title, content, tags, coverImage }),
+    });
+    return await response.json();
+}
+
+export async function deleteBlogPost(postId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/blogs/${postId}?user_id=${userId}`, { method: "DELETE" });
+    return await response.json();
+}
+
+export async function uploadBlogImage(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch("http://127.0.0.1:5001/api/blogs/upload-image", {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
+}
+
+// ==================== Media API ====================
+
+export async function getBusinessMedia(businessId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/businesses/${businessId}/media`);
+    return await response.json();
+}
+
+export async function uploadBusinessMedia(businessId, userId, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
+    const response = await fetch(`http://127.0.0.1:5001/api/businesses/${businessId}/media`, {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
+}
+
+export async function deleteBusinessMedia(mediaId, userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/media/${mediaId}?user_id=${userId}`, { method: "DELETE" });
+    return await response.json();
+}
+
 // ==================== Agent API ====================
 
 export async function sendAgentMessage(userId, message, sessionId = null) {
@@ -586,4 +662,111 @@ export async function sendAgentMessage(userId, message, sessionId = null) {
     }
 
     return await response.json();
+}
+
+// ==================== Calendar API ====================
+
+export async function getCalendarAuthUrl(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/calendar/auth-url?user_id=${userId}`);
+    return await response.json();
+}
+
+export async function getCalendarEvents(userId, month = null) {
+    let url = `http://127.0.0.1:5001/api/calendar/events?user_id=${userId}`;
+    if (month) url += `&month=${month}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function createCalendarEvent(userId, title, date, startTime, endTime, description = "", timezone = null) {
+    const body = { userId, title, date, startTime, endTime, description };
+    if (timezone) body.timezone = timezone;
+    const response = await fetch("http://127.0.0.1:5001/api/calendar/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
+    return await response.json();
+}
+
+export async function updateCalendarEvent(userId, eventId, eventData) {
+    const response = await fetch(`http://127.0.0.1:5001/api/calendar/events/${eventId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, ...eventData }),
+    });
+    return await response.json();
+}
+
+export async function deleteCalendarEvent(userId, eventId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/calendar/events/${eventId}?user_id=${userId}`, {
+        method: "DELETE",
+    });
+    return await response.json();
+}
+
+export async function getCalendarStatus(userId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/calendar/status?user_id=${userId}`);
+    return await response.json();
+}
+
+export async function disconnectCalendar(userId) {
+    const response = await fetch("http://127.0.0.1:5001/api/calendar/disconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    return await response.json();
+}
+
+// ==================== 3D Scan API ====================
+
+export async function uploadVideoScan(businessId, userId, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
+    formData.append("businessId", businessId);
+    const response = await fetch("http://127.0.0.1:5001/api/scans/upload", {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
+}
+
+export async function getScanStatus(scanId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/scans/${scanId}/status`);
+    return await response.json();
+}
+
+export async function listScans(businessId) {
+    const response = await fetch(`http://127.0.0.1:5001/api/scans?business_id=${businessId}`);
+    return await response.json();
+}
+
+// ==================== Blog Feed API ====================
+
+export async function getBlogFeed(limit = 20, offset = 0, tag = null) {
+    let url = `http://127.0.0.1:5001/api/blogs/feed?limit=${limit}&offset=${offset}`;
+    if (tag) url += `&tag=${encodeURIComponent(tag)}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+// ==================== User Upgrade API ====================
+
+export async function upgradeToBusinessOwner(userId, businessName = null, businessId = null) {
+    const body = { userId };
+    if (businessName) body.businessName = businessName;
+    if (businessId) body.businessId = businessId;
+    const response = await fetch(`http://127.0.0.1:5001/api/user/${userId}/upgrade-to-business`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
+    return await response.json();
+}
+
+export function getUserType() {
+    const session = getSession();
+    return session?.userType || "normal";
 }

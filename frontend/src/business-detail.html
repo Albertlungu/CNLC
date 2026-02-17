@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/voice-control.css">
     <link rel="stylesheet" href="css/tts.css">
     <link rel="stylesheet" href="css/agent-widget.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff6600">
     <script src="js/theme.js"></script>
@@ -19,20 +20,7 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 </head>
 <body>
-        <nav class="menu-bar">
-        <ul class="menu-links">
-            <li><a href="agent.html"><span class="menu-emoji">🤖</span><span class="menu-text">Agent</span></a></li>
-            <li><a href="businesses.html" class="active"><span class="menu-emoji">🏠</span><span class="menu-text">Directory</span></a></li>
-            <li><a href="map.html"><span class="menu-emoji">📍</span><span class="menu-text">Map</span></a></li>
-            <li><a href="trending.html"><span class="menu-emoji">🔥</span><span class="menu-text">Trending</span></a></li>
-            <li><a href="deals.html"><span class="menu-emoji">💰</span><span class="menu-text">Deals</span></a></li>
-            <li><a href="saved.html"><span class="menu-emoji">⭐</span><span class="menu-text">Saved</span></a></li>
-            <li><a href="friends.html"><span class="menu-emoji">👥</span><span class="menu-text">Friends</span></a></li>
-            <li><a href="reservations.html"><span class="menu-emoji">📅</span><span class="menu-text">Reservations</span></a></li>
-            <li><a href="profile.html"><span class="menu-emoji">👤</span><span class="menu-text">Profile</span></a></li>
-            <li><a href="#" id="logout-btn" class="logout-link"><span class="menu-emoji">🚪</span><span class="menu-text">Logout</span></a></li>
-        </ul>
-    </nav>
+    <nav class="menu-bar"></nav>
 
     <div class="main-content">
         <div class="business-container">
@@ -40,17 +28,28 @@
                 <div class="loading">Loading business details...</div>
             </div>
 
-            <div id="model-viewer-section" class="model-viewer-section" style="display:none;">
-                <h2>3D Interior View</h2>
-                <model-viewer
-                    id="business-3d-model"
-                    src="assets/models/demo-restaurant.glb"
-                    alt="3D interior view of the business"
-                    auto-rotate
-                    camera-controls
-                    shadow-intensity="1"
-                    style="width:100%;height:450px;border-radius:12px;background:#f5f5f5;"
-                ></model-viewer>
+            <div id="media-section" class="media-section" style="display:none;">
+                <div class="section-header">
+                    <h2>Vibe Check</h2>
+                    <button id="upload-media-btn" class="owner-action-btn" style="display:none;">Upload Media</button>
+                </div>
+                <div id="media-container" class="media-container"></div>
+            </div>
+
+            <div id="scan-section" class="scan-section" style="display:none;">
+                <div class="section-header">
+                    <h2>3D Scans</h2>
+                    <button id="upload-scan-btn" class="owner-action-btn" style="display:none;">Upload Video Scan</button>
+                </div>
+                <div id="scan-container" class="scan-container"></div>
+            </div>
+
+            <div id="blog-section" class="blog-section" style="display:none;">
+                <div class="section-header">
+                    <h2>Blog</h2>
+                    <button id="write-post-btn" class="owner-action-btn" style="display:none;">Write Post</button>
+                </div>
+                <div id="blog-posts" class="blog-posts"></div>
             </div>
 
             <div class="reviews-section">
@@ -116,6 +115,94 @@
             <div class="modal-footer">
                 <button id="modal-cancel-btn" class="modal-btn modal-btn-cancel">Cancel</button>
                 <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Media Modal -->
+    <div id="upload-media-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Media</h2>
+                <span class="modal-close" id="media-modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Upload a 3D scan (.glb) or video walkthrough (.mp4, .webm) of your business.</p>
+                <div class="upload-drop-zone" id="media-drop-zone">
+                    <p>Drag & drop a file here, or click to browse</p>
+                    <input type="file" id="media-file-input" accept=".glb,.gltf,.mp4,.webm" style="display:none;">
+                </div>
+                <div id="media-upload-preview" class="upload-preview" style="display:none;">
+                    <span id="media-upload-filename"></span>
+                </div>
+                <div id="media-upload-progress" style="display:none;">
+                    <div class="progress-bar"><div class="progress-fill" id="media-progress-fill"></div></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="media-upload-cancel">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="media-upload-submit" disabled>Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Write Blog Post Modal -->
+    <div id="blog-post-modal" class="modal">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h2>Write Blog Post</h2>
+                <span class="modal-close" id="blog-modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="blog-title">Title</label>
+                    <input type="text" id="blog-title" placeholder="Post title..." maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="blog-content">Content (Markdown supported)</label>
+                    <textarea id="blog-content" placeholder="Write your post..." rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="blog-tags">Tags (comma-separated)</label>
+                    <input type="text" id="blog-tags" placeholder="menu, events, news...">
+                </div>
+                <div class="form-group">
+                    <label for="blog-cover-image">Cover Image (optional)</label>
+                    <input type="file" id="blog-cover-image" accept="image/*">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="blog-post-cancel">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="blog-post-submit">Publish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload 3D Scan Modal -->
+    <div id="scan-upload-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Video for 3D Scan</h2>
+                <span class="modal-close" id="scan-modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Upload a video walkthrough of your business. It will be processed into a 3D model automatically. Supported formats: .mp4, .mov, .avi, .webm (max 500MB).</p>
+                <div class="upload-drop-zone" id="scan-drop-zone">
+                    <p>Drag & drop a video here, or click to browse</p>
+                    <input type="file" id="scan-file-input" accept=".mp4,.mov,.avi,.webm,video/*" style="display:none;">
+                </div>
+                <div id="scan-upload-preview" class="upload-preview" style="display:none;">
+                    <span id="scan-upload-filename"></span>
+                    <span id="scan-upload-filesize"></span>
+                </div>
+                <div id="scan-upload-progress" class="scan-progress" style="display:none;">
+                    <div class="progress-bar"><div class="progress-fill" id="scan-progress-fill"></div></div>
+                    <p id="scan-progress-text">Uploading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="scan-upload-cancel">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="scan-upload-submit" disabled>Upload & Process</button>
             </div>
         </div>
     </div>
