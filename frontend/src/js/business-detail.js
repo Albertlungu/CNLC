@@ -29,11 +29,13 @@ import {
     listScans,
 } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("directory");
 
 const businessInfoEl = document.getElementById("business-info");
 const ratingSummaryEl = document.getElementById("rating-summary");
@@ -47,7 +49,6 @@ const reviewTextEl = document.getElementById("review-text");
 const charCountEl = document.getElementById("char-count");
 const photoInput = document.getElementById("photo-input");
 const photoPreviewEl = document.getElementById("photo-preview");
-const logoutBtn = document.getElementById("logout-btn");
 
 let currentBusinessId = null;
 let currentUser = null;
@@ -1138,13 +1139,6 @@ async function init() {
     setupBlogPostModal();
 
     reviewForm.addEventListener("submit", handleReviewSubmit);
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 }
 
 document.addEventListener("DOMContentLoaded", init);
