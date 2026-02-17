@@ -43,6 +43,12 @@ def register() -> Response:
     last_name = request.json.get("lastName")
     city = request.json.get("city")
     country = request.json.get("country", "Canada")
+    user_type = request.json.get("userType", "normal")
+
+    # Determine roles based on user type
+    roles = ["user"]
+    if user_type == "business":
+        roles.append("business")
 
     try:
         if not all([username, email, phone, password, first_name, last_name, city]):
@@ -62,6 +68,7 @@ def register() -> Response:
             city,
             country,
             users,
+            roles=roles,
         )
 
         time.sleep(0.5)

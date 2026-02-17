@@ -1,4 +1,4 @@
-import { getSession, requireAuth, logout, getUserProfile } from "../api-client.js";
+import { getSession, requireAuth, logout, getUserProfile, upgradeToBusinessOwner } from "../api-client.js";
 import { initNavbar } from "../components/navbar.js";
 
 // Check authentication
@@ -432,3 +432,50 @@ inviteForm.addEventListener("submit", async (e) => {
 
 // Initialize on page load
 initProfile();
+setupUpgradeSection();
+
+function setupUpgradeSection() {
+    const section = document.getElementById("upgrade-section");
+    const btn = document.getElementById("upgradeBtn");
+    const statusEl = document.getElementById("upgradeStatus");
+    if (!section || !btn) return;
+
+    // Show section only for non-business users
+    const roles = session.roles || ["user"];
+    if (roles.includes("business") || roles.includes("admin")) {
+        section.style.display = "none";
+        return;
+    }
+    section.style.display = "block";
+
+    btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        btn.textContent = "Upgrading...";
+        statusEl.textContent = "";
+
+        const bizIdInput = document.getElementById("upgradeBizId");
+        const bizId = bizIdInput ? parseInt(bizIdInput.value) || null : null;
+
+        try {
+            const result = await upgradeToBusinessOwner(userId, null, bizId);
+            if (result.status === "success") {
+                statusEl.textContent = "Account upgraded successfully! Reloading...";
+                statusEl.style.color = "#27ae60";
+                // Update session
+                const updatedSession = { ...session, roles: result.user.roles, businessId: result.user.businessId };
+                localStorage.setItem("session", JSON.stringify(updatedSession));
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                statusEl.textContent = result.message || "Upgrade failed.";
+                statusEl.style.color = "#c0392b";
+                btn.disabled = false;
+                btn.textContent = "Upgrade My Account";
+            }
+        } catch (err) {
+            statusEl.textContent = "Error: " + (err.message || "Unknown error");
+            statusEl.style.color = "#c0392b";
+            btn.disabled = false;
+            btn.textContent = "Upgrade My Account";
+        }
+    });
+}

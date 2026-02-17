@@ -599,3 +599,62 @@ body {
         flex-wrap: wrap;
     }
 }
+
+/* Upgrade Section */
+.upgrade-section {
+    margin-top: 30px;
+}
+
+.upgrade-card {
+    background: var(--card-bg, #fff);
+    border: 2px dashed var(--accent-color, #ff6600);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.upgrade-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.upgrade-card h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: var(--text-primary, #333);
+}
+
+.upgrade-card p {
+    font-size: 14px;
+    color: var(--text-secondary, #666);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.upgrade-card .form-group {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+.upgrade-card .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.upgrade-card .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.upgrade-status {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}

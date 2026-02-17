@@ -94,8 +94,9 @@ export async function register(
     city,
     country,
     captchaToken = null,
+    userType = "normal",
 ) {
-    const body = { username, email, phone, password, firstName, lastName, city, country };
+    const body = { username, email, phone, password, firstName, lastName, city, country, userType };
     if (captchaToken) body.recaptchaToken = captchaToken;
 
     const response = await fetch("http://127.0.0.1:5001/api/auth/register", {

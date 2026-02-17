@@ -85,6 +85,8 @@ loginForm.addEventListener("submit", async (e) => {
             localStorage.setItem("session", JSON.stringify({
                 username: loginUsername,
                 userId: result.user.id,
+                roles: result.user.roles || ["user"],
+                businessId: result.user.businessId || null,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));
@@ -111,6 +113,7 @@ signupForm.addEventListener("submit", async (e) => {
     const signupLastName = document.getElementById("signupLastName").value;
     const signupCity = document.getElementById("signupCity").value;
     const signupCountry = document.getElementById("signupCountry").value;
+    const userType = document.querySelector('input[name="userType"]:checked')?.value || "normal";
 
     const recaptchaToken = validateRecaptcha();
     if (!recaptchaToken) {
@@ -127,12 +130,16 @@ signupForm.addEventListener("submit", async (e) => {
             signupLastName,
             signupCity,
             signupCountry,
+            null,
+            userType,
         );
         if (result.status === "success") {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
                 username: signupUsername,
                 userId: result.user.id,
+                roles: result.user.roles || ["user"],
+                businessId: result.user.businessId || null,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));

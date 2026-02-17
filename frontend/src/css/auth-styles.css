@@ -206,3 +206,63 @@ span {
         transform: scale(0.85);
     }
 }
+
+/* User type selector */
+.user-type-selector {
+    margin: 12px 0;
+}
+
+.user-type-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.user-type-options {
+    display: flex;
+    gap: 10px;
+}
+
+.user-type-option {
+    flex: 1;
+    cursor: pointer;
+}
+
+.user-type-option input[type="radio"] {
+    display: none;
+}
+
+.type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: center;
+}
+
+.user-type-option input[type="radio"]:checked + .type-card {
+    border-color: #ff6600;
+    background: rgba(255, 102, 0, 0.15);
+}
+
+.type-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.type-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.type-desc {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 2px;
+}
