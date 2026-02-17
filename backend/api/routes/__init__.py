@@ -19,18 +19,26 @@ from backend.api.routes.reservations import reservations_bp
 from backend.api.routes.notifications import notifications_bp
 from backend.api.routes.recommendations import recommendations_bp
 from backend.api.routes.agent import agent_bp
+from backend.api.routes.blogs import blogs_bp
+from backend.api.routes.media import media_bp
+from backend.api.routes.calendar import calendar_bp
+from backend.api.routes.scans import scans_bp
 
 __all__ = [
     "agent_bp",
     "auth_bp",
+    "blogs_bp",
     "bookmarks_bp",
     "businesses_bp",
+    "calendar_bp",
     "deals_bp",
     "friends_bp",
+    "media_bp",
     "notifications_bp",
     "reservations_bp",
     "reviews_bp",
     "saved_bp",
+    "scans_bp",
     "sessions_bp",
     "trending_bp",
     "users_bp",

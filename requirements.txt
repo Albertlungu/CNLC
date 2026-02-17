@@ -36,3 +36,13 @@ dotenv
 
 # AI Recommendations
 google-genai
+
+# 3D Scan Processing
+opencv-python
+Pillow
+trimesh
+
+# Google Calendar OAuth
+google-auth
+google-auth-oauthlib
+google-api-python-client

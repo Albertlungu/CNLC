@@ -13,14 +13,18 @@ load_dotenv()
 from backend.api.routes import (
     agent_bp,
     auth_bp,
+    blogs_bp,
     bookmarks_bp,
     businesses_bp,
+    calendar_bp,
     deals_bp,
     friends_bp,
+    media_bp,
     notifications_bp,
     reservations_bp,
     reviews_bp,
     saved_bp,
+    scans_bp,
     sessions_bp,
     trending_bp,
     users_bp,
@@ -102,10 +106,12 @@ def health_check():
 
 app.register_blueprint(agent_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(blogs_bp)
 app.register_blueprint(bookmarks_bp)
 app.register_blueprint(businesses_bp)
 app.register_blueprint(deals_bp)
 app.register_blueprint(friends_bp)
+app.register_blueprint(media_bp)
 app.register_blueprint(reviews_bp)
 app.register_blueprint(saved_bp)
 app.register_blueprint(sessions_bp)
@@ -115,6 +121,8 @@ app.register_blueprint(verification_bp)
 app.register_blueprint(reservations_bp)
 app.register_blueprint(notifications_bp)
 app.register_blueprint(recommendations_bp)
+app.register_blueprint(calendar_bp)
+app.register_blueprint(scans_bp)
 
 
 if __name__ == "__main__":
