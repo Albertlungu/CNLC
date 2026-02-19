@@ -1,5 +1,5 @@
-import { getSession, requireAuth, logout, getUserProfile, upgradeToBusinessOwner } from "../api-client.js";
-import { initNavbar } from "../components/navbar.js";
+import { getSession, requireAuth, logout, getUserProfile, upgradeToBusinessOwner } from "./api-client.js";
+import { initNavbar } from "./components/navbar.js";
 
 // Check authentication
 if (!requireAuth()) {
