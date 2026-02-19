@@ -903,9 +903,11 @@ async function loadScans() {
         const section = document.getElementById("scan-section");
         const container = document.getElementById("scan-container");
 
-        if (scans.length === 0 && !isBusinessOwner(parseInt(currentBusinessId))) return;
+        if (scans.length === 0 && !isBusinessOwner(parseInt(currentBusinessId))) {
+            container.innerHTML = '<p class="scan-empty">No 3D scans available for this business yet.</p>';
+            return;
+        }
 
-        section.style.display = "block";
         container.innerHTML = "";
 
         if (scans.length === 0) {
