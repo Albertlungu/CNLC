@@ -16,58 +16,6 @@ body.agent-page .theme-toggle {
     display: none;
 }
 
-/* ========== Nav (same as other pages) ========== */
-
-.menu-bar {
-    background: var(--bg-secondary);
-    box-shadow: 0 4px 16px var(--shadow-md);
-    padding: 0;
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    flex-shrink: 0;
-}
-
-.menu-links {
-    list-style: none;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.menu-links li {
-    flex: 1;
-    text-align: center;
-    border-right: 1px solid var(--border-color);
-}
-
-.menu-links li:last-child { border-right: none; }
-
-.menu-links li a {
-    text-decoration: none;
-    color: var(--text-primary);
-    font-weight: 600;
-    font-size: 15px;
-    padding: 18px 10px;
-    display: block;
-    transition: all 0.3s ease;
-}
-
-.menu-links li a:hover,
-.menu-links li a.active {
-    background: linear-gradient(135deg, var(--accent-primary) 0%, #ffa366 100%);
-    color: var(--bg-secondary);
-}
-
-.menu-links li a.logout-link { color: #d32f2f; }
-.menu-links li a.logout-link:hover {
-    background: linear-gradient(135deg, #d32f2f 0%, #f77f7f 100%);
-    color: var(--bg-secondary);
-}
-
 /* ========== Agent layout ========== */
 
 .agent-layout {
