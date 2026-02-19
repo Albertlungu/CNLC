@@ -75,9 +75,11 @@ async function createBusinessCard(business) {
     }
 
     const imageHtml = business.image_url
-        ? `<div class="image-container">
-             <img class="business-image" src="${business.image_url}" alt="${business.name}" onerror="this.parentElement.style.display='none'" loading="lazy">
-           </div>`
+        ? `<a href="business-detail.html?id=${businessId}" class="image-link">
+             <div class="image-container">
+               <img class="business-image" src="${business.image_url}" alt="${business.name}" onerror="this.parentElement.parentElement.style.display='none'" loading="lazy">
+             </div>
+           </a>`
         : "";
 
     box.innerHTML = `
