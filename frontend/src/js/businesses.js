@@ -1,12 +1,14 @@
 import { filterBusinesses, requireAuth, logout, getSession, checkBusinessSaved, saveBusiness, unsaveBusiness, getUserCollections, createCollection, getRecommendations } from "./api-client.js";
 import { getUserLocation } from "./utils/helper.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 // Check authentication before loading page
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("directory");
 
 const session = getSession();
 const userId = session.userId;
@@ -23,7 +25,6 @@ const prevPageBtn = document.getElementById("prev-page");
 const nextPageBtn = document.getElementById("next-page");
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 // Collection Modal Elements
 const collectionModal = document.getElementById("collection-modal");
@@ -73,7 +74,16 @@ async function createBusinessCard(business) {
         console.error("Error checking saved status:", error);
     }
 
+    const imageHtml = business.image_url
+        ? `<a href="business-detail.html?id=${businessId}" class="image-link">
+             <div class="image-container">
+               <img class="business-image" src="${business.image_url}" alt="${business.name}" onerror="this.parentElement.parentElement.style.display='none'" loading="lazy">
+             </div>
+           </a>`
+        : "";
+
     box.innerHTML = `
+    ${imageHtml}
     <div class="dropdown-bar">
       ${business.name}
       <div class="bar-actions">
@@ -268,13 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Logout button handler
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 });
 
 function setupModalListeners() {

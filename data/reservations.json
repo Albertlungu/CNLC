@@ -11,5 +11,31 @@
         "notes": "Can we have manga?",
         "createdAt": "2026-02-04T14:12:33.190700",
         "reminderSent": true
+    },
+    {
+        "reservationId": 89661327,
+        "userId": 10000000,
+        "businessId": 293294911,
+        "businessName": "Chantal's Hot Fries",
+        "date": "2026-02-13",
+        "time": "15:00",
+        "partySize": 4,
+        "status": "cancelled",
+        "notes": null,
+        "createdAt": "2026-02-12T21:18:16.568438",
+        "reminderSent": true
+    },
+    {
+        "reservationId": 38328341,
+        "userId": 10000000,
+        "businessId": 293294911,
+        "businessName": "Chantal's Hot Fries",
+        "date": "2026-02-15",
+        "time": "18:57",
+        "partySize": 4,
+        "status": "confirmed",
+        "notes": null,
+        "createdAt": "2026-02-13T21:27:40.268385",
+        "reminderSent": true
     }
 ]

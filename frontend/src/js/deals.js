@@ -1,18 +1,20 @@
-import { requireAuth, logout, getSession, getDeals, createDeal, deleteDeal, scrapeDeals, filterBusinesses, getBusinessById } from "./api-client.js";
+import { requireAuth, logout, getSession, getDeals, createDeal, deleteDeal, scrapeDeals, filterBusinesses, getBusinessById, isBusinessOwner } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("deals");
 
 const session = getSession();
 const userId = session.userId;
+const userIsBizOwner = isBusinessOwner();
 
 const dealsGrid = document.getElementById("deals-grid");
 const createDealBtn = document.getElementById("create-deal-btn");
 const fetchDealsBtn = document.getElementById("fetch-deals-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 // Create Deal Modal
 const createModal = document.getElementById("create-deal-modal");
@@ -85,21 +87,23 @@ async function createDealCard(deal) {
             <span class="deal-source">${deal.source === "scraped" && deal.sourceUrl ? `<a href="${deal.sourceUrl}" target="_blank">Source</a>` : deal.source}</span>
             ${expiresText ? `<span class="deal-expires">${expiresText}</span>` : ""}
         </div>
-        <div class="deal-actions">
+        ${userIsBizOwner ? `<div class="deal-actions">
             <button class="deal-delete-btn" data-deal-id="${deal.dealId}">Remove</button>
-        </div>
+        </div>` : ""}
     `;
 
-    const deleteBtn = card.querySelector(".deal-delete-btn");
-    deleteBtn.addEventListener("click", async () => {
-        const result = await deleteDeal(deal.dealId);
-        if (result.status === "success") {
-            card.remove();
-            if (dealsGrid.children.length === 0) {
-                dealsGrid.innerHTML = '<div class="no-deals">No deals available yet.</div>';
+    if (userIsBizOwner) {
+        const deleteBtn = card.querySelector(".deal-delete-btn");
+        deleteBtn.addEventListener("click", async () => {
+            const result = await deleteDeal(deal.dealId);
+            if (result.status === "success") {
+                card.remove();
+                if (dealsGrid.children.length === 0) {
+                    dealsGrid.innerHTML = '<div class="no-deals">No deals available yet.</div>';
+                }
             }
-        }
-    });
+        });
+    }
 
     return card;
 }
@@ -147,11 +151,10 @@ async function searchBusinesses(query, resultsContainer, onSelect) {
 document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
+    // Hide business-only controls for regular users
+    if (!userIsBizOwner) {
+        createDealBtn.style.display = "none";
+        fetchDealsBtn.style.display = "none";
     }
 
     // Create Deal Modal

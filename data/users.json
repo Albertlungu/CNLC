@@ -52,5 +52,42 @@
             "country": "Canada",
             "city": "Ottawa"
         }
+    },
+    {
+        "id": 10000003,
+        "username": "testuser",
+        "email": "testuser@test.com",
+        "phone": "+1-555-000-0001",
+        "password_hash": "$2b$12$ZFYF.Xl6u5HhaDZS9aiVy.lh0J2ZQ5xf6UzHyhTP0p2G1/ZQxdC2e",
+        "isActive": true,
+        "roles": ["user"],
+        "bookmarks": [],
+        "profile": {
+            "firstName": "Test",
+            "lastName": "User"
+        },
+        "location": {
+            "country": "Canada",
+            "city": "Ottawa"
+        }
+    },
+    {
+        "id": 10000004,
+        "username": "bizowner",
+        "email": "bizowner@test.com",
+        "phone": "+1-555-000-0002",
+        "password_hash": "$2b$12$wq5ugzCiMIeF80lsAY0.U.g/q5rTFHR/9uJ9/VYjk2fmWZCj/Zq6O",
+        "isActive": true,
+        "roles": ["business"],
+        "bookmarks": [],
+        "businessId": 293294911,
+        "profile": {
+            "firstName": "Biz",
+            "lastName": "Owner"
+        },
+        "location": {
+            "country": "Canada",
+            "city": "Ottawa"
+        }
     }
 ]

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/blogs.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/mobile-nav.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6600">
+    <script src="js/theme.js"></script>
+    <script src="js/mobile.js"></script>
+</head>
+<body>
+    <nav class="menu-bar"></nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Blog Feed</h1>
+            <p class="page-subtitle">Latest posts from local businesses</p>
+        </div>
+
+        <div class="feed-controls">
+            <div class="tag-filter">
+                <label for="tag-input">Filter by tag:</label>
+                <input type="text" id="tag-input" placeholder="e.g. events, menu, news...">
+                <button id="filter-btn" class="filter-btn">Filter</button>
+                <button id="clear-filter-btn" class="filter-btn filter-btn-clear" style="display:none;">Clear</button>
+            </div>
+        </div>
+
+        <div id="blog-feed" class="blog-feed">
+            <div class="loading">Loading blog posts...</div>
+        </div>
+
+        <div id="load-more-container" class="load-more-container" style="display:none;">
+            <button id="load-more-btn" class="load-more-btn">Load More</button>
+        </div>
+    </div>
+
+    <script src="js/pwa.js"></script>
+    <script type="module" src="js/blogs.js"></script>
+</body>
+</html>

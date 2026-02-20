@@ -11,7 +11,7 @@ function validateRecaptcha() {
 
 // Redirect to businesses page if already logged in
 if (isLoggedIn()) {
-    window.location.href = "businesses.html";
+    window.location.href = "agent.html";
 }
 
 console.log("app.js loaded successfully!");
@@ -85,11 +85,13 @@ loginForm.addEventListener("submit", async (e) => {
             localStorage.setItem("session", JSON.stringify({
                 username: loginUsername,
                 userId: result.user.id,
+                roles: result.user.roles || ["user"],
+                businessId: result.user.businessId || null,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));
             // Redirect to businesses page on successful login
-            window.location.href = "businesses.html";
+            window.location.href = "agent.html";
         } else {
             alert("Login failed: " + (result.message || "Unknown error"));
             grecaptcha.reset();
@@ -111,6 +113,7 @@ signupForm.addEventListener("submit", async (e) => {
     const signupLastName = document.getElementById("signupLastName").value;
     const signupCity = document.getElementById("signupCity").value;
     const signupCountry = document.getElementById("signupCountry").value;
+    const userType = document.querySelector('input[name="userType"]:checked')?.value || "normal";
 
     const recaptchaToken = validateRecaptcha();
     if (!recaptchaToken) {
@@ -127,17 +130,21 @@ signupForm.addEventListener("submit", async (e) => {
             signupLastName,
             signupCity,
             signupCountry,
+            null,
+            userType,
         );
         if (result.status === "success") {
             // Store session info in localStorage
             localStorage.setItem("session", JSON.stringify({
                 username: signupUsername,
                 userId: result.user.id,
+                roles: result.user.roles || ["user"],
+                businessId: result.user.businessId || null,
                 sessionInfo: result.session_info,
                 loggedInAt: new Date().toISOString()
             }));
             // Redirect to businesses page on successful registration
-            window.location.href = "businesses.html";
+            window.location.href = "agent.html";
         } else {
             alert(
                 "Registration failed: " + (result.message || "Unknown error"),

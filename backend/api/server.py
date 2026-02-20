@@ -11,19 +11,24 @@ from flask_cors import CORS
 load_dotenv()
 
 from backend.api.routes import (
+    agent_bp,
     auth_bp,
+    blogs_bp,
     bookmarks_bp,
     businesses_bp,
+    calendar_bp,
     deals_bp,
     friends_bp,
+    media_bp,
     notifications_bp,
+    recommendations_bp,
     reservations_bp,
     reviews_bp,
     saved_bp,
+    scans_bp,
     sessions_bp,
     trending_bp,
     users_bp,
-    recommendations_bp,
     verification_bp,
 )
 from config.config import PROJECT_ROOT
@@ -37,12 +42,28 @@ app.config["JSON_AS_ASCII"] = False
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 UPLOAD_FOLDER = PROJECT_ROOT / "data" / "uploads"
+FRONTEND_FOLDER = PROJECT_ROOT / "frontend" / "src"
 
 
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
     """Serve uploaded files (review photos)"""
     return send_from_directory(str(UPLOAD_FOLDER), filename)
+
+
+# ================== Frontend Static Files ================
+
+
+@app.route("/")
+def serve_index():
+    """Serve the frontend index page"""
+    return send_from_directory(str(FRONTEND_FOLDER), "index.html")
+
+
+@app.route("/<path:filename>")
+def serve_frontend(filename):
+    """Serve frontend static files (HTML, CSS, JS, assets)"""
+    return send_from_directory(str(FRONTEND_FOLDER), filename)
 
 
 # ================== Error Handling ================
@@ -83,11 +104,14 @@ def health_check():
 
 # ================== Register Blueprints ================
 
+app.register_blueprint(agent_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(blogs_bp)
 app.register_blueprint(bookmarks_bp)
 app.register_blueprint(businesses_bp)
 app.register_blueprint(deals_bp)
 app.register_blueprint(friends_bp)
+app.register_blueprint(media_bp)
 app.register_blueprint(reviews_bp)
 app.register_blueprint(saved_bp)
 app.register_blueprint(sessions_bp)
@@ -97,6 +121,8 @@ app.register_blueprint(verification_bp)
 app.register_blueprint(reservations_bp)
 app.register_blueprint(notifications_bp)
 app.register_blueprint(recommendations_bp)
+app.register_blueprint(calendar_bp)
+app.register_blueprint(scans_bp)
 
 
 if __name__ == "__main__":

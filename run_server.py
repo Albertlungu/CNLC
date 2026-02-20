@@ -11,6 +11,14 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+# Load environment variables from .env file (if present)
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(project_root / ".env")
+except ImportError:
+    pass
+
 # Now import and run the server
 from backend.api.server import app
 

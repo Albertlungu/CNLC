@@ -24,6 +24,7 @@ def create_user(
     city: str,
     country: str = "Canada",
     users: Optional[list[dict]] = None,
+    roles: Optional[list[str]] = None,
 ) -> Union[str, dict]:
     """
     Creates a user validated by model.
@@ -60,7 +61,7 @@ def create_user(
             phone=PhoneNumber(phone),
             password_hash=pw.hash_password(password),
             isActive=True,
-            roles=["user"],
+            roles=roles if roles else ["user"],
             bookmarks=[],
             profile=UserProfile(firstName=first_name, lastName=last_name),
             location=UserLocation(country=country, city=city),
@@ -124,12 +125,20 @@ def edit_user(
     for user in users:
         if user["username"] == username:
             user_exists = True
-            if field == "firstName" or field == "lastName":  # If in profile sub-dict
+            # Nested profile fields
+            if field in ("firstName", "lastName"):
+                if "profile" not in user:
+                    user["profile"] = {}
                 user["profile"][field] = new_value
-            elif field == "country" or field == "city":  # If in location sub-dict
+            # Nested location fields
+            elif field in ("country", "city"):
+                if "location" not in user:
+                    user["location"] = {}
                 user["location"][field] = new_value
-            elif field == "password_hash":  # If modifying password, must encrypt first
+            # Password must be hashed
+            elif field == "password_hash":
                 user["password_hash"] = pw.hash_password(new_value)
+            # All other fields go top-level (phone, address, province, postalCode, etc.)
             else:
                 user[field] = new_value
             break
@@ -232,4 +241,27 @@ def search_users(query: str, users: Optional[list[dict]] = None) -> list[dict]:
     return [u for u in users if query_lower in u["username"].lower()]
 
 
-# TODO: (Maybe: Implement a "Forgot Password" feature)
+def get_user_role(user_id: int, users: Optional[list[dict]] = None) -> list[str]:
+    """Get the roles for a user by ID."""
+    user = get_user_by_id(user_id, users)
+    if user:
+        return user.get("roles", ["user"])
+    return ["user"]
+
+
+def is_business_owner(
+    user_id: int, business_id: int, users: Optional[list[dict]] = None
+) -> bool:
+    """Check if a user owns (is linked to) a specific business."""
+    user = get_user_by_id(user_id, users)
+    if not user:
+        return False
+    if "admin" in user.get("roles", []):
+        return True
+    return "business" in user.get("roles", []) and user.get("businessId") == business_id
+
+
+def has_role(user_id: int, role: str, users: Optional[list[dict]] = None) -> bool:
+    """Check if a user has a specific role."""
+    roles = get_user_role(user_id, users)
+    return role in roles or "admin" in roles

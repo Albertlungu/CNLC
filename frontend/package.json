@@ -1,0 +1,12 @@
+{
+  "name": "cnlc",
+  "version": "1.0.0",
+  "description": "Community Neighbourhood Local Commerce - Electron App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}

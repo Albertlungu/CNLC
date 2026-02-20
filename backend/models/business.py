@@ -40,6 +40,7 @@ class Business(BaseModel):
     phone: Optional[str] = None
     website: Optional[str] = None
     address: Optional[str] = None
+    image_url: Optional[str] = None
 
     tlds = [
         ".ca",

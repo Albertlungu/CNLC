@@ -1,0 +1,247 @@
+/* Blog Feed Page Styles */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+.page-header {
+    text-align: center;
+    padding: 32px 20px 16px;
+}
+
+.page-header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary, #333);
+    margin: 0;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary, #666);
+    margin-top: 4px;
+}
+
+.feed-controls {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+}
+
+.tag-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag-filter label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    white-space: nowrap;
+}
+
+.tag-filter input {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    background: var(--card-bg, #fff);
+    color: var(--text-primary, #333);
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent-color, #ff6600);
+    color: #fff;
+    transition: opacity 0.15s;
+}
+
+.filter-btn:hover {
+    opacity: 0.85;
+}
+
+.filter-btn-clear {
+    background: var(--text-secondary, #888);
+}
+
+.blog-feed {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.feed-post {
+    background: var(--card-bg, #fff);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s;
+}
+
+.feed-post:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feed-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.feed-post-body {
+    padding: 20px;
+}
+
+.feed-post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.feed-date {
+    font-size: 13px;
+    color: var(--text-secondary, #888);
+}
+
+.feed-business-link {
+    font-size: 13px;
+    color: var(--accent-color, #ff6600);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.feed-business-link:hover {
+    text-decoration: underline;
+}
+
+.feed-post-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary, #333);
+    margin: 0 0 8px;
+    line-height: 1.3;
+}
+
+.feed-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.feed-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--accent-bg, rgba(255, 102, 0, 0.08));
+    color: var(--accent-color, #ff6600);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.feed-tag:hover {
+    background: rgba(255, 102, 0, 0.18);
+}
+
+.feed-post-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary, #444);
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-color, #ff6600);
+    text-decoration: none;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.feed-empty,
+.feed-error {
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 16px;
+    color: var(--text-secondary, #888);
+}
+
+.loading {
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 14px;
+    color: var(--text-secondary, #888);
+}
+
+.load-more-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.load-more-btn {
+    padding: 12px 32px;
+    background: var(--card-bg, #fff);
+    border: 2px solid var(--accent-color, #ff6600);
+    color: var(--accent-color, #ff6600);
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.load-more-btn:hover {
+    background: var(--accent-color, #ff6600);
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .page-header h1 {
+        font-size: 22px;
+    }
+
+    .feed-post-title {
+        font-size: 17px;
+    }
+
+    .feed-cover {
+        height: 150px;
+    }
+}

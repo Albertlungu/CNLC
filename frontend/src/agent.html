@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNLC Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/agent.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/mobile-nav.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6600">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/mobile.js"></script>
+</head>
+<body class="agent-page">
+    <nav class="menu-bar"></nav>
+
+    <div class="agent-layout">
+        <aside class="chat-sidebar" id="chat-sidebar">
+            <button class="new-chat-btn" id="new-chat-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Chat
+            </button>
+            <div class="chat-list" id="chat-list"></div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle chat history">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+
+        <div class="chat-glow-left"></div>
+        <div class="chat-glow-right"></div>
+
+        <div class="chat-panel">
+            <div class="chat-messages" id="chat-messages">
+                <div class="welcome-state" id="welcome-state">
+                    <div class="welcome-avatar">C</div>
+                    <h1 class="welcome-title">CNLC Assistant</h1>
+                    <p class="welcome-subtitle">Your AI concierge for local businesses across Canada</p>
+                    <div class="suggestion-chips" id="suggestion-chips">
+                        <button class="chip" data-message="Find me a good restaurant nearby">Find a restaurant</button>
+                        <button class="chip" data-message="What are the best deals right now?">Browse deals</button>
+                        <button class="chip" data-message="Show my upcoming reservations">My reservations</button>
+                        <button class="chip" data-message="What have my friends been up to?">Friend activity</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                    <span></span><span></span><span></span>
+                    Agent is thinking...
+                </div>
+                <form id="chat-form" class="chat-form">
+                    <input type="text" id="chat-input" placeholder="Ask me anything about local businesses..." autocomplete="off" maxlength="2000">
+                    <button type="submit" id="send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety net: prevent form from reloading page even if module fails to load -->
+    <script>
+        document.getElementById('chat-form').addEventListener('submit', function(e) { e.preventDefault(); });
+    </script>
+    <script type="module" src="js/agent.js"></script>
+</body>
+</html>

@@ -31,9 +31,13 @@ def register() -> Response:
     if recaptcha_token:
         secret_key = os.environ.get("RECAPTCHA_SECRET_KEY")
         if secret_key:
-            success, message = verify_recaptcha(recaptcha_token, secret_key, request.remote_addr)
+            success, message = verify_recaptcha(
+                recaptcha_token, secret_key, request.remote_addr
+            )
             if not success:
-                return make_response(jsonify({"status": "error", "message": message}), 403)
+                return make_response(
+                    jsonify({"status": "error", "message": message}), 403
+                )
 
     username = request.json.get("username")
     email = request.json.get("email")
@@ -43,6 +47,12 @@ def register() -> Response:
     last_name = request.json.get("lastName")
     city = request.json.get("city")
     country = request.json.get("country", "Canada")
+    user_type = request.json.get("userType", "normal")
+
+    # Determine roles based on user type
+    roles = ["user"]
+    if user_type == "business":
+        roles.append("business")
 
     try:
         if not all([username, email, phone, password, first_name, last_name, city]):
@@ -62,6 +72,7 @@ def register() -> Response:
             city,
             country,
             users,
+            roles=roles,
         )
 
         time.sleep(0.5)
@@ -94,9 +105,13 @@ def login() -> Response:
     if recaptcha_token:
         secret_key = os.environ.get("RECAPTCHA_SECRET_KEY")
         if secret_key:
-            success, message = verify_recaptcha(recaptcha_token, secret_key, request.remote_addr)
+            success, message = verify_recaptcha(
+                recaptcha_token, secret_key, request.remote_addr
+            )
             if not success:
-                return make_response(jsonify({"status": "error", "message": message}), 403)
+                return make_response(
+                    jsonify({"status": "error", "message": message}), 403
+                )
 
     try:
         if username and password:
@@ -107,8 +122,11 @@ def login() -> Response:
             jh.save_session(session_info)
 
             user = um.get_user_by_username(username)
+            safe_user = {k: v for k, v in user.items() if k != "password_hash"}
 
-            resp = jsonify({"status": "success", "session_info": session_info, "user": user})
+            resp = jsonify(
+                {"status": "success", "session_info": session_info, "user": safe_user}
+            )
             return make_response(resp, 200)
         else:
             resp = jsonify(
@@ -151,7 +169,8 @@ def get_profile() -> Response:
     try:
         if username:
             user = um.get_user_by_username(username)
-            resp = jsonify({"status": "success", "user": user})
+            safe_user = {k: v for k, v in user.items() if k != "password_hash"}
+            resp = jsonify({"status": "success", "user": safe_user})
             return make_response(resp, 200)
         else:
             resp = jsonify({"status": "error", "message": "Username was not given."})
@@ -166,6 +185,33 @@ def get_profile() -> Response:
 
 @auth_bp.route("/profile", methods=["POST"])
 def update_profile() -> Response:
+    """Update one field at a time (legacy) or bulk-update via JSON body."""
+    # --- Bulk update via JSON body ---
+    if request.is_json and request.json:
+        data = request.json
+        username = data.get("username")
+        fields = data.get("fields")  # dict of field->value
+        if not username or not fields or not isinstance(fields, dict):
+            return make_response(
+                jsonify(
+                    {"status": "error", "message": "username and fields dict required."}
+                ),
+                400,
+            )
+        try:
+            for field, value in fields.items():
+                if field in ("email", "id", "password_hash", "roles"):
+                    continue  # skip protected fields
+                um.edit_user(username, field, value)
+            user = um.get_user_by_username(username)
+            safe_user = {k: v for k, v in user.items() if k != "password_hash"}
+            return jsonify({"status": "success", "user": safe_user})
+        except ValueError as e:
+            return make_response(jsonify({"status": "error", "message": str(e)}), 404)
+        except Exception as e:
+            return make_response(jsonify({"status": "error", "message": str(e)}), 500)
+
+    # --- Legacy single-field update via query params ---
     username = request.args.get("username", type=str)
     field = request.args.get("field", type=str)
     new_value = request.args.get("newValue", type=str)

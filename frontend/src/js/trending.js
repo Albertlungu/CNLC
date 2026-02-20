@@ -1,17 +1,18 @@
 import { requireAuth, logout, getSession, getTrending, uploadReceipt, getBusinessById, filterBusinesses } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
+import { initNavbar } from "./components/navbar.js";
 
 if (!requireAuth()) {
     throw new Error("Authentication required");
 }
 initNotifications();
+initNavbar("trending");
 
 const session = getSession();
 const userId = session.userId;
 
 const trendingList = document.getElementById("trending-list");
 const uploadBtn = document.getElementById("upload-receipt-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 // Modal elements
 const receiptModal = document.getElementById("receipt-modal");
@@ -144,13 +145,6 @@ async function searchBusinesses(query) {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadTrending();
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
 
     // Modal
     uploadBtn.addEventListener("click", () => receiptModal.classList.add("active"));
