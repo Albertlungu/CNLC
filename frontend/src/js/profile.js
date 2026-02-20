@@ -1,4 +1,10 @@
-import { getSession, requireAuth, logout, getUserProfile, upgradeToBusinessOwner } from "./api-client.js";
+import {
+    getSession, requireAuth, logout,
+    getUserProfile, updateProfile, upgradeToBusinessOwner,
+    getFriends, removeFriend as apiRemoveFriend,
+    getNotifications, markNotificationRead,
+    searchUsers, sendFriendRequest
+} from "./api-client.js";
 import { initNavbar } from "./components/navbar.js";
 
 // Check authentication
@@ -50,25 +56,41 @@ async function initProfile() {
                     month: 'short', 
                     year: 'numeric' 
                 });
+            } else {
+                memberSince.textContent = "N/A";
             }
             
+            // Extract nested profile/location fields
+            const firstName = (user.profile && user.profile.firstName) || user.firstName || "";
+            const lastName = (user.profile && user.profile.lastName) || user.lastName || "";
+            const city = (user.location && user.location.city) || user.city || "";
+            const country = (user.location && user.location.country) || user.country || "";
+            
             // Populate form
-            document.getElementById("firstName").value = user.firstName || "";
-            document.getElementById("lastName").value = user.lastName || "";
+            document.getElementById("firstName").value = firstName;
+            document.getElementById("lastName").value = lastName;
             document.getElementById("email").value = user.email || "";
             document.getElementById("phone").value = user.phone || "";
             document.getElementById("address").value = user.address || "";
-            document.getElementById("city").value = user.city || "";
+            document.getElementById("city").value = city;
             document.getElementById("province").value = user.province || "";
             document.getElementById("postalCode").value = user.postalCode || "";
-            document.getElementById("country").value = user.country || "";
+            document.getElementById("country").value = country;
             
             // Store original data
             storeOriginalFormData();
             
-            // Load profile picture if available
+            // Profile picture / initials
+            const profileInitials = document.getElementById("profileInitials");
             if (user.profilePicture) {
                 profilePicture.src = user.profilePicture;
+                profilePicture.style.display = "block";
+                if (profileInitials) profileInitials.style.display = "none";
+            } else if (profileInitials) {
+                const initials = ((firstName.charAt(0) || "") + (lastName.charAt(0) || "")).toUpperCase() || (username.charAt(0) || "?").toUpperCase();
+                profileInitials.textContent = initials;
+                profileInitials.style.display = "flex";
+                profilePicture.style.display = "none";
             }
         }
         
@@ -97,22 +119,11 @@ function storeOriginalFormData() {
 profilePictureInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (file) {
-        // Preview the image
         const reader = new FileReader();
         reader.onload = function(e) {
             profilePicture.src = e.target.result;
         };
         reader.readAsDataURL(file);
-        
-        // In a real implementation, upload to server here
-        // const formData = new FormData();
-        // formData.append("profilePicture", file);
-        // const response = await fetch(`/api/users/${userId}/profile-picture`, {
-        //     method: "POST",
-        //     body: formData
-        // });
-        
-        alert("Profile picture updated! (Note: Upload to server would happen here)");
     }
 });
 
@@ -121,7 +132,7 @@ profileForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     
     const formData = new FormData(profileForm);
-    const profileData = {
+    const fields = {
         firstName: formData.get("firstName"),
         lastName: formData.get("lastName"),
         phone: formData.get("phone"),
@@ -133,19 +144,14 @@ profileForm.addEventListener("submit", async (e) => {
     };
     
     try {
-        // In a real implementation, send to server
-        // const response = await fetch(`http://127.0.0.1:5001/api/users/${userId}`, {
-        //     method: "PUT",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(profileData)
-        // });
-        
-        alert("Profile updated successfully!");
-        storeOriginalFormData();
-        
-        // Update display name
-        displayUsername.textContent = `${profileData.firstName} ${profileData.lastName}`.trim() || username;
-        
+        const result = await updateProfile(username, fields);
+        if (result.status === "success") {
+            alert("Profile updated successfully!");
+            storeOriginalFormData();
+            displayUsername.textContent = `${fields.firstName} ${fields.lastName}`.trim() || username;
+        } else {
+            alert(result.message || "Error saving profile changes");
+        }
     } catch (error) {
         console.error("Error saving profile:", error);
         alert("Error saving profile changes");
@@ -167,33 +173,17 @@ cancelBtn.addEventListener("click", () => {
 // Load friends list
 async function loadFriends() {
     try {
-        // Mock friends data - replace with actual API call
-        const mockFriends = [
-            {
-                id: 1,
-                username: "sarah_johnson",
-                email: "sarah@example.com",
-                friendsSince: "2023-08-15"
-            },
-            {
-                id: 2,
-                username: "mike_chen",
-                email: "mike@example.com",
-                friendsSince: "2023-11-22"
-            },
-            {
-                id: 3,
-                username: "emma_davis",
-                email: "emma@example.com",
-                friendsSince: "2024-01-10"
-            }
-        ];
+        const result = await getFriends(userId);
+        const friends = (result.status === "success" && result.friends) ? result.friends : [];
         
-        // In real implementation:
-        // const response = await fetch(`http://127.0.0.1:5001/api/friends?user_id=${userId}`);
-        // const friends = await response.json();
+        // Map backend shape to display shape
+        const mapped = friends.map(f => ({
+            id: f.friendshipId,
+            username: f.friendUsername || "Unknown",
+            friendsSince: f.since || new Date().toISOString()
+        }));
         
-        displayFriends(mockFriends);
+        displayFriends(mapped);
     } catch (error) {
         console.error("Error loading friends:", error);
         friendsList.innerHTML = '<p class="empty-text">Error loading friends</p>';
@@ -234,13 +224,12 @@ function displayFriends(friends) {
 window.removeFriend = async function(friendId) {
     if (confirm("Are you sure you want to remove this friend?")) {
         try {
-            // In real implementation:
-            // await fetch(`http://127.0.0.1:5001/api/friends/${friendId}?user_id=${userId}`, {
-            //     method: "DELETE"
-            // });
-            
-            alert("Friend removed");
-            loadFriends();
+            const result = await apiRemoveFriend(friendId, userId);
+            if (result.status === "success") {
+                loadFriends();
+            } else {
+                alert(result.message || "Error removing friend");
+            }
         } catch (error) {
             console.error("Error removing friend:", error);
             alert("Error removing friend");
@@ -251,54 +240,27 @@ window.removeFriend = async function(friendId) {
 // Load notifications
 async function loadNotifications(filter = "all") {
     try {
-        // Mock notifications data - replace with actual API call
-        const mockNotifications = [
-            {
-                id: 1,
-                type: "reservation",
-                title: "Reservation Confirmed",
-                message: "Your table for 4 at Luigi's Italian Restaurant is confirmed",
-                business: "Luigi's Italian Restaurant",
-                date: "Feb 15, 2026 at 7:00 PM",
-                time: "2 hours ago",
-                actions: ["confirm", "view"]
-            },
-            {
-                id: 2,
-                type: "deal",
-                title: "New Deal Available",
-                message: "50% off appetizers at The Sushi Place",
-                business: "The Sushi Place",
-                expiresAt: "Valid until Feb 10, 2026",
-                time: "5 hours ago",
-                actions: ["view", "dismiss"]
-            },
-            {
-                id: 3,
-                type: "event",
-                title: "Upcoming Event",
-                message: "Live Jazz Night this Friday",
-                business: "Blue Note Café",
-                date: "Feb 7, 2026 at 8:00 PM",
-                time: "1 day ago",
-                actions: ["view", "dismiss"]
-            },
-            {
-                id: 4,
-                type: "reservation",
-                title: "Reservation Reminder",
-                message: "Don't forget your reservation tomorrow!",
-                business: "Thai Spice Kitchen",
-                date: "Feb 2, 2026 at 6:30 PM",
-                time: "6 hours ago",
-                actions: ["confirm", "view"]
-            }
-        ];
+        const result = await getNotifications(userId);
+        let notifications = [];
+        
+        if (result.status === "success" && result.notifications) {
+            notifications = result.notifications.map(n => ({
+                id: n.id,
+                type: n.type || "event",
+                title: n.title || "Notification",
+                message: n.message || "",
+                business: n.businessName || "",
+                date: n.date || "",
+                time: n.createdAt ? timeAgo(n.createdAt) : "",
+                read: n.read || false,
+                actions: n.read ? ["dismiss"] : ["view", "dismiss"]
+            }));
+        }
         
         // Filter notifications
-        let filteredNotifications = mockNotifications;
+        let filteredNotifications = notifications;
         if (filter !== "all") {
-            filteredNotifications = mockNotifications.filter(n => {
+            filteredNotifications = notifications.filter(n => {
                 if (filter === "reservations") return n.type === "reservation";
                 if (filter === "deals") return n.type === "deal";
                 if (filter === "events") return n.type === "event";
@@ -309,8 +271,21 @@ async function loadNotifications(filter = "all") {
         displayNotifications(filteredNotifications);
     } catch (error) {
         console.error("Error loading notifications:", error);
-        notificationsList.innerHTML = '<p class="empty-text">Error loading notifications</p>';
+        notificationsList.innerHTML = '<p class="empty-text">No notifications yet</p>';
     }
+}
+
+function timeAgo(dateStr) {
+    const now = new Date();
+    const past = new Date(dateStr);
+    const diffMs = now - past;
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return "just now";
+    if (diffMins < 60) return `${diffMins} min ago`;
+    const diffHrs = Math.floor(diffMins / 60);
+    if (diffHrs < 24) return `${diffHrs} hour${diffHrs > 1 ? "s" : ""} ago`;
+    const diffDays = Math.floor(diffHrs / 24);
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
 }
 
 // Display notifications
@@ -359,16 +334,20 @@ function displayNotifications(notifications) {
 
 // Handle notification actions
 window.handleNotificationAction = async function(notificationId, action) {
-    if (action === "confirm") {
-        alert("Reservation confirmed!");
-        // In real implementation: update server
-    } else if (action === "view") {
-        alert("Viewing details... (would navigate to business/event page)");
-        // In real implementation: navigate to relevant page
+    if (action === "view") {
+        // Mark as read, then stay on page (notification details are inline)
+        try {
+            await markNotificationRead(notificationId);
+        } catch (e) {
+            console.error("Error marking notification read:", e);
+        }
+        loadNotifications(currentFilter);
     } else if (action === "dismiss") {
-        if (confirm("Dismiss this notification?")) {
-            // In real implementation: mark as read on server
+        try {
+            await markNotificationRead(notificationId);
             loadNotifications(currentFilter);
+        } catch (e) {
+            console.error("Error dismissing notification:", e);
         }
     }
 };
@@ -406,24 +385,23 @@ inviteForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     
     const friendEmail = document.getElementById("friendEmail").value;
-    const message = document.getElementById("inviteMessage").value;
     
     try {
-        // In real implementation: send invite via API
-        // const response = await fetch("http://127.0.0.1:5001/api/friends/invite", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //         fromUserId: userId,
-        //         toEmail: friendEmail,
-        //         message: message
-        //     })
-        // });
-        
-        alert(`Invitation sent to ${friendEmail}!`);
-        inviteModal.classList.remove("show");
-        inviteForm.reset();
-        
+        // Search for the user by email/username first
+        const searchResult = await searchUsers(friendEmail, userId);
+        if (searchResult.status === "success" && searchResult.users && searchResult.users.length > 0) {
+            const targetUser = searchResult.users[0];
+            const reqResult = await sendFriendRequest(userId, targetUser.id);
+            if (reqResult.status === "success") {
+                alert(`Friend request sent to ${targetUser.username}!`);
+                inviteModal.classList.remove("show");
+                inviteForm.reset();
+            } else {
+                alert(reqResult.message || "Could not send friend request.");
+            }
+        } else {
+            alert("No user found with that email/username. They may need to create an account first.");
+        }
     } catch (error) {
         console.error("Error sending invite:", error);
         alert("Error sending invitation");
@@ -436,9 +414,9 @@ setupUpgradeSection();
 
 function setupUpgradeSection() {
     const section = document.getElementById("upgrade-section");
-    const btn = document.getElementById("upgradeBtn");
+    const upgradeForm = document.getElementById("upgradeForm");
     const statusEl = document.getElementById("upgradeStatus");
-    if (!section || !btn) return;
+    if (!section || !upgradeForm) return;
 
     // Show section only for non-business users
     const roles = session.roles || ["user"];
@@ -448,34 +426,53 @@ function setupUpgradeSection() {
     }
     section.style.display = "block";
 
-    btn.addEventListener("click", async () => {
+    upgradeForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById("upgradeBtn");
         btn.disabled = true;
-        btn.textContent = "Upgrading...";
+        btn.textContent = "Verifying...";
         statusEl.textContent = "";
 
+        const bizName = document.getElementById("bizName").value.trim();
+        const bizAddress = document.getElementById("bizAddress").value.trim();
+        const bizPhone = document.getElementById("bizPhone").value.trim();
+        const bizCategory = document.getElementById("bizCategory").value;
         const bizIdInput = document.getElementById("upgradeBizId");
         const bizId = bizIdInput ? parseInt(bizIdInput.value) || null : null;
 
+        if (!bizName || !bizAddress || !bizPhone || !bizCategory) {
+            statusEl.textContent = "Please fill in all required fields.";
+            statusEl.style.color = "#c0392b";
+            btn.disabled = false;
+            btn.textContent = "Verify & Upgrade";
+            return;
+        }
+
         try {
-            const result = await upgradeToBusinessOwner(userId, null, bizId);
+            const result = await upgradeToBusinessOwner(userId, bizName, bizId, {
+                address: bizAddress,
+                phone: bizPhone,
+                category: bizCategory
+            });
             if (result.status === "success") {
-                statusEl.textContent = "Account upgraded successfully! Reloading...";
+                statusEl.textContent = "Business verified! Your account has been upgraded. Reloading...";
                 statusEl.style.color = "#27ae60";
                 // Update session
                 const updatedSession = { ...session, roles: result.user.roles, businessId: result.user.businessId };
                 localStorage.setItem("session", JSON.stringify(updatedSession));
                 setTimeout(() => window.location.reload(), 1500);
             } else {
-                statusEl.textContent = result.message || "Upgrade failed.";
+                statusEl.textContent = result.message || "Verification failed.";
                 statusEl.style.color = "#c0392b";
                 btn.disabled = false;
-                btn.textContent = "Upgrade My Account";
+                btn.textContent = "Verify & Upgrade";
             }
         } catch (err) {
             statusEl.textContent = "Error: " + (err.message || "Unknown error");
             statusEl.style.color = "#c0392b";
             btn.disabled = false;
-            btn.textContent = "Upgrade My Account";
+            btn.textContent = "Verify & Upgrade";
         }
     });
 }

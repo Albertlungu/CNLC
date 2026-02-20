@@ -21,6 +21,7 @@ from backend.api.routes import (
     friends_bp,
     media_bp,
     notifications_bp,
+    recommendations_bp,
     reservations_bp,
     reviews_bp,
     saved_bp,
@@ -28,7 +29,6 @@ from backend.api.routes import (
     sessions_bp,
     trending_bp,
     users_bp,
-    recommendations_bp,
     verification_bp,
 )
 from config.config import PROJECT_ROOT
