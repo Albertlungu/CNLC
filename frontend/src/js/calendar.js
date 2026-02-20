@@ -216,7 +216,7 @@ function showDayEvents(date) {
 
     eventsList.innerHTML = dayEvents.map(e => {
         const time = e.allDay ? "All day" : formatTime(e.start);
-        const sourceLabel = e.source === "google" ? "Google Calendar" : "CNLC Reservation";
+        const sourceLabel = e.source === "google" ? "Google Calendar" : "Discovereye Reservation";
         const sourceClass = e.source;
 
         let actions = "";
@@ -227,7 +227,7 @@ function showDayEvents(date) {
                     <button class="event-delete-btn" data-event-id="${e.id}">Delete</button>
                 </div>
             `;
-        } else if (e.source === "cnlc" && isGoogleConnected) {
+        } else if (e.source === "discovereye" && isGoogleConnected) {
             actions = `<button class="event-add-to-gcal" data-title="${escapeAttr(e.title)}" data-start="${e.start}">Add to GCal</button>`;
         }
 
@@ -289,7 +289,7 @@ function showDayEvents(date) {
             btn.disabled = true;
             try {
                 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                await createCalendarEvent(userId, title, date, time, endTime, "Added from CNLC", tz);
+                await createCalendarEvent(userId, title, date, time, endTime, "Added from Discovereye", tz);
                 btn.textContent = "Added";
                 await fetchEvents();
                 renderCalendar();

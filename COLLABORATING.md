@@ -15,7 +15,7 @@ I have created the branches for each of us. To see branches, go to the [GitHub r
 
 When cloning a repository, it automatically puts you on the main branch. To switch to your branch:
 ```bash
-git clone https://github.com/Albertlungu/CNLC.git # This clones the repository into the directory that your terminal currently is at
+git clone https://github.com/Albertlungu/CNLC.git # This clones the Discovereye repository into the directory that your terminal currently is at
 git checkout -t origin/<your-branch> # Put your branch name here
 ```
 Once you make your first change, you must stage it, and make a meaningful commit message (try to use prefixes, which I have put for you in `./for_teammates`):

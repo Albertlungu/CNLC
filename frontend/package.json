@@ -1,7 +1,7 @@
 {
-  "name": "cnlc",
+  "name": "discovereye",
   "version": "1.0.0",
-  "description": "Community Neighbourhood Local Commerce - Electron App",
+  "description": "Discovereye - Electron App",
   "main": "main.js",
   "scripts": {
     "start": "electron ."

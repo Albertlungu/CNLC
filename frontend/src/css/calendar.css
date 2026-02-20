@@ -213,7 +213,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.day-event.cnlc {
+.day-event.discovereye {
     background: rgba(255, 102, 0, 0.1);
     color: #ff6600;
 }
@@ -283,7 +283,7 @@ body {
     margin-top: 2px;
 }
 
-.event-source.cnlc { color: #ff6600; }
+.event-source.discovereye { color: #ff6600; }
 .event-source.google { color: #4285f4; }
 
 .event-add-to-gcal {

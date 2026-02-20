@@ -64,7 +64,7 @@ def oauth_callback() -> Response:
 
 @calendar_bp.route("/events", methods=["GET"])
 def get_events() -> Response:
-    """Get merged Google Calendar events + CNLC reservations for a month."""
+    """Get merged Google Calendar events + Discovereye reservations for a month."""
     user_id = request.args.get("user_id", type=int)
     month = request.args.get("month")  # Format: YYYY-MM
 
@@ -106,7 +106,7 @@ def get_events() -> Response:
     except Exception:
         pass
 
-    # Fetch CNLC reservations
+    # Fetch Discovereye reservations
     try:
         reservations = get_user_reservations(user_id)
         for r in reservations:
@@ -117,7 +117,7 @@ def get_events() -> Response:
                     "start": f"{r.get('date')}T{r.get('time')}",
                     "end": None,
                     "allDay": False,
-                    "source": "cnlc",
+                    "source": "discovereye",
                     "status": r.get("status"),
                     "reservationData": r,
                 }

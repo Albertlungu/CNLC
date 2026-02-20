@@ -33,7 +33,7 @@ function initWidget() {
                 <div class="agent-widget-header-left">
                     <div class="agent-widget-avatar">AI</div>
                     <div>
-                        <div class="agent-widget-title">CNLC Assistant</div>
+                        <div class="agent-widget-title">Discovereye Assistant</div>
                         <div class="agent-widget-status">Online</div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ function initWidget() {
             </div>
             <div class="agent-widget-messages" id="agent-widget-messages">
                 <div class="agent-widget-msg agent-widget-msg-agent">
-                    <div class="agent-widget-msg-content">Hi! I'm the CNLC assistant. How can I help you today?</div>
+                    <div class="agent-widget-msg-content">Hi! I'm the Discovereye assistant. How can I help you today?</div>
                 </div>
             </div>
             <div class="agent-widget-typing" id="agent-widget-typing" style="display:none;">
