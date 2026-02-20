@@ -1,6 +1,6 @@
 python -m venv venv
 source venv/bin/activate
-which python # Should return something like ../../CNLC/venv/bin/python
+which python # Should return something like ../../Discovereye/venv/bin/python
 echo "Virtual environment created and activated."
 
 

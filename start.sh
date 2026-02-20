@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# CNLC Application Start Script
+# Discovereye Application Start Script
 # Starts both the Flask backend API and frontend server
 
 set -e
@@ -70,7 +70,7 @@ if check_port $FRONTEND_PORT; then
     exit 1
 fi
 
-echo -e "${GREEN}Starting CNLC Application...${NC}"
+echo -e "${GREEN}Starting Discovereye Application...${NC}"
 echo "========================================"
 
 # Activate virtual environment

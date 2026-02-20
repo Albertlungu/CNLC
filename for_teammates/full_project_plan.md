@@ -1,7 +1,7 @@
-# CNLC Full Project Plan
+# Discovereye Full Project Plan
 
 ## Project Overview
-CNLC (Canadian Non-chain Local Catalog) is a desktop application for discovering local, non-chain businesses in Canadian cities. Built with Python Flask backend and Electron frontend.
+Discovereye is a desktop application for discovering local, non-chain businesses in Canadian cities. Built with Python Flask backend and Electron frontend.
 
 ## Phase 4: Deals & Coupons 💰 PLANNED
 
