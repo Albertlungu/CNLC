@@ -1,4 +1,4 @@
-const CACHE_NAME = "cnlc-v14";
+const CACHE_NAME = "discovereye-v14";
 const STATIC_ASSETS = [
     "/agent.html",
     "/businesses.html",

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# CNLC Application Stop Script
+# Discovereye Application Stop Script
 # Stops both the Flask backend API and frontend server
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,7 +13,7 @@ NC='\033[0m'
 BACKEND_PID_FILE="$SCRIPT_DIR/.backend.pid"
 FRONTEND_PID_FILE="$SCRIPT_DIR/.frontend.pid"
 
-echo -e "${YELLOW}Stopping CNLC servers...${NC}"
+echo -e "${YELLOW}Stopping Discovereye servers...${NC}"
 
 if [ -f "$BACKEND_PID_FILE" ]; then
     kill $(cat "$BACKEND_PID_FILE") 2>/dev/null && echo "Backend server stopped." || echo "Backend server was not running."

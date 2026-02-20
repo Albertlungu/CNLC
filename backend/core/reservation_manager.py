@@ -91,10 +91,9 @@ def get_upcoming_reservations(user_id: int) -> list[dict]:
     reservations = _load_reservations()
     now = datetime.utcnow().isoformat()[:10]
     return [
-        r for r in reservations
-        if r["userId"] == user_id
-        and r["status"] == "confirmed"
-        and r["date"] >= now
+        r
+        for r in reservations
+        if r["userId"] == user_id and r["status"] == "confirmed" and r["date"] >= now
     ]
 
 
@@ -108,10 +107,12 @@ def check_reminders(user_id: int) -> list[dict]:
     due = []
 
     for r in reservations:
-        if (r["userId"] == user_id
-                and r["status"] == "confirmed"
-                and not r.get("reminderSent", False)
-                and now_str <= r["date"] <= tomorrow_str):
+        if (
+            r["userId"] == user_id
+            and r["status"] == "confirmed"
+            and not r.get("reminderSent", False)
+            and now_str <= r["date"] <= tomorrow_str
+        ):
             r["reminderSent"] = True
             due.append(r)
 
@@ -129,7 +130,9 @@ def generate_ics(reservation: dict) -> str:
 
     # Assume 1 hour duration
     try:
-        start = datetime.strptime(f"{reservation['date']} {reservation['time']}", "%Y-%m-%d %H:%M")
+        start = datetime.strptime(
+            f"{reservation['date']} {reservation['time']}", "%Y-%m-%d %H:%M"
+        )
         end = start + timedelta(hours=1)
         dtend = end.strftime("%Y%m%dT%H%M00")
     except ValueError:
@@ -138,13 +141,13 @@ def generate_ics(reservation: dict) -> str:
     return (
         "BEGIN:VCALENDAR\r\n"
         "VERSION:2.0\r\n"
-        "PRODID:-//CNLC//Reservation//EN\r\n"
+        "PRODID:-//Discovereye//Reservation//EN\r\n"
         "BEGIN:VEVENT\r\n"
         f"DTSTART:{dtstart}\r\n"
         f"DTEND:{dtend}\r\n"
         f"SUMMARY:Reservation at {reservation.get('businessName', 'Business')}\r\n"
         f"DESCRIPTION:Party size: {reservation.get('partySize', 1)}. {reservation.get('notes', '')}\r\n"
-        f"UID:{reservation['reservationId']}@cnlc\r\n"
+        f"UID:{reservation['reservationId']}@discovereye\r\n"
         "END:VEVENT\r\n"
         "END:VCALENDAR\r\n"
     )

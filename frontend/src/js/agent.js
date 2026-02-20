@@ -23,11 +23,11 @@ const chatSidebar = document.getElementById("chat-sidebar");
 
 // ==================== Multi-chat storage ====================
 
-const CHATS_INDEX_KEY = `cnlc-chats-${userId}`;
-const ACTIVE_CHAT_KEY = `cnlc-active-chat-${userId}`;
+const CHATS_INDEX_KEY = `discovereye-chats-${userId}`;
+const ACTIVE_CHAT_KEY = `discovereye-active-chat-${userId}`;
 
 // Each chat: { id, title, agentSessionId, updatedAt }
-// Messages stored at: cnlc-chat-msgs-{chatId}
+// Messages stored at: discovereye-chat-msgs-{chatId}
 
 let chatsIndex = []; // sorted newest first
 let activeChatId = null;
@@ -52,8 +52,8 @@ function saveChatsIndex() {
 
 function migrateOldHistory() {
     // Migrate from old single-chat storage to new multi-chat format
-    const oldHistoryKey = `cnlc-agent-history-${userId}`;
-    const oldSessionKey = `cnlc-agent-session-${userId}`;
+    const oldHistoryKey = `discovereye-agent-history-${userId}`;
+    const oldSessionKey = `discovereye-agent-session-${userId}`;
     const oldHistory = localStorage.getItem(oldHistoryKey);
     const oldSession = localStorage.getItem(oldSessionKey);
 
@@ -75,7 +75,7 @@ function migrateOldHistory() {
             updatedAt: new Date().toISOString(),
         };
 
-        localStorage.setItem(`cnlc-chat-msgs-${chatId}`, JSON.stringify(entries));
+        localStorage.setItem(`discovereye-chat-msgs-${chatId}`, JSON.stringify(entries));
         chatsIndex.push(chat);
         saveChatsIndex();
 
@@ -87,7 +87,7 @@ function migrateOldHistory() {
 
 function loadChatMessages(chatId) {
     try {
-        const raw = localStorage.getItem(`cnlc-chat-msgs-${chatId}`);
+        const raw = localStorage.getItem(`discovereye-chat-msgs-${chatId}`);
         return raw ? JSON.parse(raw) : [];
     } catch (e) {
         return [];
@@ -96,11 +96,11 @@ function loadChatMessages(chatId) {
 
 function saveChatMessages(chatId, messages) {
     try {
-        localStorage.setItem(`cnlc-chat-msgs-${chatId}`, JSON.stringify(messages));
+        localStorage.setItem(`discovereye-chat-msgs-${chatId}`, JSON.stringify(messages));
     } catch (e) {
         if (messages.length > 20) {
             const trimmed = messages.slice(-20);
-            try { localStorage.setItem(`cnlc-chat-msgs-${chatId}`, JSON.stringify(trimmed)); } catch (_) {}
+            try { localStorage.setItem(`discovereye-chat-msgs-${chatId}`, JSON.stringify(trimmed)); } catch (_) {}
         }
     }
 }
@@ -128,7 +128,7 @@ function saveHistory() {
 function deleteChat(chatId) {
     chatsIndex = chatsIndex.filter(c => c.id !== chatId);
     saveChatsIndex();
-    localStorage.removeItem(`cnlc-chat-msgs-${chatId}`);
+    localStorage.removeItem(`discovereye-chat-msgs-${chatId}`);
 
     if (activeChatId === chatId) {
         if (chatsIndex.length > 0) {

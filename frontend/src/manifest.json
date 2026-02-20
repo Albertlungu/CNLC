@@ -1,6 +1,6 @@
 {
-    "name": "CNLC - Community Neighbourhood Local Commerce",
-    "short_name": "CNLC",
+    "name": "Discovereye",
+    "short_name": "Discovereye",
     "description": "Discover and support local businesses in your community",
     "start_url": "/businesses.html",
     "display": "standalone",
