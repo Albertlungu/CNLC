@@ -511,6 +511,15 @@ export async function getUserProfile(username) {
     return await response.json();
 }
 
+export async function updateProfile(username, fields) {
+    const response = await fetch("http://127.0.0.1:5001/api/auth/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, fields }),
+    });
+    return await response.json();
+}
+
 // ==================== Reservations API ====================
 
 export async function createReservation(userId, businessId, businessName, date, time, partySize, notes = null) {
@@ -755,10 +764,15 @@ export async function getBlogFeed(limit = 20, offset = 0, tag = null) {
 
 // ==================== User Upgrade API ====================
 
-export async function upgradeToBusinessOwner(userId, businessName = null, businessId = null) {
+export async function upgradeToBusinessOwner(userId, businessName = null, businessId = null, businessDetails = null) {
     const body = { userId };
     if (businessName) body.businessName = businessName;
     if (businessId) body.businessId = businessId;
+    if (businessDetails) {
+        if (businessDetails.address) body.businessAddress = businessDetails.address;
+        if (businessDetails.phone) body.businessPhone = businessDetails.phone;
+        if (businessDetails.category) body.businessCategory = businessDetails.category;
+    }
     const response = await fetch(`http://127.0.0.1:5001/api/user/${userId}/upgrade-to-business`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -1,4 +1,4 @@
-import { requireAuth, logout, getSession, getDeals, createDeal, deleteDeal, scrapeDeals, filterBusinesses, getBusinessById } from "./api-client.js";
+import { requireAuth, logout, getSession, getDeals, createDeal, deleteDeal, scrapeDeals, filterBusinesses, getBusinessById, isBusinessOwner } from "./api-client.js";
 import { initNotifications } from "./notifications.js";
 import { initNavbar } from "./components/navbar.js";
 
@@ -10,6 +10,7 @@ initNavbar("deals");
 
 const session = getSession();
 const userId = session.userId;
+const userIsBizOwner = isBusinessOwner();
 
 const dealsGrid = document.getElementById("deals-grid");
 const createDealBtn = document.getElementById("create-deal-btn");
@@ -86,21 +87,23 @@ async function createDealCard(deal) {
             <span class="deal-source">${deal.source === "scraped" && deal.sourceUrl ? `<a href="${deal.sourceUrl}" target="_blank">Source</a>` : deal.source}</span>
             ${expiresText ? `<span class="deal-expires">${expiresText}</span>` : ""}
         </div>
-        <div class="deal-actions">
+        ${userIsBizOwner ? `<div class="deal-actions">
             <button class="deal-delete-btn" data-deal-id="${deal.dealId}">Remove</button>
-        </div>
+        </div>` : ""}
     `;
 
-    const deleteBtn = card.querySelector(".deal-delete-btn");
-    deleteBtn.addEventListener("click", async () => {
-        const result = await deleteDeal(deal.dealId);
-        if (result.status === "success") {
-            card.remove();
-            if (dealsGrid.children.length === 0) {
-                dealsGrid.innerHTML = '<div class="no-deals">No deals available yet.</div>';
+    if (userIsBizOwner) {
+        const deleteBtn = card.querySelector(".deal-delete-btn");
+        deleteBtn.addEventListener("click", async () => {
+            const result = await deleteDeal(deal.dealId);
+            if (result.status === "success") {
+                card.remove();
+                if (dealsGrid.children.length === 0) {
+                    dealsGrid.innerHTML = '<div class="no-deals">No deals available yet.</div>';
+                }
             }
-        }
-    });
+        });
+    }
 
     return card;
 }
@@ -147,6 +150,12 @@ async function searchBusinesses(query, resultsContainer, onSelect) {
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
+
+    // Hide business-only controls for regular users
+    if (!userIsBizOwner) {
+        createDealBtn.style.display = "none";
+        fetchDealsBtn.style.display = "none";
+    }
 
     // Create Deal Modal
     createDealBtn.addEventListener("click", () => createModal.classList.add("active"));

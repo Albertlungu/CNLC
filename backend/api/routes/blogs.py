@@ -34,12 +34,24 @@ def create_post() -> Response:
     cover_image = data.get("coverImage")
 
     if not all([user_id, business_id, title, content]):
-        return make_response(jsonify({"status": "error", "message": "Missing required fields."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "Missing required fields."}), 400
+        )
 
     if not _check_business_owner(user_id, business_id):
-        return make_response(jsonify({"status": "error", "message": "Not authorized to post for this business."}), 403)
+        return make_response(
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Not authorized to post for this business.",
+                }
+            ),
+            403,
+        )
 
-    post = blog_manager.create_post(business_id, user_id, title, content, tags, cover_image)
+    post = blog_manager.create_post(
+        business_id, user_id, title, content, tags, cover_image
+    )
     return make_response(jsonify({"status": "success", "post": post}), 201)
 
 
@@ -55,7 +67,9 @@ def get_posts() -> Response:
 def get_post(post_id: int) -> Response:
     post = blog_manager.get_post_by_id(post_id)
     if not post:
-        return make_response(jsonify({"status": "error", "message": "Post not found."}), 404)
+        return make_response(
+            jsonify({"status": "error", "message": "Post not found."}), 404
+        )
     return jsonify({"post": post})
 
 
@@ -64,11 +78,14 @@ def update_post(post_id: int) -> Response:
     data = request.json or {}
     user_id = data.get("userId")
     if not user_id:
-        return make_response(jsonify({"status": "error", "message": "userId required."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "userId required."}), 400
+        )
 
     try:
         post = blog_manager.update_post(
-            post_id, user_id,
+            post_id,
+            user_id,
             title=data.get("title"),
             content=data.get("content"),
             tags=data.get("tags"),
@@ -82,7 +99,9 @@ def update_post(post_id: int) -> Response:
 def delete_post(post_id: int) -> Response:
     user_id = request.args.get("user_id", type=int)
     if not user_id:
-        return make_response(jsonify({"status": "error", "message": "user_id required."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "user_id required."}), 400
+        )
 
     try:
         blog_manager.delete_post(post_id, user_id)
@@ -99,11 +118,14 @@ def get_feed() -> Response:
     tag = request.args.get("tag", type=str)
     posts = blog_manager.get_posts(business_id=None, limit=limit + offset)
     if tag:
-        posts = [p for p in posts if tag.lower() in [t.lower() for t in p.get("tags", [])]]
-    posts = posts[offset:offset + limit]
+        posts = [
+            p for p in posts if tag.lower() in [t.lower() for t in p.get("tags", [])]
+        ]
+    posts = posts[offset : offset + limit]
 
     # Enrich with business names
     import backend.storage.json_handler as jh
+
     businesses = {b["id"]: b["name"] for b in jh.load_businesses()}
     for p in posts:
         p["businessName"] = businesses.get(p.get("businessId"), "Unknown")
@@ -114,15 +136,21 @@ def get_feed() -> Response:
 @blogs_bp.route("/upload-image", methods=["POST"])
 def upload_image() -> Response:
     if "file" not in request.files:
-        return make_response(jsonify({"status": "error", "message": "No file provided."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "No file provided."}), 400
+        )
 
     file = request.files["file"]
     if not file.filename:
-        return make_response(jsonify({"status": "error", "message": "No file selected."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "No file selected."}), 400
+        )
 
     ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
     if ext not in ALLOWED_IMAGE_EXT:
-        return make_response(jsonify({"status": "error", "message": f"File type not allowed."}), 400)
+        return make_response(
+            jsonify({"status": "error", "message": "File type not allowed."}), 400
+        )
 
     os.makedirs(str(BLOG_UPLOAD_DIR), exist_ok=True)
     filename = f"{uuid.uuid4().hex}.{ext}"

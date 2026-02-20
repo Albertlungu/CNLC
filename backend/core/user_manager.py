@@ -125,12 +125,20 @@ def edit_user(
     for user in users:
         if user["username"] == username:
             user_exists = True
-            if field == "firstName" or field == "lastName":  # If in profile sub-dict
+            # Nested profile fields
+            if field in ("firstName", "lastName"):
+                if "profile" not in user:
+                    user["profile"] = {}
                 user["profile"][field] = new_value
-            elif field == "country" or field == "city":  # If in location sub-dict
+            # Nested location fields
+            elif field in ("country", "city"):
+                if "location" not in user:
+                    user["location"] = {}
                 user["location"][field] = new_value
-            elif field == "password_hash":  # If modifying password, must encrypt first
+            # Password must be hashed
+            elif field == "password_hash":
                 user["password_hash"] = pw.hash_password(new_value)
+            # All other fields go top-level (phone, address, province, postalCode, etc.)
             else:
                 user[field] = new_value
             break
@@ -241,7 +249,9 @@ def get_user_role(user_id: int, users: Optional[list[dict]] = None) -> list[str]
     return ["user"]
 
 
-def is_business_owner(user_id: int, business_id: int, users: Optional[list[dict]] = None) -> bool:
+def is_business_owner(
+    user_id: int, business_id: int, users: Optional[list[dict]] = None
+) -> bool:
     """Check if a user owns (is linked to) a specific business."""
     user = get_user_by_id(user_id, users)
     if not user:

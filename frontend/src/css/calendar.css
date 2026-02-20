@@ -1,5 +1,20 @@
 /* Calendar Page Styles */
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
 .calendar-container {
     max-width: 900px;
     margin: 30px auto;
