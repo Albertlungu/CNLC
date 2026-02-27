@@ -1,26 +1,26 @@
 [
     {
+        "businessId": 67972684,
+        "totalSpent": 2046.0,
+        "points": 330.19,
+        "receiptCount": 124
+    },
+    {
+        "businessId": 11057576996,
+        "totalSpent": 130892.57,
+        "points": 1158.13,
+        "receiptCount": 987
+    },
+    {
+        "businessId": 4779808529,
+        "totalSpent": 3820.0,
+        "points": 452.4,
+        "receiptCount": 48
+    },
+    {
         "businessId": 192375715,
-        "totalSpent": 67000.0,
-        "points": 1024.2,
-        "receiptCount": 1
-    },
-    {
-        "businessId": 1109955206,
-        "totalSpent": 9.458673986759848e+17,
-        "points": 7079.88,
-        "receiptCount": 1
-    },
-    {
-        "businessId": 7553898543,
-        "totalSpent": 20.0,
-        "points": 0.25,
-        "receiptCount": 1
-    },
-    {
-        "businessId": 8477771163,
-        "totalSpent": 670.0,
-        "points": 133.65,
-        "receiptCount": 1
+        "totalSpent": 68233.4,
+        "points": 1024.9,
+        "receiptCount": 102
     }
 ]

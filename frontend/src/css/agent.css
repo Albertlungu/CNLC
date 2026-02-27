@@ -16,6 +16,19 @@ body.agent-page .theme-toggle {
     display: none;
 }
 
+/* Ensure TTS and Voice Control buttons remain visible on the agent page */
+body.agent-page .tts-btn,
+body.agent-page .voice-control-btn,
+body.agent-page .tts-control-bar,
+body.agent-page .tts-feedback,
+body.agent-page .voice-feedback,
+body.agent-page .voice-indicator,
+body.agent-page .command-palette {
+    position: fixed;
+    clip: auto;
+    overflow: visible;
+}
+
 /* ========== Agent layout ========== */
 
 .agent-layout {
@@ -46,6 +59,7 @@ body.agent-page .theme-toggle {
     margin: 16px 14px 12px;
     padding: 10px 16px;
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 10px;
@@ -199,11 +213,13 @@ body.agent-page .theme-toggle {
 .chat-glow-left {
     left: 0;
     background: linear-gradient(to right, rgba(255, 102, 0, 0.06), transparent);
+    background: rgba(255, 102, 0, 0.06);
 }
 
 .chat-glow-right {
     right: 0;
     background: linear-gradient(to left, rgba(255, 102, 0, 0.06), transparent);
+    background: rgba(255, 102, 0, 0.06);
 }
 
 @keyframes breathe {
@@ -228,6 +244,7 @@ body.agent-page .theme-toggle {
     height: 72px;
     border-radius: 50%;
     background: linear-gradient(135deg, #ff6600, #ffa366);
+    background: #ff6600;
     color: white;
     display: flex;
     align-items: center;
@@ -329,6 +346,7 @@ body.agent-page .theme-toggle {
 
 .user-message .message-content {
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
     border-bottom-right-radius: 4px;
 }
@@ -629,6 +647,7 @@ body.agent-page .theme-toggle {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 50%;

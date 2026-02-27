@@ -3,7 +3,7 @@
 ## Project Overview
 Discovereye is a desktop application for discovering local, non-chain businesses in Canadian cities. Built with Python Flask backend and Electron frontend.
 
-## Phase 4: Deals & Coupons 💰 PLANNED
+## Phase 4: Deals & Coupons -- PLANNED
 
 ### Objective
 Businesses can post deals/coupons, users can discover and save them.
@@ -25,7 +25,7 @@ Businesses can post deals/coupons, users can discover and save them.
 
 ---
 
-## Phase 5: Social Features 👥 PLANNED
+## Phase 5: Social Features -- PLANNED
 
 ### Objective
 Friend network and social interactions.
@@ -45,7 +45,7 @@ Friend network and social interactions.
 
 ---
 
-## Phase 6: AI Recommendations 🤖 PLANNED
+## Phase 6: AI Recommendations -- PLANNED
 
 ### Objective
 Personalized business recommendations using ML.
@@ -64,7 +64,7 @@ Personalized business recommendations using ML.
 
 ---
 
-## Phase 7: Frontend Development 🖥️ PLANNED
+## Phase 7: Frontend Development -- PLANNED
 
 ### Objective
 Build Electron desktop application UI.
@@ -90,7 +90,7 @@ Build Electron desktop application UI.
 
 ---
 
-## Phase 8: Polish & Production 🚀 PLANNED
+## Phase 8: Polish & Production -- PLANNED
 
 ### Objective
 Prepare for production deployment.

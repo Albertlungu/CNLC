@@ -63,6 +63,7 @@ body {
 .add-event-btn {
     padding: 10px 18px;
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 10px;
@@ -408,6 +409,7 @@ body {
 
 .modal-btn-confirm {
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
 }
 

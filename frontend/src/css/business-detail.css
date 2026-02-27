@@ -734,6 +734,7 @@ body {
     gap: 6px;
     padding: 8px 16px;
     background: linear-gradient(135deg, #ff6600, #ff8533);
+    background: #ff6600;
     color: white;
     border: none;
     border-radius: 8px;

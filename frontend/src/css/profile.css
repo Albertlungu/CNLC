@@ -48,6 +48,7 @@ body {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%);
+    background: linear-gradient(135deg, #ff6600 0%, #ffa366 100%); /* keep gradient for agent 'C' */
     color: white;
     font-size: 48px;
     font-weight: 700;

@@ -101,7 +101,7 @@ async function createPopupContent(business) {
                         data-business-id="${businessId}"
                         data-business-name="${business.name}"
                         title="${isSaved ? 'Saved' : 'Save to collection'}">
-                    ${isSaved ? '★ Saved' : '☆ Save'}
+                    ${isSaved ? '<i class="fa-solid fa-bookmark"></i> Saved' : '<i class="fa-regular fa-bookmark"></i> Save'}
                 </button>
                 <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}"
                    target="_blank" class="popup-btn street-view">Street View</a>
@@ -387,7 +387,7 @@ async function handleSaveMap(businessId, businessName, saveBtn) {
             const result = await saveBusiness(userId, businessId, collections[0].collectionId);
             if (result.status === "success") {
                 saveBtn.classList.add("saved");
-                saveBtn.textContent = "★ Saved";
+                saveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
                 saveBtn.title = "Saved";
             } else {
                 alert("Failed to save: " + result.message);
@@ -414,7 +414,7 @@ async function handleSaveMap(businessId, businessName, saveBtn) {
             const result = await saveBusiness(userId, businessId, targetCollection.collectionId);
             if (result.status === "success") {
                 saveBtn.classList.add("saved");
-                saveBtn.textContent = "★ Saved";
+                saveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
                 saveBtn.title = "Saved";
             } else {
                 alert("Failed to save: " + result.message);
@@ -431,7 +431,7 @@ async function handleUnsaveMap(businessId, businessName, saveBtn) {
         const result = await unsaveBusiness(userId, businessId);
         if (result.status === "success") {
             saveBtn.classList.remove("saved");
-            saveBtn.textContent = "☆ Save";
+            saveBtn.innerHTML = '<i class="fa-regular fa-bookmark"></i> Save';
             saveBtn.title = "Save to collection";
         } else {
             alert("Failed to unsave: " + result.message);

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discovereye Agent</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/agent.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/mobile.css">
@@ -15,6 +16,8 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css/tts.css">
+    <link rel="stylesheet" href="css/voice-control.css">
 </head>
 <body class="agent-page">
     <nav class="menu-bar"></nav>
@@ -70,5 +73,7 @@
         document.getElementById('chat-form').addEventListener('submit', function(e) { e.preventDefault(); });
     </script>
     <script type="module" src="js/agent.js"></script>
+    <script type="module" src="js/tts.js"></script>
+    <script type="module" src="js/voice-control.js"></script>
 </body>
 </html>

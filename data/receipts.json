@@ -34,5 +34,50 @@
         "receiptImagePath": "receipts/91344392d5ed41fbad5a556c564173d7.jpeg",
         "submittedAt": "2026-01-30T18:42:42.347696",
         "verified": false
+    },
+    {
+        "receiptId": 12326001,
+        "userId": 10000000,
+        "businessId": 67972684,
+        "amount": 1023.0,
+        "receiptImagePath": "receipts/4a612c9f68724ab0a103b8aa2355c81e.png",
+        "submittedAt": "2026-02-21T00:52:45.789054",
+        "verified": false
+    },
+    {
+        "receiptId": 95926931,
+        "userId": 10000000,
+        "businessId": 67972684,
+        "amount": 1023.0,
+        "receiptImagePath": "receipts/3a59808cb6ab425fb9b8cb4c5c40efe2.png",
+        "submittedAt": "2026-02-21T00:52:46.065644",
+        "verified": false
+    },
+    {
+        "receiptId": 21949843,
+        "userId": 10000000,
+        "businessId": 11057576996,
+        "amount": 130892.57,
+        "receiptImagePath": "receipts/bee12c9858a84eb8b5ad5831e001aa0f.png",
+        "submittedAt": "2026-02-21T00:53:14.057965",
+        "verified": false
+    },
+    {
+        "receiptId": 44414655,
+        "userId": 10000000,
+        "businessId": 4779808529,
+        "amount": 3820.0,
+        "receiptImagePath": "receipts/946d622b93c34894862f8b3661202325.png",
+        "submittedAt": "2026-02-21T00:53:39.155590",
+        "verified": false
+    },
+    {
+        "receiptId": 30438747,
+        "userId": 10000000,
+        "businessId": 192375715,
+        "amount": 233.4,
+        "receiptImagePath": "receipts/8bad9e4eeda7497a8a3fb95699402004.png",
+        "submittedAt": "2026-02-21T00:53:52.857578",
+        "verified": false
     }
 ]

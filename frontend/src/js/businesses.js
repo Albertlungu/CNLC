@@ -88,7 +88,7 @@ async function createBusinessCard(business) {
       ${business.name}
       <div class="bar-actions">
         <button class="save-btn ${isSaved ? 'saved' : ''}" data-business-id="${businessId}" title="${isSaved ? 'Saved' : 'Save to collection'}">
-          ${isSaved ? '★' : '☆'}
+          ${isSaved ? '<i class="fa-solid fa-bookmark"></i>' : '<i class="fa-regular fa-bookmark"></i>'}
         </button>
         <span class="arrow">&#9662;</span>
       </div>
@@ -445,7 +445,7 @@ async function confirmSaveToCollection() {
         const result = await saveBusiness(userId, pendingSaveBusinessId, selectedCollectionId);
         if (result.status === "success") {
             pendingSaveBtn.classList.add("saved");
-            pendingSaveBtn.textContent = "★";
+            pendingSaveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
             pendingSaveBtn.title = "Saved";
             closeCollectionModal();
         } else {
@@ -479,7 +479,7 @@ async function handleSave(businessId, businessName, saveBtn) {
             const result = await saveBusiness(userId, businessId, collections[0].collectionId);
             if (result.status === "success") {
                 saveBtn.classList.add("saved");
-                saveBtn.textContent = "★";
+                saveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
                 saveBtn.title = "Saved";
             } else {
                 alert("Failed to save: " + result.message);
@@ -499,7 +499,7 @@ async function handleUnsave(businessId, saveBtn) {
         const result = await unsaveBusiness(userId, businessId);
         if (result.status === "success") {
             saveBtn.classList.remove("saved");
-            saveBtn.textContent = "☆";
+            saveBtn.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
             saveBtn.title = "Save to collection";
         } else {
             alert("Failed to unsave: " + result.message);

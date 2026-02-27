@@ -43,7 +43,7 @@ class TextToSpeech {
         const readBtn = document.createElement("button");
         readBtn.id = "tts-btn";
         readBtn.className = "tts-btn";
-        readBtn.innerHTML = `<span class="tts-icon">TTS</span>`;
+        readBtn.innerHTML = `<span class="tts-icon"><i class="fas fa-volume-up"></i></span>`;
         readBtn.title = "Read page aloud";
         readBtn.setAttribute("aria-label", "Read page content aloud");
 

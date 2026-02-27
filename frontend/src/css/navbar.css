@@ -43,6 +43,7 @@
 .menu-links > li > a:hover,
 .menu-links > li > a.active {
     background: linear-gradient(135deg, var(--accent-primary) 0%, #ffa366 100%);
+    background: var(--accent-primary);
     color: var(--bg-secondary);
 }
 
@@ -52,6 +53,7 @@
 
 .menu-links > li > a.logout-link:hover {
     background: linear-gradient(135deg, #d32f2f 0%, #f77f7f 100%);
+    background: #d32f2f;
     color: var(--bg-secondary);
 }
 
@@ -78,6 +80,7 @@
 .nav-group-toggle:hover,
 .nav-group.group-active > .nav-group-toggle {
     background: linear-gradient(135deg, var(--accent-primary) 0%, #ffa366 100%);
+    background: var(--accent-primary);
     color: var(--bg-secondary);
 }
 

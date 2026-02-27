@@ -121,7 +121,7 @@ async function loadActivity() {
                     }
                 } catch (e) { /* use default */ }
 
-                const stars = "★".repeat(item.rating) + "☆".repeat(5 - item.rating);
+                const stars = '<i class="fa-solid fa-star"></i>'.repeat(item.rating) + '<i class="fa-regular fa-star"></i>'.repeat(5 - item.rating);
                 const date = new Date(item.createdAt).toLocaleDateString();
 
                 const activityItem = document.createElement("div");

@@ -30,7 +30,7 @@
         
         // Special handling for map sidebar
         if (mapSidebar) {
-            toggleBtn.innerHTML = '🔍';
+            toggleBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
             toggleBtn.style.top = 'auto';
             toggleBtn.style.bottom = '70px';
         }
@@ -42,12 +42,12 @@
             
             // Update button icon
             if (sidebar.classList.contains('active')) {
-                toggleBtn.innerHTML = '✕';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
             } else {
                 if (mapSidebar) {
-                    toggleBtn.innerHTML = '🔍';
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
                 } else {
-                    toggleBtn.innerHTML = '☰';
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
                 }
             }
         });
@@ -58,9 +58,9 @@
             overlay.classList.remove('active');
             
             if (mapSidebar) {
-                toggleBtn.innerHTML = '🔍';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
             } else {
-                toggleBtn.innerHTML = '☰';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
             }
         });
     }

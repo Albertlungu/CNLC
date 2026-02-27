@@ -612121,5 +612121,24 @@
         "category": "restaurant",
         "cuisine": null,
         "image_url": "https://www.fodors.com/wp-content/uploads/2022/05/Hero-UltMontreal-shutterstock_1839500569.jpg"
+    },
+    {
+        "id": 2081437825,
+        "name": "Burrito Gringo",
+        "latitude": 45.344819496619415,
+        "longitude": -75.7294634570572,
+        "address": {
+            "street": "Merivale",
+            "housenumber": "1715",
+            "city": "Ottawa",
+            "country": "Canada",
+            "postcode": "K2E8B8"
+        },
+        "phone": null,
+        "website": null,
+        "opening_hours": null,
+        "category": "restaurant",
+        "cuisine": null,
+        "image_url": "burritogringo.ca"
     }
 ]

@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <link rel="stylesheet" href="css/auth-styles.css">
   <link rel="icon" href="data:,">
@@ -30,11 +31,11 @@
     <form id="loginForm" class="form active">
       <h2>Login</h2>
       <div class="input-icon">
-        <span class="icon">👤</span>
+        <span class="icon"><i class="fa-solid fa-user"></i></span>
         <input id='username' type="text" placeholder="Email or Username" required>
       </div>
       <div class="input-icon">
-        <span class="icon">🔒</span>
+        <span class="icon"><i class="fa-solid fa-lock"></i></span>
         <input id='password' type="password" placeholder="Password" required>
       </div>
       <p class="forgot" onclick="showForgot()">Forgot password?</p>
@@ -49,35 +50,35 @@
     <form id="signupForm" class="form">
       <h2>Sign Up</h2>
       <div class="input-icon">
-        <span class="icon">📧</span>
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
         <input type="email" id="signupEmail" placeholder="Email" required>
       </div>
       <div class="input-icon">
-        <span class="icon">👤</span>
+        <span class="icon"><i class="fa-solid fa-user"></i></span>
         <input type="text" id="signupUsername" placeholder="Username" required>
       </div>
       <div class="input-icon">
-        <span class="icon">🔒</span>
+        <span class="icon"><i class="fa-solid fa-lock"></i></span>
         <input type="password" id="signupPassword" placeholder="Password" required oninput="checkPasswordStrength()">
       </div>
       <div class="input-icon">
-          <span class="icon">📞</span>
+          <span class="icon"><i class="fa-solid fa-phone"></i></span>
           <input type="tel" id="signupPhonenumber" placeholder="Format: +1-XXX-XXX-XXXX" required>
       </div>
       <div class="input-icon">
-          <span class="icon">👋</span>
+          <span class="icon"><i class="fa-solid fa-signature"></i></span>
           <input type="text" id="signupFirstName" placeholder="First Name" required>
       </div>
       <div class="input-icon">
-          <span class="icon">👋</span>
+          <span class="icon"><i class="fa-solid fa-signature"></i></span>
           <input type="text" id="signupLastName" placeholder="Last Name" required>
       </div>
       <div class="input-icon">
-          <span class="icon">🏙️</span>
+          <span class="icon"><i class="fa-solid fa-city"></i></span>
           <input type="text" id="signupCity" placeholder="City" required>
       </div>
       <div class="input-icon">
-          <span class="icon">🇨🇦</span>
+          <span class="icon"><i class="fa-solid fa-globe"></i></span>
           <input type="text" id="signupCountry" placeholder="Country" required>
       </div>
       <div class="user-type-selector">
@@ -86,7 +87,7 @@
               <label class="user-type-option">
                   <input type="radio" name="userType" value="normal" checked>
                   <span class="type-card">
-                      <span class="type-icon">👤</span>
+                      <span class="type-icon"><i class="fa-solid fa-user"></i></span>
                       <span class="type-name">Regular User</span>
                       <span class="type-desc">Discover local businesses</span>
                   </span>
@@ -94,7 +95,7 @@
               <label class="user-type-option">
                   <input type="radio" name="userType" value="business">
                   <span class="type-card">
-                      <span class="type-icon">🏪</span>
+                      <span class="type-icon"><i class="fa-solid fa-store"></i></span>
                       <span class="type-name">Business Owner</span>
                       <span class="type-desc">Manage your business listing</span>
                   </span>
@@ -117,7 +118,7 @@
       <h2>Reset Password</h2>
       <p class="info-text">Enter your email and we'll send you a reset link.</p>
       <div class="input-icon">
-        <span class="icon">📧</span>
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
         <input type="email" placeholder="Email address" required>
       </div>
       <button type="submit">Send Reset Link</button>

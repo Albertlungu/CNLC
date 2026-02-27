@@ -12,6 +12,7 @@ body {
   align-items: center;
   overflow: hidden;
   background: linear-gradient(135deg, #ff9a9e, #fbcf33, #ff6b6b);
+  background: #ff9a9e;
   position: relative;
 }
 

@@ -9,7 +9,7 @@
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'theme-toggle';
         toggleBtn.setAttribute('aria-label', 'Toggle theme');
-        toggleBtn.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+        toggleBtn.innerHTML = savedTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
         document.body.appendChild(toggleBtn); // Still append, but CSS makes it float
 
         // Toggle theme on click
@@ -19,7 +19,7 @@
             
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            toggleBtn.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+            toggleBtn.innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
         });
     });
 })();

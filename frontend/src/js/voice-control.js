@@ -73,7 +73,7 @@ class VoiceControl {
         const micBtn = document.createElement("button");
         micBtn.id = "voice-control-btn";
         micBtn.className = "voice-control-btn";
-        micBtn.innerHTML = `<span class="mic-icon">MIC</span>`;
+        micBtn.innerHTML = `<span class="mic-icon"><i class="fas fa-microphone"></i></span>`;
         micBtn.title = "Voice Control (Click to speak)";
         micBtn.setAttribute("aria-label", "Activate voice control");
 

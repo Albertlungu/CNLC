@@ -141,7 +141,7 @@ async function loadBusinessInfo() {
                 <div class="business-title-section">
                     <h1>${business.name}</h1>
                     <button id="save-business-btn" class="save-business-btn ${isSaved ? 'saved' : ''}" title="${isSaved ? 'Saved' : 'Save to collection'}">
-                        ${isSaved ? '★' : '☆'} ${isSaved ? 'Saved' : 'Save'}
+                        ${isSaved ? '<i class="fa-solid fa-bookmark"></i>' : '<i class="fa-regular fa-bookmark"></i>'} ${isSaved ? 'Saved' : 'Save'}
                     </button>
                 </div>
                 <div class="business-meta">
@@ -561,7 +561,7 @@ async function confirmSaveToCollection(userId) {
         const result = await saveBusiness(userId, pendingSaveBusinessId, selectedCollectionId);
         if (result.status === "success") {
             pendingSaveBtn.classList.add("saved");
-            pendingSaveBtn.textContent = "★ Saved";
+            pendingSaveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
             pendingSaveBtn.title = "Saved";
             closeCollectionModal();
         } else {
@@ -594,7 +594,7 @@ async function handleSaveBusinessDetail(userId, businessId, businessName, saveBt
             const result = await saveBusiness(userId, businessId, collections[0].collectionId);
             if (result.status === "success") {
                 saveBtn.classList.add("saved");
-                saveBtn.textContent = "★ Saved";
+                saveBtn.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
                 saveBtn.title = "Saved";
             } else {
                 alert("Failed to save: " + result.message);
@@ -613,7 +613,7 @@ async function handleUnsaveBusinessDetail(userId, businessId, businessName, save
         const result = await unsaveBusiness(userId, businessId);
         if (result.status === "success") {
             saveBtn.classList.remove("saved");
-            saveBtn.textContent = "☆ Save";
+            saveBtn.innerHTML = '<i class="fa-regular fa-bookmark"></i> Save';
             saveBtn.title = "Save to collection";
         } else {
             alert("Failed to unsave: " + result.message);

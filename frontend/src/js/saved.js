@@ -229,8 +229,8 @@ function renderBusinessGrid() {
                 <div class="business-card-header">
                     <h3>${business.name}</h3>
                     <div class="card-actions">
-                        ${currentCollectionId !== "all" ? `<button class="icon-btn move-btn" data-business-id="${businessId}" data-business-name="${business.name}" title="Move to another collection">📁</button>` : ""}
-                        <button class="icon-btn unsave-btn" data-business-id="${businessId}" title="Remove from saved">❌</button>
+                        ${currentCollectionId !== "all" ? `<button class="icon-btn move-btn" data-business-id="${businessId}" data-business-name="${business.name}" title="Move to another collection"><i class="fa-solid fa-folder"></i></button>` : ""}
+                        <button class="icon-btn unsave-btn" data-business-id="${businessId}" title="Remove from saved"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
                 <p>${addressText}</p>

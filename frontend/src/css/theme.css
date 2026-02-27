@@ -51,6 +51,10 @@
     transform: scale(1.2);
 }
 
+[data-theme="dark"] .theme-toggle {
+    color: #ffffff;
+}
+
 /* Apply theme variables to body */
 body {
     background-color: var(--bg-primary);

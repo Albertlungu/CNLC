@@ -108,25 +108,29 @@ Business owners can verify their accounts to unlock management capabilities: cre
 
 ## Architecture
 
-```
-+-------------------+         HTTP / REST          +-------------------+
-|                   |  ----------------------->    |                   |
-|   Electron App    |                              |   Flask API       |
-|   (frontend/src)  |  <-----------------------    |   (backend/api)   |
-|                   |         JSON responses       |                   |
-+-------------------+                              +-------------------+
-                                                           |
-                                                           v
-                                              +------------------------+
-                                              |   Core Business Logic  |
-                                              |   (backend/core)       |
-                                              +------------------------+
-                                                           |
-                                                           v
-                                              +------------------------+
-                                              |   JSON File Storage    |
-                                              |   (data/*.json)        |
-                                              +------------------------+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#ffffff', 'edgeLabelBackground': '#ffffff'}}}%%
+graph LR
+    A[User Interface<br/>Electron Desktop App] -->|HTTP / REST| B[Flask API Server<br/>20 Route Blueprints]
+    B --> C[Core Business Logic<br/>Manager Modules]
+    B --> D[AI Assistant<br/>Google Gemini]
+    C --> E[Data Storage<br/>JSON Files]
+    D --> C
+    C --> F[3D Scan Pipeline<br/>OpenCV / COLMAP / OpenMVS]
+    A -->|Service Worker| G[Offline Cache<br/>PWA Support]
+
+    classDef primary fill:#E8640A,stroke:#B84D08,color:#fff
+    classDef secondary fill:#F5A04A,stroke:#E8640A,color:#fff
+    classDef tertiary fill:#FDE3C6,stroke:#F5A04A,color:#7A3800
+    classDef accent fill:#FFF3E6,stroke:#F5A04A,color:#7A3800
+
+    class A primary
+    class B secondary
+    class C secondary
+    class D primary
+    class E tertiary
+    class F tertiary
+    class G accent
 ```
 
 - **Frontend (Electron):** Chromium-based desktop shell. The main process (`frontend/main.js`) spawns Flask as a child process, waits for it to become healthy, then loads the UI. All frontend code is vanilla HTML, CSS, and JavaScript using ES modules -- no build step or framework.

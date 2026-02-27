@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Businesses</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/trending.css">
     <link rel="stylesheet" href="css/mobile.css">
@@ -15,6 +16,8 @@
     <meta name="theme-color" content="#ff6600">
     <script src="js/theme.js"></script>
     <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css/tts.css">
+    <link rel="stylesheet" href="css/voice-control.css">
 </head>
 <body>
     <nav class="menu-bar"></nav>
@@ -42,20 +45,20 @@
                     <div class="podium-points"></div>
                     <div class="podium-meta"></div>
                     <div class="podium-base podium-base-2">
-                        <div class="medal">🥈</div>
+                        <div class="medal"><i class="fa-solid fa-medal" style="color: silver;"></i></div>
                     </div>
                 </a>
 
                 <!-- 1st Place -->
                 <a href="#" class="podium-card podium-1" id="podium-1">
-                    <div class="crown">👑</div>
+                    <div class="crown"><i class="fa-solid fa-crown" style="color: gold;"></i></div>
                     <div class="rank-badge rank-1">1</div>
                     <div class="podium-name"></div>
                     <div class="podium-category"></div>
                     <div class="podium-points"></div>
                     <div class="podium-meta"></div>
                     <div class="podium-base podium-base-1">
-                        <div class="medal">🥇</div>
+                        <div class="medal"><i class="fa-solid fa-medal" style="color: gold;"></i></div>
                     </div>
                 </a>
 
@@ -67,7 +70,7 @@
                     <div class="podium-points"></div>
                     <div class="podium-meta"></div>
                     <div class="podium-base podium-base-3">
-                        <div class="medal">🥉</div>
+                        <div class="medal"><i class="fa-solid fa-medal" style="color: #cd7f32;"></i></div>
                     </div>
                 </a>
             </div>
@@ -115,5 +118,7 @@
     <script type="module" src="js/trending.js"></script>
     <script src="js/pwa.js"></script>
     <script type="module" src="js/agent-widget.js"></script>
+    <script type="module" src="js/tts.js"></script>
+    <script type="module" src="js/voice-control.js"></script>
 </body>
 </html>

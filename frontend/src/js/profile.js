@@ -297,10 +297,10 @@ function displayNotifications(notifications) {
     
     notificationsList.innerHTML = notifications.map(notification => {
         const iconEmoji = {
-            reservation: "📅",
-            deal: "💰",
-            event: "🎉"
-        }[notification.type] || "🔔";
+            reservation: '<i class="fa-solid fa-calendar"></i>',
+            deal: '<i class="fa-solid fa-tag"></i>',
+            event: '<i class="fa-solid fa-champagne-glasses"></i>'
+        }[notification.type] || '<i class="fa-solid fa-bell"></i>';
         
         const actionButtons = notification.actions.map(action => {
             if (action === "confirm") {
