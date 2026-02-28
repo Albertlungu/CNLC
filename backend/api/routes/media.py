@@ -44,7 +44,7 @@ def upload_media(business_id: int) -> Response:
 def get_media(business_id: int) -> Response:
     media = media_manager.get_media(business_id)
     for m in media:
-        m["url"] = f"/uploads/media/{m['filename']}"
+        m["url"] = f"http://127.0.0.1:5001/uploads/media/{m['filename']}"
     return jsonify({"media": media, "count": len(media)})
 
 

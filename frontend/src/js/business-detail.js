@@ -662,11 +662,15 @@ async function loadMedia() {
 
             if (m.mediaType === "3d") {
                 el.innerHTML = `
-                    <model-viewer src="${m.url}" alt="${m.originalName}" auto-rotate camera-controls
-                        shadow-intensity="1" style="width:100%;height:400px;border-radius:12px;background:#f5f5f5;">
-                    </model-viewer>
+                    <div class="scan-viewer-wrapper">
+                        <model-viewer src="${m.url}" alt="${m.originalName}" auto-rotate camera-controls
+                            shadow-intensity="1" style="width:100%;height:400px;border-radius:0;background:#f5f5f5;">
+                        </model-viewer>
+                        <button class="scan-enter-fp-btn">Enter Environment</button>
+                    </div>
                     <div class="media-item-label">${m.originalName}</div>
                 `;
+                el.querySelector(".scan-enter-fp-btn").addEventListener("click", () => enterFirstPersonMode(m.url));
             } else {
                 el.innerHTML = `
                     <video controls playsinline style="width:100%;border-radius:12px;">
@@ -920,13 +924,18 @@ async function loadScans() {
             el.className = "scan-item";
 
             if (scan.status === "completed" && scan.outputPath) {
+                const glbUrl = `http://127.0.0.1:5001${scan.outputPath}`;
                 el.innerHTML = `
-                    <model-viewer src="http://127.0.0.1:5001${scan.outputPath}" alt="3D Scan"
-                        auto-rotate camera-controls ar
-                        shadow-intensity="1" style="width:100%;height:400px;border-radius:12px;background:#f5f5f5;">
-                    </model-viewer>
+                    <div class="scan-viewer-wrapper">
+                        <model-viewer src="${glbUrl}" alt="3D Scan"
+                            auto-rotate camera-controls
+                            shadow-intensity="1" style="width:100%;height:400px;border-radius:0;background:#f5f5f5;">
+                        </model-viewer>
+                        <button class="scan-enter-fp-btn">Enter Environment</button>
+                    </div>
                     <div class="scan-item-label">3D Scan - ${new Date(scan.createdAt).toLocaleDateString()}</div>
                 `;
+                el.querySelector(".scan-enter-fp-btn").addEventListener("click", () => enterFirstPersonMode(glbUrl));
             } else if (scan.status === "processing") {
                 el.innerHTML = `
                     <div class="scan-processing">
@@ -1144,3 +1153,267 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+// ==================== First-Person Environment ====================
+
+async function enterFirstPersonMode(glbUrl) {
+    const [THREE, { GLTFLoader: ModelLoader }, { RoomEnvironment }] = await Promise.all([
+        import("three"),
+        import("three/addons/loaders/GLTFLoader.js"),
+        import("three/addons/environments/RoomEnvironment.js"),
+    ]);
+
+    // ---- Overlay ----
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:9999;background:#111;";
+
+    // Canvas — tabIndex makes it focusable so pointer lock is not silently rejected
+    const canvas = document.createElement("canvas");
+    canvas.tabIndex = 0;
+    canvas.style.cssText = "display:block;outline:none;";
+    overlay.appendChild(canvas);
+
+    // Centred status card — pointer-events:none so all clicks reach the canvas
+    const statusCard = document.createElement("div");
+    statusCard.style.cssText =
+        "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);" +
+        "color:#fff;text-align:center;font-family:sans-serif;font-size:15px;" +
+        "background:rgba(0,0,0,0.65);padding:20px 32px;border-radius:10px;" +
+        "pointer-events:none;white-space:nowrap;";
+    statusCard.textContent = "Loading environment...";
+    overlay.appendChild(statusCard);
+
+    // Crosshair — hidden until pointer is locked
+    const crosshair = document.createElement("div");
+    crosshair.style.cssText =
+        "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);" +
+        "width:22px;height:22px;pointer-events:none;display:none;";
+    crosshair.innerHTML =
+        '<svg viewBox="0 0 22 22" style="width:100%;height:100%">' +
+        '<line x1="11" y1="0" x2="11" y2="22" stroke="white" stroke-width="1.5" opacity="0.75"/>' +
+        '<line x1="0" y1="11" x2="22" y2="11" stroke="white" stroke-width="1.5" opacity="0.75"/>' +
+        "</svg>";
+    overlay.appendChild(crosshair);
+
+    // Exit button
+    const exitBtn = document.createElement("button");
+    exitBtn.textContent = "Exit";
+    exitBtn.style.cssText =
+        "position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.55);" +
+        "color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:7px;" +
+        "padding:6px 16px;font-size:13px;cursor:pointer;z-index:1;";
+    overlay.appendChild(exitBtn);
+
+    document.body.appendChild(overlay);
+
+    // ---- Three.js — pixelRatio before setSize, updateStyle=true for explicit px ----
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.8;
+
+    // IBL via RoomEnvironment — neutral studio lighting matching AR Quick Look
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envTexture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    pmrem.dispose();
+
+    const scene = new THREE.Scene();
+    scene.environment = envTexture;
+    scene.background = new THREE.Color(0x1a1a1a);
+
+    const camera = new THREE.PerspectiveCamera(
+        90, window.innerWidth / window.innerHeight, 0.01, 500
+    );
+    camera.rotation.order = "YXZ";
+
+    // ---- Load model via fetch so we get real progress and error messages ----
+    const loader = new ModelLoader();
+
+    (async () => {
+        let arrayBuffer;
+        try {
+            const response = await fetch(glbUrl);
+            if (!response.ok) {
+                statusCard.textContent = `Failed to fetch model (HTTP ${response.status}).`;
+                return;
+            }
+
+            const total = Number(response.headers.get("content-length")) || 0;
+            const reader = response.body.getReader();
+            const chunks = [];
+            let loaded = 0;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                loaded += value.byteLength;
+                if (total > 0) {
+                    const pct = Math.round((loaded / total) * 100);
+                    statusCard.textContent = `Loading environment... ${pct}%`;
+                } else {
+                    const mb = (loaded / 1048576).toFixed(1);
+                    statusCard.textContent = `Loading environment... ${mb} MB`;
+                }
+            }
+
+            const blob = new Blob(chunks);
+            arrayBuffer = await blob.arrayBuffer();
+        } catch (err) {
+            statusCard.textContent = `Network error: ${err.message}`;
+            return;
+        }
+
+        statusCard.textContent = "Parsing model...";
+
+        loader.parse(
+            arrayBuffer,
+            "",
+            (model) => {
+                model.scene.traverse((node) => {
+                    if (node.isMesh && node.material) {
+                        const mats = Array.isArray(node.material) ? node.material : [node.material];
+                        mats.forEach((m) => {
+                            m.side = THREE.DoubleSide;
+
+                            // Fix color-space: the GLB exporter leaves textures without
+                            // a colorSpace hint, so Three.js treats them as linear and
+                            // applies gamma-correction twice, making them look very dark.
+                            if (m.map) {
+                                m.map.colorSpace = THREE.SRGBColorSpace;
+                                m.map.needsUpdate = true;
+                            }
+
+                            // Add emissive self-illumination so brightness is guaranteed
+                            // regardless of tone-mapping behavior.
+                            if (m.isMeshStandardMaterial && m.map) {
+                                m.emissiveMap       = m.map;
+                                m.emissive          = new THREE.Color(1, 1, 1);
+                                m.emissiveIntensity = 0.6;
+                            }
+
+                            m.needsUpdate = true;
+                        });
+                    }
+                });
+
+                scene.add(model.scene);
+
+                const box    = new THREE.Box3().setFromObject(model.scene);
+                const center = box.getCenter(new THREE.Vector3());
+                const size   = box.getSize(new THREE.Vector3());
+                camera.position.set(
+                    center.x,
+                    center.y + size.y * 0.1,
+                    center.z + size.z * 0.6
+                );
+                camera.lookAt(center);
+                yaw   = camera.rotation.y;
+                pitch = camera.rotation.x;
+
+                statusCard.innerHTML =
+                    "<div>Click to look around</div>" +
+                    '<div style="font-size:12px;margin-top:8px;opacity:0.65">' +
+                    "W/A/S/D &nbsp;move &nbsp;|&nbsp; Scroll &nbsp;zoom &nbsp;|&nbsp; Esc &nbsp;exit" +
+                    "</div>";
+            },
+            (err) => {
+                statusCard.textContent = `Failed to parse model: ${err.message}`;
+            }
+        );
+    })();
+
+    // ---- Input state ----
+    let yaw = 0;
+    let pitch = 0;
+    const keys = {};
+
+    // Pointer lock — focus canvas first so Chrome doesn't silently reject
+    canvas.addEventListener("click", () => {
+        canvas.focus();
+        const req = canvas.requestPointerLock();
+        if (req && typeof req.catch === "function") req.catch(() => {});
+    });
+
+    const onPointerLockChange = () => {
+        const locked = document.pointerLockElement === canvas;
+        statusCard.style.display = locked ? "none" : "block";
+        crosshair.style.display  = locked ? "block" : "none";
+        overlay.style.cursor     = locked ? "none" : "default";
+    };
+    document.addEventListener("pointerlockchange", onPointerLockChange);
+
+    const onMouseMove = (e) => {
+        if (document.pointerLockElement !== canvas) return;
+        yaw   -= e.movementX * 0.002;
+        pitch -= e.movementY * 0.002;
+        pitch  = Math.max(-Math.PI * 0.45, Math.min(Math.PI * 0.45, pitch));
+        camera.rotation.y = yaw;
+        camera.rotation.x = pitch;
+    };
+    document.addEventListener("mousemove", onMouseMove);
+
+    const onKeyDown = (e) => {
+        keys[e.code] = true;
+        if (e.code === "Escape" && document.pointerLockElement !== canvas) exit();
+    };
+    const onKeyUp = (e) => { keys[e.code] = false; };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
+
+    const onWheel = (e) => {
+        camera.fov = Math.max(20, Math.min(110, camera.fov + e.deltaY * 0.05));
+        camera.updateProjectionMatrix();
+    };
+    canvas.addEventListener("wheel", onWheel, { passive: true });
+
+    const onResize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener("resize", onResize);
+
+    // ---- Animation loop ----
+    const clock    = new THREE.Clock();
+    const moveSpeed = 3;
+    const dir   = new THREE.Vector3();
+    const right = new THREE.Vector3();
+    const upVec = new THREE.Vector3(0, 1, 0);
+    let animId;
+
+    const animate = () => {
+        animId = requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+
+        camera.getWorldDirection(dir);
+        dir.y = 0;
+        if (dir.lengthSq() > 0.0001) dir.normalize();
+        right.crossVectors(dir, upVec).normalize();
+
+        if (keys["KeyW"]) camera.position.addScaledVector(dir,   moveSpeed * delta);
+        if (keys["KeyS"]) camera.position.addScaledVector(dir,  -moveSpeed * delta);
+        if (keys["KeyA"]) camera.position.addScaledVector(right, -moveSpeed * delta);
+        if (keys["KeyD"]) camera.position.addScaledVector(right,  moveSpeed * delta);
+
+        renderer.render(scene, camera);
+    };
+    animate();
+
+    // ---- Cleanup ----
+    const exit = () => {
+        cancelAnimationFrame(animId);
+        renderer.dispose();
+        document.removeEventListener("pointerlockchange", onPointerLockChange);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("keydown", onKeyDown);
+        document.removeEventListener("keyup", onKeyUp);
+        window.removeEventListener("resize", onResize);
+        if (document.pointerLockElement) document.exitPointerLock();
+        document.body.removeChild(overlay);
+    };
+
+    exitBtn.addEventListener("click", exit);
+}

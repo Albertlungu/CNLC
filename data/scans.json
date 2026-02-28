@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "scanId": 77777001,
+        "businessId": 2081437825,
+        "userId": 10000000,
+        "originalName": "Burrito Gringo",
+        "status": "completed",
+        "progress": "done",
+        "videoPath": null,
+        "outputPath": "/uploads/media/burrito_gringo.glb",
+        "mediaId": 11111001,
+        "error": null,
+        "createdAt": "2026-02-27T18:00:00.000000",
+        "completedAt": "2026-02-27T18:00:00.000000"
+    }
+]

@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "mediaId": 11111001,
+        "businessId": 2081437825,
+        "uploadedByUserId": 10000000,
+        "filename": "burrito_gringo.glb",
+        "originalName": "3D Scan - Burrito Gringo",
+        "mediaType": "3d",
+        "mimeType": "model/gltf-binary",
+        "createdAt": "2026-02-27T18:00:00.000000",
+        "fromScan": true,
+        "scanId": 77777001
+    }
+]

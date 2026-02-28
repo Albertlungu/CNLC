@@ -58,6 +58,10 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const url = new URL(event.request.url);
 
+    // Let cross-origin requests (e.g. backend API on a different port) bypass
+    // the service worker entirely so they reach the network directly.
+    if (url.origin !== self.location.origin) return;
+
     // Network-first for API calls, JS, CSS, and HTML (so code updates take effect immediately)
     if (url.pathname.startsWith("/api/") || url.pathname.endsWith(".js") || url.pathname.endsWith(".css") || url.pathname.endsWith(".html") || url.pathname === "/") {
         event.respondWith(
